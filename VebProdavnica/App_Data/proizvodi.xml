@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<proizvodi>
+
+  <proizvod>
+	<ID>1</ID>
+	<NAZIV>Laptop</NAZIV>
+	<CENA>100000</CENA>
+	<KOLICINA>4</KOLICINA>
+	<OPIS>Macbook Air</OPIS>
+	<SLIKA></SLIKA>
+	<DATUM>10.06.2023</DATUM>
+	<GRAD>Novi Sad</GRAD>
+	<DOSTUPAN>true</DOSTUPAN>
+	<USER_PRODAVCA>petarp</USER_PRODAVCA>
+  </proizvod>
+  
+</proizvodi>
