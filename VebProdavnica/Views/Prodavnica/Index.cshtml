@@ -4,36 +4,49 @@
     ViewBag.Title = "Index";
 }
 
-
 <body>
     <h2>Dobrodosli u prodavnicu</h2>
 
-    <form method="post" id="loginForm" action="/Prodavnica/UlogujSe">
-        <table border="1" align="center">
+
+    <table>
+        @if (HttpContext.Current.Session["korisnik"] == null)
+        {
             <tr>
-                <td colspan="2" align="center">Ulogujte se</td>
-            </tr>
-            <tr>
-                <td>Korisnicko ime:</td>
                 <td>
-                    <input type="text" />
+                    <form method="post" id="loginForm" action="/Prodavnica/UlogujSe">
+                        <table border="1" align="center">
+                            <tr>
+                                <td colspan="2" align="center">Ulogujte se</td>
+                            </tr>
+                            <tr>
+                                <td>Korisnicko ime:</td>
+                                <td>
+                                    <input type="text" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Lozinka:</td>
+                                <td>
+                                    <input type="password" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center"><input type="submit" value="Uloguj se" /></td>
+                            </tr>
+                        </table>
+                    </form>
+                </td>
+                <td>
+                    <h3>Nemate nalog?</h3>
+                    <form action="/Prodavnica/Registracija">
+                        <input type="submit" value="Registrujte se ovde!" />
+                    </form>
                 </td>
             </tr>
-            <tr>
-                <td>Lozinka:</td>
-                <td>
-                    <input type="password" />
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center"><input type="submit" value="Uloguj se"/></td>
-            </tr>
-        </table>
-    </form>
+        }
+        <tr>
+            @* TODO NASTAVITI *@
+        </tr>
 
-    <h3>Nemate nalog?</h3>
-    <form action="/Prodavnica/Registracija">
-        <input type="submit" value="Registrujte se ovde!" />
-    </form>
-
+    </table>
 </body>

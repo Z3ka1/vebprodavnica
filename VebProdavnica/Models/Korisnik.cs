@@ -43,6 +43,22 @@ namespace VebProdavnica.Models
             listaObjavljenihProizvoda = objavljeni;
         }
 
+        public Korisnik(string ime, string prezime, Pol pol, string email, DateTime datumRodjenja, Uloga uloga,
+            string korisnickoIme, string lozinka)
+        {
+            this.ime = ime;
+            this.prezime = prezime;
+            this.pol = pol;
+            this.email = email;
+            this.datumRodjenja = datumRodjenja;
+            this.uloga = uloga;
+            this.korisnickoIme = korisnickoIme;
+            this.lozinka = lozinka;
+
+            listaPorudzbina = new List<Porudzbina>();
+            listaOmiljenihProizvoda = new List<Proizvod>();
+            listaObjavljenihProizvoda = new List<Proizvod>();
+        }
         
     }
 }

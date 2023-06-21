@@ -1,10 +1,13 @@
 ﻿
 @{
+    Layout = null;
     ViewBag.Title = "Registracija";
 }
 
-<body style="background-color:skyblue">
+<body>
     <h2>Registracija</h2>
+
+    <h2> @ViewBag.Message </h2>
 
     <form method="post" action="/Prodavnica/RegistrujSe">
         <table>
@@ -38,10 +41,33 @@
             <tr>
                 <td>Datum rodjenja:</td>
                 <td>
-                    <input type="datetime-local" name="datumRodjenja" />
+                    <input type="date" name="datumRodjenja" />
                 </td>
             </tr>
-
+            <tr>
+                <td>Uloga:</td>
+                <td>
+                    <select name="uloga">
+                        <option value="Kupac">Kupac</option>
+                        <option value="Prodavac">Prodavac</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Korisnicko ime:</td>
+                <td>
+                    <input type="text" name="korisnickoIme"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Lozinka:</td>
+                <td>
+                    <input type="password" name="lozinka" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" value="Registruj se"/> </td>
+            </tr>
 
         </table>
 

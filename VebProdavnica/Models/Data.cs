@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace VebProdavnica.Models
 {
@@ -81,6 +82,67 @@ namespace VebProdavnica.Models
 
 
             return ret;
+        }
+
+        //Ukoliko prosledjeni korisnik ne postoji dodaje se, u suprotnom se vrsi update
+        public static void UpdateKorisnikXml(Korisnik update)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(korisniciPath);
+
+            XmlNode korisnikNode = xmlDoc.SelectSingleNode($"//korisnik[KORISNICKO_IME='{update.korisnickoIme}']");
+            if(korisnikNode != null)
+                korisnikNode.ParentNode.RemoveChild(korisnikNode);
+
+            //Lista koja sadrzi sve IDeve omiljenih proizvoda
+            List<int> idProizvoda = update.listaOmiljenihProizvoda.Select(proizvod => proizvod.id).ToList();
+
+            
+            XmlElement korisnikXmlElement = xmlDoc.CreateElement("korisnik");
+
+            XmlElement korisnickoImeElement = xmlDoc.CreateElement("KORISNICKO_IME");
+            korisnickoImeElement.InnerText = update.korisnickoIme;
+            korisnikXmlElement.AppendChild(korisnickoImeElement);
+
+            XmlElement lozinkaElement = xmlDoc.CreateElement("LOZINKA");
+            lozinkaElement.InnerText = update.lozinka;
+            korisnikXmlElement.AppendChild(lozinkaElement);
+
+            XmlElement imeElement = xmlDoc.CreateElement("IME");
+            imeElement.InnerText = update.ime;
+            korisnikXmlElement.AppendChild(imeElement);
+
+            XmlElement prezimeElement = xmlDoc.CreateElement("PREZIME");
+            prezimeElement.InnerText = update.prezime;
+            korisnikXmlElement.AppendChild(prezimeElement);
+
+            XmlElement polElement = xmlDoc.CreateElement("POL");
+            polElement.InnerText = update.pol.ToString();
+            korisnikXmlElement.AppendChild(polElement);
+
+            XmlElement emailElement = xmlDoc.CreateElement("EMAIL");
+            emailElement.InnerText = update.email;
+            korisnikXmlElement.AppendChild(emailElement);
+
+            XmlElement datumElement = xmlDoc.CreateElement("DATUM");
+            datumElement.InnerText = update.datumRodjenja.ToString("dd.MM.yyyy");
+            korisnikXmlElement.AppendChild(datumElement);
+
+            XmlElement ulogaElement = xmlDoc.CreateElement("ULOGA");
+            ulogaElement.InnerText = update.uloga.ToString();
+            korisnikXmlElement.AppendChild(ulogaElement);
+
+            XmlElement omiljeniElement = xmlDoc.CreateElement("omiljeni");
+            foreach(int id in idProizvoda)
+            {
+                XmlElement idProizvodElement = xmlDoc.CreateElement("ID_PROIZVOD");
+                idProizvodElement.InnerText = id.ToString();
+                omiljeniElement.AppendChild(idProizvodElement);
+            }
+            korisnikXmlElement.AppendChild(omiljeniElement);
+
+            xmlDoc.DocumentElement.AppendChild(korisnikXmlElement);
+            xmlDoc.Save(korisniciPath);
         }
 
         public static Dictionary<int, Proizvod> ReadProizvodi()

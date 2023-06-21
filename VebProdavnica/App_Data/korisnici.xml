@@ -3,33 +3,27 @@
   <korisnik>
     <KORISNICKO_IME>markom</KORISNICKO_IME>
     <LOZINKA>markom</LOZINKA>
-	<IME>Marko</IME>
-	<PREZIME>Markovic</PREZIME>
-	<POL>M</POL>
-	<EMAIL>markom@gmail.com</EMAIL>
-	<DATUM>01.01.2001</DATUM>
-	<ULOGA>Kupac</ULOGA>
-	
-	<omiljeni>
-		<ID_PROIZVOD>1</ID_PROIZVOD>
-	</omiljeni>
-	
+    <IME>Marko</IME>
+    <PREZIME>Markovic</PREZIME>
+    <POL>M</POL>
+    <EMAIL>markom@gmail.com</EMAIL>
+    <DATUM>01.01.2001</DATUM>
+    <ULOGA>Kupac</ULOGA>
+    <omiljeni>
+      <ID_PROIZVOD>1</ID_PROIZVOD>
+    </omiljeni>
   </korisnik>
-  
   <korisnik>
     <KORISNICKO_IME>petar</KORISNICKO_IME>
     <LOZINKA>petar</LOZINKA>
-	<IME>Petar</IME>
-	<PREZIME>Petrovic</PREZIME>
-	<POL>M</POL>
-	<EMAIL>petarp@gmail.com</EMAIL>
-	<DATUM>01.11.2001</DATUM>
-	<ULOGA>Prodavac</ULOGA>
-	
-	<omiljeni>
-		<ID_PROIZVOD>1</ID_PROIZVOD>
-	</omiljeni>
-	
+    <IME>Petar</IME>
+    <PREZIME>Petrovic</PREZIME>
+    <POL>M</POL>
+    <EMAIL>petarp@gmail.com</EMAIL>
+    <DATUM>01.11.2001</DATUM>
+    <ULOGA>Prodavac</ULOGA>
+    <omiljeni>
+      <ID_PROIZVOD>1</ID_PROIZVOD>
+    </omiljeni>
   </korisnik>
-  
 </korisnici>
