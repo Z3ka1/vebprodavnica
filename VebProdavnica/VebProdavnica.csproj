@@ -189,6 +189,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Prodavnica\Index.cshtml" />
     <Content Include="Views\Prodavnica\Registracija.cshtml" />
+    <Content Include="Views\Prodavnica\DetaljiProizvoda.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

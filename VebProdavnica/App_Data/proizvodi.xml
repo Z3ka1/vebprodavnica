@@ -7,7 +7,7 @@
 	<CENA>100000</CENA>
 	<KOLICINA>4</KOLICINA>
 	<OPIS>Macbook Air</OPIS>
-	<SLIKA></SLIKA>
+	<SLIKA>../Slike/laptop.jpg</SLIKA>
 	<DATUM>10.06.2023</DATUM>
 	<GRAD>Novi Sad</GRAD>
 	<DOSTUPAN>true</DOSTUPAN>

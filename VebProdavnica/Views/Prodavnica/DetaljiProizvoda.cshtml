@@ -1,0 +1,60 @@
+﻿@using VebProdavnica.Models
+@model VebProdavnica.Models.Proizvod
+@{
+    Layout = null;
+    ViewBag.Title = "DetaljiProizvoda";
+}
+
+<h2>Detalji proizvoda</h2>
+
+<head>
+    <title>Proizvod @Model.naziv</title>
+</head>
+<body>
+    <h3> @ViewBag.Message </h3>
+    
+    <h2>@Model.naziv </h2>
+    <img src="@Model.slika"/> 
+    <p>Preostalo: @Model.kolicina </p>
+    <p>Dostupan: @Model.dostupan </p>
+    <p>Cena: @Model.cena </p>
+    <p>Grad: @Model.grad</p>
+    <p>Datum postavljanja: @Model.datumPostavljanja.ToString("dd.MM.yyyy")</p> 
+    <p>@Model.opis</p>
+
+    @if (HttpContext.Current.Session["korisnik"] != null &&
+        ((Korisnik)HttpContext.Current.Session["korisnik"]).uloga == Uloga.Kupac)
+    {
+        if (!((Korisnik)HttpContext.Current.Session["korisnik"]).listaOmiljenihProizvoda.Contains(Model))
+        {
+            <form method="post" action="/Prodavnica/DodajUOmiljene">
+                <input type="number" value="@Model.id" hidden />
+                <input type="submit" value="Dodaj u omiljene" />
+            </form>
+        }
+        <h3> Oznacili ste ovaj proizvod kao omiljen! </h3>
+    }
+
+    @if (Model.listaRecenzija.Count != 0)
+    {
+        <h3>Recenzije: </h3>
+    }
+    @{Dictionary<int, VebProdavnica.Models.Recenzija> recenzije = (Dictionary<int, VebProdavnica.Models.Recenzija>)HttpContext.Current.Application["recenzije"]; }
+    @{Dictionary<string, VebProdavnica.Models.Korisnik> korisnici = (Dictionary<string, VebProdavnica.Models.Korisnik>)HttpContext.Current.Application["korisnici"]; }
+    @foreach(VebProdavnica.Models.Recenzija r in Model.listaRecenzija)
+    {
+    <table>
+        <tr>
+            <td> @recenzije[r.id].naslov </td>
+            <td> <img src="@recenzije[r.id].slika" /> </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime  : @recenzije[r.id].sadrzajRecenzije
+            </td>
+        </tr>
+    </table>
+    }
+
+    <a href="~/Prodavnica/Index">Pocetna strana</a>
+</body>

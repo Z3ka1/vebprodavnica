@@ -1,12 +1,14 @@
-﻿
+﻿@using VebProdavnica.Models;
 @{
     Layout = null;
     ViewBag.Title = "Index";
+    var SviProizvodi = ViewData["Proizvodi"] as Dictionary<int, Proizvod>;
 }
 
 <body>
     <h2>Dobrodosli u prodavnicu</h2>
 
+    <h2>@ViewBag.Greska</h2>
 
     <table>
         @if (HttpContext.Current.Session["korisnik"] == null)
@@ -21,13 +23,13 @@
                             <tr>
                                 <td>Korisnicko ime:</td>
                                 <td>
-                                    <input type="text" />
+                                    <input type="text" name="username" required/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Lozinka:</td>
                                 <td>
-                                    <input type="password" />
+                                    <input type="password" name="password" required/>
                                 </td>
                             </tr>
                             <tr>
@@ -44,9 +46,36 @@
                 </td>
             </tr>
         }
+    </table>
+
+    <table border="1">
         <tr>
-            @* TODO NASTAVITI *@
+            <th>Naziv</th>
+            <th>Slika</th>
+            <th>Cena</th>
         </tr>
+        @foreach(Proizvod p in SviProizvodi.Values)
+        {
+            if (p.kolicina > 0)
+            {
+                <tr>
+                    <td>@p.naziv</td>
+                    <td>
+                        <img src="@p.slika"/>
+                    </td>
+                    <td>@p.cena</td>
+                    <td>
+                        <form method="post" action="/Prodavnica/DetaljiProizvoda">
+                            <input type="number" value="@p.id" name="id" hidden />
+                            <input type="submit" value="Vise o proizvodu" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+
+
 
     </table>
+
 </body>

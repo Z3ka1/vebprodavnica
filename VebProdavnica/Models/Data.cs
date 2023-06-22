@@ -181,7 +181,7 @@ namespace VebProdavnica.Models
                 recenzije = vratiRecenzije(int.Parse(id));
 
                 Proizvod novi = new Proizvod(int.Parse(id), naziv, double.Parse(cena), int.Parse(kolicina),
-                    opis, slika, datum, grad, dostupan, userProdavca);
+                    opis, slika, datum, grad, dostupan, userProdavca, recenzije);
                 ret.Add(int.Parse(id), novi);
             }
 
@@ -322,10 +322,13 @@ namespace VebProdavnica.Models
                 DateTime.TryParseExact(datumStr, format, null, System.Globalization.DateTimeStyles.None, out datum);
 
 
+
                 if (userProdavca == korisnickoImeTrazenog)
                 {
+                    List<Recenzija> recenzije = new List<Recenzija>();
+                    recenzije = vratiRecenzije(int.Parse(id));
                     Proizvod objavljen = new Proizvod(int.Parse(id), naziv, double.Parse(cena), int.Parse(kolicina),
-                        opis, slika, datum, grad, dostupan, userProdavca);
+                        opis, slika, datum, grad, dostupan, userProdavca,recenzije);
                     ret.Add(objavljen);
                 }
 
@@ -407,8 +410,10 @@ namespace VebProdavnica.Models
 
                 if (int.Parse(id) == trazeniId)
                 {
+                    List<Recenzija> recenzije = new List<Recenzija>();
+                    recenzije = vratiRecenzije(int.Parse(id));
                     Proizvod omiljeni = new Proizvod(int.Parse(id), naziv, double.Parse(cena), int.Parse(kolicina),
-                        opis, slika, datum, grad, dostupan, userProdavca);
+                        opis, slika, datum, grad, dostupan, userProdavca, recenzije);
                     return omiljeni;
                 }
 

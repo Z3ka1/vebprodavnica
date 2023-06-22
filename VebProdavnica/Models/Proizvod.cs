@@ -22,7 +22,7 @@ namespace VebProdavnica.Models
         public string userProdavca { get; set; }
 
         public Proizvod(int id, string naziv, double cena, int kolicina, string opis, string slika, 
-            DateTime datumPostavljanja, string grad, bool dostupan, string userProdavca)
+            DateTime datumPostavljanja, string grad, bool dostupan, string userProdavca, List<Recenzija> recenzije)
         {
             this.id = id;
             this.naziv = naziv;
@@ -33,7 +33,7 @@ namespace VebProdavnica.Models
             this.datumPostavljanja = datumPostavljanja;
             this.grad = grad;
             this.dostupan = dostupan;
-            this.listaRecenzija = new List<Recenzija>();
+            this.listaRecenzija = recenzije;
             this.userProdavca = userProdavca;
         }
         
