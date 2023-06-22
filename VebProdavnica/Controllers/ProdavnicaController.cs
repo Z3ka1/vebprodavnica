@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using VebProdavnica.Models;
@@ -87,7 +88,7 @@ namespace VebProdavnica.Controllers
         public ActionResult DodajUOmiljene(int id)
         {
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
-            if (!((Korisnik)Session["korisnik"]).listaOmiljenihProizvoda.Contains(proizvodi[id]))
+            if (!((Korisnik)Session["korisnik"]).listaOmiljenihProizvoda.Any(p => p.id == id))
             {
                 ((Korisnik)Session["korisnik"]).listaOmiljenihProizvoda.Add(proizvodi[id]);
                 Data.UpdateKorisnikXml((Korisnik)Session["korisnik"]);
@@ -99,5 +100,31 @@ namespace VebProdavnica.Controllers
             }
             return View("DetaljiProizvoda", proizvodi[id]);
         }
+
+        [HttpPost]
+        public ActionResult PoruciProizvod(int id, int kolicina)
+        {
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+
+            if (proizvodi[id].kolicina >= kolicina)
+            {
+                Porudzbina nova = new Porudzbina(Data.GenerateID(), id, kolicina,
+                    ((Korisnik)Session["korisnik"]).korisnickoIme, DateTime.Now, Status.AKTIVNA);
+                ((Korisnik)Session["korisnik"]).listaPorudzbina.Add(nova);
+                Data.UpdatePorudzbinaXml(nova);
+                proizvodi[id].kolicina -= kolicina;
+                Data.UpdateProizvodXml(proizvodi[id]);
+
+                ViewBag.Message = $"Porudzbina {nova.id} uspesno kreirana, detalje o porudzbini mozete videti na svom profilu.";
+            }
+            else
+            {
+                ViewBag.Greska = $"Nema dovoljno proizvoda na stanju! Preostala kolicina je {proizvodi[id].kolicina}.";
+            }
+
+            return View("DetaljiProizvoda", proizvodi[id]);
+        }
+
+
     }
 }

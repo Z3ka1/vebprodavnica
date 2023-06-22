@@ -167,10 +167,10 @@ namespace VebProdavnica.Models
                 string datumStr = proizvodNode.SelectSingleNode("DATUM")?.InnerText;
                 string grad = proizvodNode.SelectSingleNode("GRAD")?.InnerText;
                 string dostupanStr = proizvodNode.SelectSingleNode("DOSTUPAN")?.InnerText;
-                string userProdavca = proizvodNode.SelectSingleNode("ID_PRODAVCA")?.InnerText;
+                string userProdavca = proizvodNode.SelectSingleNode("USER_PRODAVCA")?.InnerText;
 
                 bool dostupan = false;
-                if (dostupanStr == "true")
+                if (dostupanStr == "True")
                     dostupan = true;
 
                 DateTime datum;
@@ -187,6 +187,61 @@ namespace VebProdavnica.Models
 
 
             return ret;
+        }
+
+        public static void UpdateProizvodXml(Proizvod update)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(proizvodiPath);
+
+            XmlNode proizvodNode = xmlDoc.SelectSingleNode($"//proizvod[ID='{update.id}']");
+            if (proizvodNode != null)
+                proizvodNode.ParentNode.RemoveChild(proizvodNode);
+
+            XmlElement proizvodXmlElement = xmlDoc.CreateElement("proizvod");
+
+            XmlElement idElement = xmlDoc.CreateElement("ID");
+            idElement.InnerText = update.id.ToString();
+            proizvodXmlElement.AppendChild(idElement);
+
+            XmlElement nazivElement = xmlDoc.CreateElement("NAZIV");
+            nazivElement.InnerText = update.naziv;
+            proizvodXmlElement.AppendChild(nazivElement);
+
+            XmlElement cenaElement = xmlDoc.CreateElement("CENA");
+            cenaElement.InnerText = update.cena.ToString();
+            proizvodXmlElement.AppendChild(cenaElement);
+
+            XmlElement kolicinaElement = xmlDoc.CreateElement("KOLICINA");
+            kolicinaElement.InnerText = update.kolicina.ToString();
+            proizvodXmlElement.AppendChild(kolicinaElement);
+
+            XmlElement opisElement = xmlDoc.CreateElement("OPIS");
+            opisElement.InnerText = update.opis;
+            proizvodXmlElement.AppendChild(opisElement);
+
+            XmlElement slikaElement = xmlDoc.CreateElement("SLIKA");
+            slikaElement.InnerText = update.slika;
+            proizvodXmlElement.AppendChild(slikaElement);
+
+            XmlElement datumElement = xmlDoc.CreateElement("DATUM");
+            datumElement.InnerText = update.datumPostavljanja.ToString("dd.MM.yyyy");
+            proizvodXmlElement.AppendChild(datumElement);
+
+            XmlElement gradElement = xmlDoc.CreateElement("GRAD");
+            gradElement.InnerText = update.grad;
+            proizvodXmlElement.AppendChild(gradElement);
+
+            XmlElement dostupanElement = xmlDoc.CreateElement("DOSTUPAN");
+            dostupanElement.InnerText = update.dostupan.ToString();
+            proizvodXmlElement.AppendChild(dostupanElement);
+
+            XmlElement userProdavacElement = xmlDoc.CreateElement("USER_PRODAVCA");
+            userProdavacElement.InnerText = update.userProdavca;
+            proizvodXmlElement.AppendChild(userProdavacElement);
+
+            xmlDoc.DocumentElement.AppendChild(proizvodXmlElement);
+            xmlDoc.Save(proizvodiPath);
         }
 
         public static Dictionary<int, Porudzbina> ReadPorudzbine()
@@ -226,6 +281,45 @@ namespace VebProdavnica.Models
             }
 
             return ret;
+        }
+
+        public static void UpdatePorudzbinaXml(Porudzbina update)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(porudzbinePath);
+
+            XmlNode porudzbinaNode = xmlDoc.SelectSingleNode($"//porudzbina[ID='{update.id}']");
+            if (porudzbinaNode != null)
+                porudzbinaNode.ParentNode.RemoveChild(porudzbinaNode);
+
+            XmlElement porudzbinaXmlElement = xmlDoc.CreateElement("porudzbina");
+
+            XmlElement idElement = xmlDoc.CreateElement("ID");
+            idElement.InnerText = update.id.ToString();
+            porudzbinaXmlElement.AppendChild(idElement);
+
+            XmlElement kolicinaElement = xmlDoc.CreateElement("KOLICINA");
+            kolicinaElement.InnerText = update.kolicina.ToString();
+            porudzbinaXmlElement.AppendChild(kolicinaElement);
+
+            XmlElement datumElement = xmlDoc.CreateElement("DATUM");
+            datumElement.InnerText = update.datumPorudzbine.ToString("dd.MM.yyyy");
+            porudzbinaXmlElement.AppendChild(datumElement);
+
+            XmlElement statusElement = xmlDoc.CreateElement("STATUS");
+            statusElement.InnerText = update.status.ToString();
+            porudzbinaXmlElement.AppendChild(statusElement);
+
+            XmlElement idProizvodaElement = xmlDoc.CreateElement("ID_PROIZVOD");
+            idProizvodaElement.InnerText = update.idProizvod.ToString();
+            porudzbinaXmlElement.AppendChild(idProizvodaElement);
+
+            XmlElement userKorisnikElement = xmlDoc.CreateElement("USER_KORISNIK");
+            userKorisnikElement.InnerText = update.userKupac.ToString();
+            porudzbinaXmlElement.AppendChild(userKorisnikElement);
+
+            xmlDoc.DocumentElement.AppendChild(porudzbinaXmlElement);
+            xmlDoc.Save(porudzbinePath);
         }
 
         public static Dictionary<int, Recenzija> ReadRecenzije()
@@ -420,6 +514,14 @@ namespace VebProdavnica.Models
             }
 
             return null;
+        }
+
+        public static int GenerateID()
+        {
+            long timestamp = DateTime.UtcNow.Ticks;
+            int random = new Random().Next();
+            int uniqueId = (int)((timestamp & 0XFFFFFFFF) ^ random);
+            return uniqueId;
         }
     }
 }

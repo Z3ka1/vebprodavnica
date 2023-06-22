@@ -10,7 +10,7 @@ namespace VebProdavnica.Models
     {
         public int id { get; set; }
         public Proizvod proizvod { get; set; }
-        public int idPorizvod { get; set; }
+        public int idProizvod { get; set; }
         public int kolicina { get; set; }
         public Korisnik kupac { get; set; }
         public string userKupac { get; set; }
@@ -21,7 +21,7 @@ namespace VebProdavnica.Models
         public Porudzbina(int id, int idProizvod, int kolicina, string userKupac, DateTime datumPorudzbine, Status status)
         {
             this.id = id;
-            this.idPorizvod = idPorizvod;
+            this.idProizvod = idProizvod;
             this.kolicina = kolicina;
             this.userKupac = userKupac;
             this.datumPorudzbine = datumPorudzbine;

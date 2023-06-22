@@ -1,13 +1,19 @@
 <?xml version="1.0"?>
 <porudzbine>
-
   <porudzbina>
-	<ID>1</ID>
-	<KOLICINA>1</KOLICINA>
-	<DATUM>20.06.2023</DATUM>
-	<STATUS>IZVRSENA</STATUS>
-	<ID_PROIZVOD>1</ID_PROIZVOD>
-	<USER_KORISNIK>markom</USER_KORISNIK>
+    <ID>1</ID>
+    <KOLICINA>1</KOLICINA>
+    <DATUM>20.06.2023</DATUM>
+    <STATUS>IZVRSENA</STATUS>
+    <ID_PROIZVOD>1</ID_PROIZVOD>
+    <USER_KORISNIK>markom</USER_KORISNIK>
   </porudzbina>
-  
+  <porudzbina>
+    <ID>-1117505296</ID>
+    <KOLICINA>2</KOLICINA>
+    <DATUM>22.06.2023</DATUM>
+    <STATUS>AKTIVNA</STATUS>
+    <ID_PROIZVOD>1</ID_PROIZVOD>
+    <USER_KORISNIK>test</USER_KORISNIK>
+  </porudzbina>
 </porudzbine>

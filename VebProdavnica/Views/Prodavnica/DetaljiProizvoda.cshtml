@@ -12,6 +12,7 @@
 </head>
 <body>
     <h3> @ViewBag.Message </h3>
+    <h3> @ViewBag.Greska </h3>
     
     <h2>@Model.naziv </h2>
     <img src="@Model.slika"/> 
@@ -25,14 +26,27 @@
     @if (HttpContext.Current.Session["korisnik"] != null &&
         ((Korisnik)HttpContext.Current.Session["korisnik"]).uloga == Uloga.Kupac)
     {
-        if (!((Korisnik)HttpContext.Current.Session["korisnik"]).listaOmiljenihProizvoda.Contains(Model))
+        if(Model.kolicina > 0)
+                {
+                    <form method="post" action="/Prodavnica/PoruciProizvod">
+                        <input type="number" value="@Model.id" name="id" hidden />
+                        Kolicina: 
+                        <input type="number" name="kolicina" min="1" required/>
+                        <input type="submit" value="Naruci" />
+                    </form>
+                }
+
+        if (!((Korisnik)HttpContext.Current.Session["korisnik"]).listaOmiljenihProizvoda.Any(p => p.id == Model.id))
         {
             <form method="post" action="/Prodavnica/DodajUOmiljene">
-                <input type="number" value="@Model.id" hidden />
+                <input type="number" value="@Model.id" name="id" hidden />
                 <input type="submit" value="Dodaj u omiljene" />
             </form>
         }
-        <h3> Oznacili ste ovaj proizvod kao omiljen! </h3>
+        else
+        {
+            <h3> Oznacili ste ovaj proizvod kao omiljen! </h3>
+        }
     }
 
     @if (Model.listaRecenzija.Count != 0)
@@ -45,12 +59,15 @@
     {
     <table>
         <tr>
+            <td> @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime</td>
+        </tr>
+        <tr>
             <td> @recenzije[r.id].naslov </td>
             <td> <img src="@recenzije[r.id].slika" /> </td>
         </tr>
         <tr>
             <td colspan="2">
-                @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime  : @recenzije[r.id].sadrzajRecenzije
+                 @recenzije[r.id].sadrzajRecenzije
             </td>
         </tr>
     </table>
