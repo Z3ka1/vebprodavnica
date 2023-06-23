@@ -12,4 +12,16 @@
     <DOSTUPAN>True</DOSTUPAN>
     <USER_PRODAVCA>petarp</USER_PRODAVCA>
   </proizvod>
+	<proizvod>
+		<ID>2</ID>
+		<NAZIV>Tastatura</NAZIV>
+		<CENA>8900</CENA>
+		<KOLICINA>9</KOLICINA>
+		<OPIS>Razer RGB mehanicka tastatura</OPIS>
+		<SLIKA>../Slike/laptop.jpg</SLIKA>
+		<DATUM>15.06.2023</DATUM>
+		<GRAD>Novi Sad</GRAD>
+		<DOSTUPAN>True</DOSTUPAN>
+		<USER_PRODAVCA>petarp</USER_PRODAVCA>
+	</proizvod>
 </proizvodi>

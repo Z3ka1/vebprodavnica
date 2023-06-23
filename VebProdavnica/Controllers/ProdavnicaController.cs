@@ -125,6 +125,142 @@ namespace VebProdavnica.Controllers
             return View("DetaljiProizvoda", proizvodi[id]);
         }
 
+        public ActionResult Sort(string kriterijum)
+        {
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            var listaProizvoda = proizvodi.ToList();
 
+            if (kriterijum == "Naziv(rastuce)")
+                listaProizvoda.Sort((x, y) => x.Value.naziv.CompareTo(y.Value.naziv));
+            else if (kriterijum == "Naziv(opadajuce)")
+                listaProizvoda.Sort((x, y) => y.Value.naziv.CompareTo(x.Value.naziv));
+            else if(kriterijum == "Cena(rastuce)")
+                listaProizvoda.Sort((x, y) => x.Value.cena.CompareTo(y.Value.cena));
+            else if (kriterijum == "Cena(opadajuce)")
+                listaProizvoda.Sort((x, y) => y.Value.cena.CompareTo(x.Value.cena));
+            else if (kriterijum == "Datum oglasavanja(rastuce)")
+                listaProizvoda.Sort((x, y) => x.Value.datumPostavljanja.CompareTo(y.Value.datumPostavljanja));
+            else if (kriterijum == "Datum oglasavanja(opadajuce)")
+                listaProizvoda.Sort((x, y) => y.Value.datumPostavljanja.CompareTo(x.Value.datumPostavljanja));
+
+            proizvodi = listaProizvoda.ToDictionary(kvp => kvp.Key, kvp=> kvp.Value);
+            ViewData["Proizvodi"] = proizvodi;
+            return View("Index");
+        }
+
+        public ActionResult Pretraga(string naziv, string cenaOd, string cenaDo, string grad)
+        {
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<int, Proizvod> pretraga = new Dictionary<int, Proizvod>();
+
+            bool uspesno = false;
+            double cenaOddouble;
+            double cenaDodouble;
+            uspesno = double.TryParse(cenaOd, out cenaOddouble);
+            uspesno = double.TryParse(cenaDo, out cenaDodouble);
+
+            foreach(Proizvod p in proizvodi.Values)
+            {
+                if (naziv != "" && (cenaOd != "" || cenaDo != "") && grad != "")
+                {
+                    if (cenaOd == "")
+                        cenaOddouble = 0;
+                    if (cenaDo == "")
+                        cenaDodouble = double.MaxValue;
+
+                    if (p.naziv.ToLower().Contains(naziv.ToLower()) &&
+                        p.cena <= cenaDodouble && p.cena >= cenaOddouble &&
+                        p.grad.ToLower().Equals(grad.ToLower()))
+                        if (!pretraga.ContainsKey(p.id))
+                            pretraga.Add(p.id, p);
+                }
+
+                if (naziv != "" && (cenaOd == "" && cenaDo == "") && grad == "")
+                {
+                    if (cenaOd == "")
+                        cenaOddouble = 0;
+                    if (cenaDo == "")
+                        cenaDodouble = double.MaxValue;
+
+                    if (p.naziv.ToLower().Contains(naziv.ToLower()))
+                        if (!pretraga.ContainsKey(p.id))
+                            pretraga.Add(p.id, p);
+                }
+
+                if (naziv == "" && (cenaOd != "" || cenaDo != "") && grad == "")
+                {
+                    if (cenaOd == "")
+                        cenaOddouble = 0;
+                    if (cenaDo == "")
+                        cenaDodouble = double.MaxValue;
+
+                    if (p.cena <= cenaDodouble && p.cena >= cenaOddouble)
+                        if (!pretraga.ContainsKey(p.id))
+                            pretraga.Add(p.id, p);
+                }
+
+                if (naziv == "" && (cenaOd == "" && cenaDo == "") && grad != "")
+                {
+                    if (cenaOd == "")
+                        cenaOddouble = 0;
+                    if (cenaDo == "")
+                        cenaDodouble = double.MaxValue;
+
+                    if (p.grad.ToLower().Equals(grad.ToLower()))
+                        if (!pretraga.ContainsKey(p.id))
+                            pretraga.Add(p.id, p);
+                }
+
+                if (naziv != "" && (cenaOd != "" || cenaDo != "") && grad == "")
+                {
+                    if (cenaOd == "")
+                        cenaOddouble = 0;
+                    if (cenaDo == "")
+                        cenaDodouble = double.MaxValue;
+
+                    if (p.naziv.ToLower().Contains(naziv.ToLower()) &&
+                        p.cena <= cenaDodouble && p.cena >= cenaOddouble)
+                        if (!pretraga.ContainsKey(p.id))
+                            pretraga.Add(p.id, p);
+                }
+
+                if (naziv != "" && (cenaOd == "" && cenaDo == "") && grad != "")
+                {
+                    if (cenaOd == "")
+                        cenaOddouble = 0;
+                    if (cenaDo == "")
+                        cenaDodouble = double.MaxValue;
+
+                    if (p.naziv.ToLower().Contains(naziv.ToLower()) && 
+                        p.grad.ToLower().Equals(grad.ToLower()))
+                        if (!pretraga.ContainsKey(p.id))
+                            pretraga.Add(p.id, p);
+                }
+
+                if (naziv == "" && (cenaOd != "" || cenaDo != "") && grad != "")
+                {
+                    if (cenaOd == "")
+                        cenaOddouble = 0;
+                    if (cenaDo == "")
+                        cenaDodouble = double.MaxValue;
+
+                    if (p.cena <= cenaDodouble && p.cena >= cenaOddouble &&
+                        p.grad.ToLower().Equals(grad.ToLower()))
+                        if (!pretraga.ContainsKey(p.id))
+                            pretraga.Add(p.id, p);
+                }
+            }
+
+            if(pretraga.Count == 0)
+            {
+                ViewBag.Pretraga = "Nije pronadjen ni jedan proizvod za datu pretragu. Prikazani su svi proizvodi.";
+                ViewData["Proizvodi"] = proizvodi;
+                return View("Index");
+            }
+
+            ViewBag.Pretraga = "Rezultati pretrage";
+            ViewData["Proizvodi"] = pretraga;
+            return View("Index");
+        }
     }
 }
