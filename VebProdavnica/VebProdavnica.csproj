@@ -190,6 +190,7 @@
     <Content Include="Views\Prodavnica\Index.cshtml" />
     <Content Include="Views\Prodavnica\Registracija.cshtml" />
     <Content Include="Views\Prodavnica\DetaljiProizvoda.cshtml" />
+    <Content Include="Views\Prodavnica\Prijava.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

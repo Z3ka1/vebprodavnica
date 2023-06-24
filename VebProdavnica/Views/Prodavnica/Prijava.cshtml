@@ -1,0 +1,121 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "Prijava";
+}
+
+<head>
+    <title>Prijavi se</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #cc0000;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 10px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="submit"] {
+            padding: 8px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+            margin-top: 20px;
+        }
+
+        .login-container {
+            margin: 0 auto;
+            max-width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .login-container h3 {
+            margin-top: 0;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Prijava</h2>
+    <h3>@ViewBag.Greska</h3>
+    @if (HttpContext.Current.Session["korisnik"] == null)
+    {
+        <div class="login-container">
+            <form method="post" action="/Prodavnica/UlogujSe">
+                <table>
+                    <tr>
+                        <td colspan="2" align="center">Prijava na sistem</td>
+                    </tr>
+                    <tr>
+                        <td>Korisnicko ime:</td>
+                        <td><input type="text" name="username" required /></td>
+                    </tr>
+                    <tr>
+                        <td>Lozinka:</td>
+                        <td><input type="password" name="password" required /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><input type="submit" value="Prijavi se" /></td>
+                    </tr>
+                </table>
+            </form>
+            <div class="register-link">
+                <h3>Nemate nalog?</h3>
+                <form action="/Prodavnica/Registracija">
+                    <input type="submit" value="Registrujte se ovde!" />
+                </form>
+            </div>
+        </div>
+        <a href="~/Prodavnica/Index">Pocetna strana</a>
+    }
+    else
+    {
+        <h3>Vec ste prijavljeni</h3>
+        <a href="~/Prodavnica/Index">Pocetna strana</a>
+    }
+</body>

@@ -24,6 +24,11 @@ namespace VebProdavnica.Controllers
             return View();
         }
 
+        public ActionResult Prijava()
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult RegistrujSe(string ime, string prezime, string polStr, string email, DateTime datumRodjenja,
             string ulogaStr, string korisnickoIme, string lozinka)
@@ -66,15 +71,18 @@ namespace VebProdavnica.Controllers
                 if (korisnik == null || korisnici[username].lozinka != password)
                 {
                     ViewBag.Greska = "Pogresno korisnicko ime ili lozinka!";
-                    Dictionary<int, Proizvod> proizvodii = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
-                    ViewData["Proizvodi"] = proizvodii;
-                    return View("Index");
+                    return View("Prijava");
                 }
                 Session["korisnik"] = korisnik;
             }
-            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
-            ViewData["Proizvodi"] = proizvodi;
-            return View("Index");
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Odjava()
+        {
+            Session["korisnik"] = null;
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
