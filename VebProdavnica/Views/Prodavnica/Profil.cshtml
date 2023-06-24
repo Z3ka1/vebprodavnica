@@ -163,6 +163,70 @@
     } else { <h4>Nema OMILJENIH proizvoda</h4>}
     </div>
 }
+else if(Model.uloga == Uloga.Prodavac)
+{
+    <form action="/Prodavnica/DodajProizvod">
+        <input type="submit" value="Prodaj novi proizvod" />
+    </form>
+    if(Model.listaObjavljenihProizvoda.Count > 0)
+    {
+        <h4>Vasi objavljeni proizvodi</h4>
+        <table>
+            <tr>
+                <th>Naziv</th>
+                <th>Cena</th>
+                <th>Kolicina</th>
+                <th>Opis</th>
+                <th>Slika</th>
+                <th>Datum postavljanja</th>
+                <th>Grad</th>
+                <th>Dostupnost</th>
+            </tr>
+            @foreach(Proizvod p in Model.listaObjavljenihProizvoda)
+            {
+                <tr>
+                    <td>@p.naziv</td>
+                    <td>@p.cena</td>
+                    <td>@p.kolicina</td>
+                    <td>@p.opis</td>
+                    <td><img src="@p.slika"/></td>
+                    <td>@p.datumPostavljanja</td>
+                    <td>@p.grad</td>
+                    @if(p.dostupan)
+                    {
+                        <td>Dostupan</td>
+                    }
+                    else
+                    {
+                        <td>Nedostupan</td>
+                    }
+                    <td>
+                        @if(p.dostupan)
+                        {
+                            <form action="/Prodavnica/ObrisiProizvod">
+                                <input type="number" name="id" value="@p.id" hidden/>
+                                <input type="submit" value="Obrisi" />
+                            </form>
+                            <form action="/Prodavnica/IzmeniProizvod">
+                                <input type="number" name="id" value="@p.id" hidden />
+                                <input type="submit" value="Izmeni" />
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <h4>Trenutno nemate objavljenih proizvoda</h4>
+    }
+
+}
+else if(Model.uloga == Uloga.Administrator)
+{
+
+}
 
 <div>
 <h4>Podaci o korisniku</h4>

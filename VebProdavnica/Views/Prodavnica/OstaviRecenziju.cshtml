@@ -3,26 +3,87 @@
     ViewBag.Title = "OstaviRecenziju";
 }
 
-<h2>Recenzija porudzbine '@ViewBag.id'</h2>
+<head>
+    <title>Nova recenzija</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
 
-<form method="post" action="/Prodavnica/PublishRecenziju">
-    <input type="number" value="@ViewBag.id" name="idPorudzbine" hidden/>
-    <table>
-        <tr>
-            <td>Naslov:</td>
-            <td> <input type="text" name="naslov" /> </td>
-        </tr>
-        <tr>
-            <td>Napisite nesto o ovom proizvodu: </td>
-            <td> <input type="text" name="sadrzaj" /> </td>
-        </tr>
-        <tr>
-            <td>Mozete dodati i sliku uz vasu recenziju</td>
-            <td><input type="file" accept="image/*" name="slika"/></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="submit" value="Ostavi recenziju" /></td>
-        </tr>
-    </table>
-</form>
-<a href="~/Prodavnica/Profil" > Odustani </a>
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td {
+            padding: 10px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            padding: 5px 10px;
+            width: 100%;
+        }
+
+        input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #cc0000;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #990000;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #cc0000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Recenzija porudzbine '@ViewBag.id'</h2>
+
+    <form method="post" action="/Prodavnica/PublishRecenziju">
+        <input type="number" value="@ViewBag.id" name="idPorudzbine" hidden />
+        <table>
+            <tr>
+                <td>Naslov:</td>
+                <td> <input type="text" name="naslov" /> </td>
+            </tr>
+            <tr>
+                <td>Napisite nesto o ovom proizvodu: </td>
+                <td> <input type="text" name="sadrzaj" /> </td>
+            </tr>
+            <tr>
+                <td>Mozete dodati i sliku uz vasu recenziju</td>
+                <td><input type="file" accept="image/*" name="slika" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" value="Ostavi recenziju" /></td>
+            </tr>
+        </table>
+    </form>
+    <a href="~/Prodavnica/Profil"> Odustani </a>
+</body>

@@ -194,6 +194,7 @@
     <Content Include="Views\Prodavnica\Profil.cshtml" />
     <Content Include="Views\Prodavnica\OstaviRecenziju.cshtml" />
     <Content Include="Views\Prodavnica\IzmeniRecenziju.cshtml" />
+    <Content Include="Views\Prodavnica\IzmeniProizvod.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,0 +1,45 @@
+﻿@model VebProdavnica.Models.Proizvod
+@{
+    ViewBag.Title = "IzmeniProizvod";
+}
+
+<title>Izmeni proizvod</title>
+
+<h2>Izmeni proizvod @ViewBag.Id</h2>
+
+<h3>@ViewBag.Greska</h3>
+
+<form action="/Prodavnica/IzmeniProizvod">
+    <input type="number" value="@Model.id" name="id" hidden/>
+<table>
+    <tr>
+        <td>Naziv:</td>
+        <td><input type="text" value="@Model.naziv" name="naziv" required/></td>
+    </tr>
+    <tr>
+        <td>Cena:</td>
+        <td><input type="text" value="@Model.cena" name="cena" required/></td>
+    </tr>
+    <tr>
+        <td>Kolicina:</td>
+        <td><input type="number" value="@Model.kolicina" min="0" name="kolicina" required /></td>
+    </tr>
+    <tr>
+        <td>Opis:</td>
+        <td><input type="text" value="@Model.opis" neme="opis" required/></td>
+    </tr>
+    <tr>
+        <td>Slika:</td>
+        <td><input type="file" value="@Model.slika" accept="image/*" name="slika"/></td>
+    </tr>
+    <tr>
+        <td>Grad:</td>
+        <td> <input type="text" value="@Model.grad" name="grad" required /></td>
+    </tr>
+    <tr>
+        <td colspan="2"><input type="submit" value="Potvrdi izmenu" /></td>
+    </tr>
+</table>
+</form>
+
+<a href="~/Prodavnica/Profil">Odustani</a>

@@ -9,15 +9,125 @@
 
 <head>
     <title>Proizvod @Model.naziv</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #cc0000;
+            margin-top: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ccc;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+        }
+
+        .form-container input[type="number"],
+        .form-container input[type="submit"] {
+            padding: 5px 10px;
+        }
+
+        .form-container input[type="number"] {
+            width: 50px;
+        }
+
+        .form-container input[type="submit"] {
+            background-color: #cc0000;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-container input[type="submit"]:hover {
+            background-color: #990000;
+        }
+
+        .recenzije-container {
+            margin-top: 20px;
+        }
+
+        .recenzija {
+            margin-bottom: 20px;
+        }
+
+        .recenzija td {
+            vertical-align: top;
+            padding: 5px;
+        }
+
+        .recenzija img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .recenzija h4 {
+            margin-bottom: 5px;
+        }
+
+        .recenzija p {
+            margin-top: 5px;
+        }
+
+        .recenzija:last-child {
+            margin-bottom: 0;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #cc0000;
+        }
+    </style>
 </head>
 <body>
     <h3> @ViewBag.Message </h3>
     <h3> @ViewBag.Greska </h3>
     
     <h2>@Model.naziv </h2>
-    <img src="@Model.slika"/> 
-    <p>Preostalo: @Model.kolicina </p>
-    <p>Dostupan: @Model.dostupan </p>
+    <img src="@Model.slika" alt="Slika"/> 
+    @if (Model.dostupan == true)
+    {
+        <p>Dostupan, Preostalo: @Model.kolicina</p>
+    }
+    else
+    {
+        <p>Nedostupan</p>
+    }
     <p>Cena: @Model.cena </p>
     <p>Grad: @Model.grad</p>
     <p>Datum postavljanja: @Model.datumPostavljanja.ToString("dd.MM.yyyy")</p> 
@@ -28,12 +138,14 @@
     {
         if(Model.kolicina > 0)
                 {
-                    <form method="post" action="/Prodavnica/PoruciProizvod">
-                        <input type="number" value="@Model.id" name="id" hidden />
-                        Kolicina: 
-                        <input type="number" name="kolicina" min="1" required/>
-                        <input type="submit" value="Naruci" />
-                    </form>
+                    <div class="form-container">
+                        <form method="post" action="/Prodavnica/PoruciProizvod">
+                            <input type="number" value="@Model.id" name="id" hidden />
+                            <label for="kolicina">Kolicina:</label>
+                            <input type="number" name="kolicina" min="1" required />
+                            <input type="submit" value="Naruci" />
+                        </form>
+                    </div>
                 }
 
         if (!((Korisnik)HttpContext.Current.Session["korisnik"]).listaOmiljenihProizvoda.Any(p => p.id == Model.id))
@@ -51,30 +163,34 @@
 
     @if (Model.listaRecenzija.Count != 0)
     {
-        <h3>Recenzije: </h3>
-    }
-    @{Dictionary<int, VebProdavnica.Models.Recenzija> recenzije = (Dictionary<int, VebProdavnica.Models.Recenzija>)HttpContext.Current.Application["recenzije"]; }
-    @{Dictionary<string, VebProdavnica.Models.Korisnik> korisnici = (Dictionary<string, VebProdavnica.Models.Korisnik>)HttpContext.Current.Application["korisnici"]; }
-    @foreach(VebProdavnica.Models.Recenzija r in Model.listaRecenzija)
-    {
-        if (!r.obrisana)
-        {
-        <table>
-            <tr>
-                <td> @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime</td>
-            </tr>
-            <tr>
-                <td> @recenzije[r.id].naslov </td>
-                <td> <img src="@recenzije[r.id].slika" /> </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                     @recenzije[r.id].sadrzajRecenzije
-                </td>
-            </tr>
-        </table>
-        }
-    }
+        <div class="recenzije-container">
+            <h3>Recenzije: </h3>
 
+            @{Dictionary<int, VebProdavnica.Models.Recenzija> recenzije = (Dictionary<int, VebProdavnica.Models.Recenzija>)HttpContext.Current.Application["recenzije"]; }
+            @{Dictionary<string, VebProdavnica.Models.Korisnik> korisnici = (Dictionary<string, VebProdavnica.Models.Korisnik>)HttpContext.Current.Application["korisnici"]; }
+            @foreach (VebProdavnica.Models.Recenzija r in Model.listaRecenzija)
+            {
+                if (!r.obrisana)
+                {
+                    <div class="recenzija">
+                        <table>
+                            <tr>
+                                <td> @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime</td>
+                            </tr>
+                            <tr>
+                                <td> @recenzije[r.id].naslov </td>
+                                <td> <img src="@recenzije[r.id].slika" alt="Slika"/> </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    @recenzije[r.id].sadrzajRecenzije
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                }
+            }
+        </div>
+    }
     <a href="~/Prodavnica/Index">Pocetna strana</a>
 </body>

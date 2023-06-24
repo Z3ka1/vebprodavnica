@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using VebProdavnica.Models;
+using WebGrease;
 
 namespace VebProdavnica.Controllers
 {
@@ -438,7 +439,8 @@ namespace VebProdavnica.Controllers
             //recenzije + XMLRecenzije
             recenzije[idRecenzije].naslov = naslov;
             recenzije[idRecenzije].sadrzajRecenzije = sadrzaj;
-            recenzije[idRecenzije].slika = slika;
+            if(slika != "")
+                recenzije[idRecenzije].slika = slika;
             Data.UpdateRecenzijaXml(recenzije[idRecenzije]);
 
             //proizvodi.recenzije
@@ -449,6 +451,78 @@ namespace VebProdavnica.Controllers
             ViewData["Proizvodi"] = proizvodi;
             return View("Profil", (Korisnik)Session["korisnik"]);
         }
+        public ActionResult DodajProizvod()
+        {
+            return View();
+        }
+
+        public ActionResult ObrisiProizvod(int id)
+        {
+            return View();
+        }
+
+        public ActionResult IzmeniProizvod(int id)
+        {
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+
+            return View(proizvodi[id]);
+        }
+
+        public ActionResult IzmeniProizvod(int id, string naziv, string cena,int kolicina, string opis, 
+            string slika, string grad)
+        {
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Korisnik trenutni = (Korisnik)Session["korisnik"];
+
+            double cenaParse;
+            bool valid = double.TryParse(cena, out cenaParse);
+
+            if(!valid)
+            {
+                ViewBag.Greska = "Proizvod nije izmenjen, pogresna vrednost za cenu!";
+                return View(proizvodi[id]);
+            }
+
+            //pozicija u listi objavljenih proizvoda za Session
+            int idxMenjanja = trenutni.listaObjavljenihProizvoda.FindIndex(p => p.id == id);
+            //pozicija u listi objavljenih proizvoda za Application
+            int idxMenjanjaApp = korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda.FindIndex(p => p.id == id);
+
+            proizvodi[id].naziv = naziv;
+            trenutni.listaObjavljenihProizvoda[idxMenjanja].naziv = naziv;
+            korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].naziv = naziv;
+
+            proizvodi[id].cena = cenaParse;
+            trenutni.listaObjavljenihProizvoda[idxMenjanja].cena = cenaParse;
+            korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].cena = cenaParse;
+
+            proizvodi[id].kolicina = kolicina;
+            trenutni.listaObjavljenihProizvoda[idxMenjanja].kolicina = kolicina;
+            korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].kolicina = kolicina;
+
+            proizvodi[id].opis = opis;
+            trenutni.listaObjavljenihProizvoda[idxMenjanja].opis = opis;
+            korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].opis = opis;
+
+            if(slika != "")
+            {
+                proizvodi[id].slika = slika;
+                trenutni.listaObjavljenihProizvoda[idxMenjanja].slika = slika;
+                korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].slika = slika;
+            }
+
+            proizvodi[id].grad = grad;
+            trenutni.listaObjavljenihProizvoda[idxMenjanja].grad = grad;
+            korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].grad = grad;
+
+            Data.UpdateProizvodXml(proizvodi[id]);
+
+            ViewBag.Message = "Proizvod uspesno izmenjen";
+            ViewData["Proizvodi"] = proizvodi;
+            return View("Profil",trenutni);
+        }
+
 
     }
 }
