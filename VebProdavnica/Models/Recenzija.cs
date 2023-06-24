@@ -16,8 +16,8 @@ namespace VebProdavnica.Models
         public string naslov { get; set; }
         public string sadrzajRecenzije { get; set; }
         public string slika { get; set; }
-
-        public Recenzija(int id, int idProizvod, string userRecezent, string naslov, string sadrzajRecenzije, string slika)
+        public bool obrisana { get; set; }
+        public Recenzija(int id, int idProizvod, string userRecezent, string naslov, string sadrzajRecenzije, string slika, bool obrisana)
         {
             this.id = id;
             this.idProizvod = idProizvod;
@@ -25,6 +25,7 @@ namespace VebProdavnica.Models
             this.naslov = naslov;
             this.sadrzajRecenzije = sadrzajRecenzije;
             this.slika = slika;
+            this.obrisana = obrisana;
         }
 
     }

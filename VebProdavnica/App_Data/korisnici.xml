@@ -1,19 +1,6 @@
 <?xml version="1.0"?>
 <korisnici>
   <korisnik>
-    <KORISNICKO_IME>markom</KORISNICKO_IME>
-    <LOZINKA>markom</LOZINKA>
-    <IME>Marko</IME>
-    <PREZIME>Markovic</PREZIME>
-    <POL>M</POL>
-    <EMAIL>markom@gmail.com</EMAIL>
-    <DATUM>01.01.2001</DATUM>
-    <ULOGA>Kupac</ULOGA>
-    <omiljeni>
-      <ID_PROIZVOD>1</ID_PROIZVOD>
-    </omiljeni>
-  </korisnik>
-  <korisnik>
     <KORISNICKO_IME>petar</KORISNICKO_IME>
     <LOZINKA>petar</LOZINKA>
     <IME>Petar</IME>
@@ -22,6 +9,7 @@
     <EMAIL>petarp@gmail.com</EMAIL>
     <DATUM>01.11.2001</DATUM>
     <ULOGA>Prodavac</ULOGA>
+    <OBRISAN>False</OBRISAN>
     <omiljeni>
       <ID_PROIZVOD>1</ID_PROIZVOD>
     </omiljeni>
@@ -35,6 +23,21 @@
     <EMAIL>testtestovic@gmail.com</EMAIL>
     <DATUM>01.06.2023</DATUM>
     <ULOGA>Kupac</ULOGA>
+    <OBRISAN>False</OBRISAN>
+    <omiljeni>
+      <ID_PROIZVOD>1</ID_PROIZVOD>
+    </omiljeni>
+  </korisnik>
+  <korisnik>
+    <KORISNICKO_IME>markom</KORISNICKO_IME>
+    <LOZINKA>markom</LOZINKA>
+    <IME>Markoo</IME>
+    <PREZIME>Markovicc</PREZIME>
+    <POL>M</POL>
+    <EMAIL>markomm@gmail.com</EMAIL>
+    <DATUM>09.01.2001</DATUM>
+    <ULOGA>Kupac</ULOGA>
+    <OBRISAN>False</OBRISAN>
     <omiljeni>
       <ID_PROIZVOD>1</ID_PROIZVOD>
     </omiljeni>

@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <recenzije>
-
   <recenzija>
-	<ID>1</ID>
-	<NASLOV>Fenomenomenalno</NASLOV>
-	<SADRZAJ>Odlican laptop</SADRZAJ>
-	<SLIKA></SLIKA>
-	<ID_PROIZVOD>1</ID_PROIZVOD>
-	<USER_KORISNIK>markom</USER_KORISNIK>
+    <ID>1</ID>
+    <NASLOV>Fenomenomenalno</NASLOV>
+    <SADRZAJ>Odlican laptop</SADRZAJ>
+    <SLIKA>
+    </SLIKA>
+    <ID_PROIZVOD>1</ID_PROIZVOD>
+    <USER_KORISNIK>markom</USER_KORISNIK>
+    <OBRISANA>False</OBRISANA>
   </recenzija>
-  
 </recenzije>

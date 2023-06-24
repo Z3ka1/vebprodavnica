@@ -1,0 +1,245 @@
+﻿@using VebProdavnica.Models;
+@model VebProdavnica.Models.Korisnik
+@{
+    Layout = null;
+    ViewBag.Title = "Profil";
+    var SviProizvodi = ViewData["Proizvodi"] as Dictionary<int, Proizvod>;
+}
+
+<head>
+    <title>Profil @Model.korisnickoIme</title>
+</head>
+
+
+<h2>Profil korisnika '@Model.korisnickoIme'</h2>
+<h3>Vasa uloga: '@Model.uloga.ToString()'</h3>
+<h2>@ViewBag.Greska</h2>
+<h2>@ViewBag.Message</h2>
+
+
+@if (Model.uloga == Uloga.Kupac)
+{
+    <div>
+    <h4>Vase porudzbine:</h4>
+    @if (Model.listaPorudzbina.Any(obj => obj.status == Status.AKTIVNA))
+    {
+    <h4>AKTIVNE:</h4>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Proizvod</th>
+            <th>Kolicina</th>
+            <th>Datum porudzbine</th>
+            <th>Oznaci pristiglo</th>
+        </tr>
+        @foreach (Porudzbina p in Model.listaPorudzbina)
+        {
+            if (p.status == Status.AKTIVNA)
+            {
+                <tr>
+                    <td>@p.id</td>
+                    <td>@SviProizvodi[p.idProizvod].naziv</td>
+                    <td>@p.kolicina</td>
+                    <td>@p.datumPorudzbine.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        <form method="post" action="/Prodavnica/OznaciPorudzbinuIzvrsenom">
+                            <input type="text" value="@p.id" name="id" hidden />
+                            <input type="submit" value="Primljeno" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    }
+    else { <h4>Nema AKTIVNIH porudzbina!</h4> }
+
+    @if (Model.listaPorudzbina.Any(obj => obj.status == Status.IZVRSENA))
+    {
+    <h4>IZVRSENE</h4>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Proizvod</th>
+            <th>Kolicina</th>
+            <th>Datum porudzbine</th>
+            <th>Ostavi recenziju</th>
+        </tr>
+        @foreach (Porudzbina p in Model.listaPorudzbina)
+        {
+            if (p.status == Status.IZVRSENA)
+            {
+                <tr>
+                    <td>@p.id</td>
+                    <td>@SviProizvodi[p.idProizvod].naziv</td>
+                    <td>@p.kolicina</td>
+                    <td>@p.datumPorudzbine.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        @if (p.recenzijaOstavljena == false)
+                        {
+                            <form method="post" action="/Prodavnica/OstaviRecenziju">
+                                <input type="text" value="@p.id" name="id" hidden />
+                                <input type="submit" value="Ostavi recenziju" />
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" action="/Prodavnica/IzmeniRecenziju">
+                                <input type="text" value="@p.id" name="id" hidden />
+                                <input type="submit" value="Izmeni recenziju" />
+                            </form>
+                            <form method="post" action="/Prodavnica/ObrisiRecenziju">
+                                <input type="text" value="@p.id" name="id" hidden />
+                                <input type="submit" value="Obrisi recenziju" />
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    }
+    else { <h4>Nema IZVRSENIH porudzbina!</h4>}
+
+    @if (Model.listaPorudzbina.Any(obj => obj.status == Status.OTKAZANA))
+    {
+    <h4>OTKAZANE</h4>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Proizvod</th>
+            <th>Kolicina</th>
+            <th>Datum porudzbine</th>
+        </tr>
+        @foreach (Porudzbina p in Model.listaPorudzbina)
+        {
+            if (p.status == Status.OTKAZANA)
+            {
+                <tr>
+                    <td>@p.id</td>
+                    <td>@SviProizvodi[p.idProizvod].naziv</td>
+                    <td>@p.kolicina</td>
+                    <td>@p.datumPorudzbine.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        Porudzbina OTKAZANA
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    }
+    else { <h4>Nema OTKAZANIH porudzbina!</h4>}
+    </div>
+
+    <div>
+    @if (Model.listaOmiljenihProizvoda.Count > 0)
+    {
+    <h4>Vasi omiljeni proizvodi</h4>
+    <table title="OMILJENI">
+        <tr>
+            <th>Naziv</th>
+            <th>Cena</th>
+            <th>Grad</th>
+            <th>Dostupnost</th>
+        </tr>
+        @foreach (Proizvod p in Model.listaOmiljenihProizvoda)
+        {
+                <tr>
+                    <td>@p.naziv</td>
+                    <td>@p.cena</td>
+                    <td>@p.grad</td>
+                    @if (p.dostupan)
+                    {
+                        <td>DOSTUPAN</td>
+                    }
+                    else
+                    {
+                        <td>NEDOSTUPAN</td>
+                    }
+                    
+                </tr>
+        }
+    </table>
+    } else { <h4>Nema OMILJENIH proizvoda</h4>}
+    </div>
+}
+
+<div>
+<h4>Podaci o korisniku</h4>
+<form method="post" action="/Prodavnica/IzmeniPodatkeKorisnika">
+    <table>
+        <tr>
+            <td>Ime:</td>
+            <td>
+                <input type="text" value="@Model.ime" name="ime" required />
+            </td>
+        </tr>
+        <tr>
+            <td>Prezime:</td>
+            <td>
+                <input type="text" value="@Model.prezime" name="prezime" required />
+            </td>
+        </tr>
+        <tr>
+            <td>Pol</td>
+            @switch (Model.pol)
+            {
+                case Pol.M:
+                    <td>Muski</td>
+                    break;
+                case Pol.Z:
+                    <td>Zenski</td>
+                    break;
+            }
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>
+                <input type="text" value="@Model.email" name="email" required />
+            </td>
+        </tr>
+        <tr>
+            <td>Datum rodjenja:</td>
+            <td>
+                <input type="date" value="@Model.datumRodjenja.ToString("yyyy-MM-dd")" name="datumRodjenja" required />
+            </td>
+        </tr>
+        <tr>
+            <td>Uloga:</td>
+            @switch (Model.uloga)
+            {
+                case Uloga.Kupac:
+                    <td>Kupac</td>
+                    break;
+                case Uloga.Prodavac:
+                    <td>Prodavac</td>
+                    break;
+                case Uloga.Administrator:
+                    <td>Administrator</td>
+                    break;
+            }
+        </tr>
+        <tr>
+            <td>Korisnicko ime:</td>
+            <td>
+                @Model.korisnickoIme
+            </td>
+        </tr>
+        <tr>
+            <td>Nova lozinka:</td>
+            <td>
+                <input type="password" name="novaLozinka" />
+            </td>
+        </tr>
+        <tr>
+            <td>Stara lozinka (radi potvrde identiteta):</td>
+            <td>
+                <input type="password" name="staraLozinka" required />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Potvrdi izmenu podataka" /> </td>
+        </tr>
+    </table>
+</form>
+</div>

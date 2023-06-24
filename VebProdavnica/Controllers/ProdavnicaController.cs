@@ -85,7 +85,6 @@ namespace VebProdavnica.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
         public ActionResult DetaljiProizvoda(int id)
         {
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
@@ -95,10 +94,12 @@ namespace VebProdavnica.Controllers
         [HttpPost]
         public ActionResult DodajUOmiljene(int id)
         {
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
             if (!((Korisnik)Session["korisnik"]).listaOmiljenihProizvoda.Any(p => p.id == id))
             {
                 ((Korisnik)Session["korisnik"]).listaOmiljenihProizvoda.Add(proizvodi[id]);
+                korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].listaOmiljenihProizvoda.Add(proizvodi[id]);
                 Data.UpdateKorisnikXml((Korisnik)Session["korisnik"]);
                 ViewBag.Message = "Proizvod dodat u omiljene!";
             }
@@ -113,14 +114,24 @@ namespace VebProdavnica.Controllers
         public ActionResult PoruciProizvod(int id, int kolicina)
         {
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
 
             if (proizvodi[id].kolicina >= kolicina)
             {
                 Porudzbina nova = new Porudzbina(Data.GenerateID(), id, kolicina,
-                    ((Korisnik)Session["korisnik"]).korisnickoIme, DateTime.Now, Status.AKTIVNA);
+                    ((Korisnik)Session["korisnik"]).korisnickoIme, DateTime.Now, Status.AKTIVNA, false, 0);
+                //Session.porudzbine
                 ((Korisnik)Session["korisnik"]).listaPorudzbina.Add(nova);
+                //korisnici.porudzbine
+                korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].listaPorudzbina.Add(nova);
+                //porudzbine + XMLPorudzbine
+                porudzbine.Add(nova.id, nova);
                 Data.UpdatePorudzbinaXml(nova);
+                //proizvodi.kolicina + XMLProizvodi
                 proizvodi[id].kolicina -= kolicina;
+                if (proizvodi[id].kolicina <= 0)
+                    proizvodi[id].dostupan = false;
                 Data.UpdateProizvodXml(proizvodi[id]);
 
                 ViewBag.Message = $"Porudzbina {nova.id} uspesno kreirana, detalje o porudzbini mozete videti na svom profilu.";
@@ -270,5 +281,174 @@ namespace VebProdavnica.Controllers
             ViewData["Proizvodi"] = pretraga;
             return View("Index");
         }
+
+        public ActionResult Profil()
+        {
+            Korisnik trenutni = (Korisnik)HttpContext.Session["korisnik"];
+
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            ViewData["Proizvodi"] = proizvodi;
+            return View(trenutni);
+        }
+
+        [HttpPost]
+        public ActionResult IzmeniPodatkeKorisnika(string ime, string prezime, string email, DateTime datumRodjenja, 
+            string staraLozinka, string novaLozinka)
+        {
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+
+            Korisnik update = (Korisnik)HttpContext.Session["korisnik"];
+            if(staraLozinka == update.lozinka)
+            {
+                update.ime = ime;
+                korisnici[update.korisnickoIme].ime = ime;
+                update.prezime = prezime;
+                korisnici[update.korisnickoIme].prezime = prezime;
+                update.email = email;
+                korisnici[update.korisnickoIme].email = email;
+                update.datumRodjenja = datumRodjenja;
+                korisnici[update.korisnickoIme].datumRodjenja = datumRodjenja;
+                if (novaLozinka != "")
+                {
+                    update.lozinka = novaLozinka;
+                    korisnici[update.korisnickoIme].lozinka = novaLozinka;
+                }
+                Data.UpdateKorisnikXml(update);
+            }
+            else
+            {
+                ViewBag.Greska = "Stara lozinka je ne ispravna";
+            }
+
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            ViewData["Proizvodi"] = proizvodi;
+            return View("Profil",update);
+        }
+
+        [HttpPost]
+        public ActionResult OznaciPorudzbinuIzvrsenom(int id)
+        {
+            Korisnik trenutni = (Korisnik)HttpContext.Session["korisnik"];
+            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            
+            porudzbine[id].status = Status.IZVRSENA;
+            trenutni.listaPorudzbina.Find(x => x.id == id).status = Status.IZVRSENA;
+            korisnici[trenutni.korisnickoIme].listaPorudzbina.Find(x => x.id == id).status = Status.IZVRSENA;
+            Data.UpdatePorudzbinaXml(porudzbine[id]);
+
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            ViewData["Proizvodi"] = proizvodi;
+            return View("Profil",trenutni);
+        }
+
+        [HttpPost]
+        public ActionResult OstaviRecenziju(int id)
+        {
+            ViewBag.id = id;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult PublishRecenziju(int idPorudzbine, string naslov,string sadrzaj,string slika)
+        {
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
+            Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+
+            Korisnik recezent = (Korisnik)HttpContext.Session["korisnik"];
+
+            Recenzija nova = new Recenzija(Data.GenerateID(), porudzbine[idPorudzbine].idProizvod,
+                recezent.korisnickoIme, naslov, sadrzaj, slika, false);
+
+            //proizvodi.recenzije
+            proizvodi[nova.idProizvod].listaRecenzija.Add(nova);
+            //porudzbine + XMLporudzbine
+            porudzbine[idPorudzbine].recenzijaOstavljena = true;
+            porudzbine[idPorudzbine].idRecenzije = nova.id;
+            Data.UpdatePorudzbinaXml(porudzbine[idPorudzbine]);
+            //recenzije + XMLrecenzije
+            recenzije.Add(nova.id, nova);
+            Data.UpdateRecenzijaXml(nova);
+            //Session.porudzbine
+            int idxMenjanja = recezent.listaPorudzbina.FindIndex(p => p.id == idPorudzbine);
+            recezent.listaPorudzbina[idxMenjanja] = porudzbine[idPorudzbine];
+            //korisnici.porudzbine
+            korisnici[recezent.korisnickoIme].listaPorudzbina[idxMenjanja] = porudzbine[idPorudzbine];
+
+            ViewBag.Message = "Recenzija postavljena";
+            ViewData["Proizvodi"] = proizvodi;
+            return View("Profil", recezent);
+        }
+
+        [HttpPost]
+        public ActionResult ObrisiRecenziju(int id)
+        {
+            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
+            Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Korisnik recezent = (Korisnik)HttpContext.Session["korisnik"];
+
+            //Ovo ne moze da ne bude tacno al za svaki slucaj
+            if (porudzbine[id].recenzijaOstavljena == true)
+            {
+                //Recenzije + XMLRecenzije
+                recenzije[porudzbine[id].idRecenzije].obrisana = true;
+                Data.UpdateRecenzijaXml(recenzije[porudzbine[id].idRecenzije]);
+                
+                //Proizvodi.recenzije
+                int idxMenjanja = proizvodi[porudzbine[id].idProizvod].listaRecenzija.FindIndex(r => r.id == porudzbine[id].idRecenzije);
+                proizvodi[porudzbine[id].idProizvod].listaRecenzija[idxMenjanja] = recenzije[porudzbine[id].idRecenzije];
+                
+                //Porudzbine + XMLPorudzbine
+                porudzbine[id].recenzijaOstavljena = false;
+                porudzbine[id].idRecenzije = 0;
+                Data.UpdatePorudzbinaXml(porudzbine[id]);
+
+                //korisnici.porudzbine
+                idxMenjanja = recezent.listaPorudzbina.FindIndex(p => p.id == id);
+                korisnici[recezent.korisnickoIme].listaPorudzbina[idxMenjanja] = porudzbine[id];
+                //Session.porudzbine
+                recezent.listaPorudzbina[idxMenjanja] = porudzbine[id];
+            }
+
+            ViewBag.Message = "Recenzija obrisana";
+            ViewData["Proizvodi"] = proizvodi;
+            return View("Profil", (Korisnik)HttpContext.Session["korisnik"]);
+        }
+
+        [HttpPost]
+        public ActionResult IzmeniRecenziju(int id)
+        {
+            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
+            Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
+
+            ViewData["Recenzija"] = recenzije[porudzbine[id].idRecenzije];
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult PublishIzmenjenuRecenziju(int idRecenzije, string naslov, string sadrzaj, string slika)
+        {
+            Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+
+            //recenzije + XMLRecenzije
+            recenzije[idRecenzije].naslov = naslov;
+            recenzije[idRecenzije].sadrzajRecenzije = sadrzaj;
+            recenzije[idRecenzije].slika = slika;
+            Data.UpdateRecenzijaXml(recenzije[idRecenzije]);
+
+            //proizvodi.recenzije
+            int idxMenjanja = proizvodi[recenzije[idRecenzije].idProizvod].listaRecenzija.FindIndex(r => r.id == idRecenzije);
+            proizvodi[recenzije[idRecenzije].idProizvod].listaRecenzija[idxMenjanja] = recenzije[idRecenzije];
+
+            ViewBag.Message = "Recenzija uspesno izmenjena";
+            ViewData["Proizvodi"] = proizvodi;
+            return View("Profil", (Korisnik)Session["korisnik"]);
+        }
+
     }
 }

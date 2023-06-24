@@ -39,6 +39,11 @@ namespace VebProdavnica.Models
                 string email = korisnikNode.SelectSingleNode("EMAIL")?.InnerText;
                 string datumStr = korisnikNode.SelectSingleNode("DATUM")?.InnerText;
                 string ulogaStr = korisnikNode.SelectSingleNode("ULOGA")?.InnerText;
+                string obrisanStr = korisnikNode.SelectSingleNode("OBRISAN")?.InnerText;
+
+                bool obrisan = false;
+                if (obrisanStr == "True")
+                    obrisan = true;
 
                 Pol pol = Pol.M;
                 if (polStr == "Z")
@@ -76,7 +81,7 @@ namespace VebProdavnica.Models
                 }
 
                 Korisnik novi = new Korisnik(korisnickoIme,lozinka,ime,prezime,pol,email,datum,uloga,
-                    listaPorudzbina,listaOmiljenihProizvoda,listaObjavljenihProizvoda);
+                    listaPorudzbina,listaOmiljenihProizvoda,listaObjavljenihProizvoda, obrisan);
                 ret.Add(korisnickoIme, novi);
             }
 
@@ -131,6 +136,10 @@ namespace VebProdavnica.Models
             XmlElement ulogaElement = xmlDoc.CreateElement("ULOGA");
             ulogaElement.InnerText = update.uloga.ToString();
             korisnikXmlElement.AppendChild(ulogaElement);
+
+            XmlElement obirsanElement = xmlDoc.CreateElement("OBRISAN");
+            obirsanElement.InnerText = update.obrisan.ToString();
+            korisnikXmlElement.AppendChild(obirsanElement);
 
             XmlElement omiljeniElement = xmlDoc.CreateElement("omiljeni");
             foreach(int id in idProizvoda)
@@ -262,7 +271,12 @@ namespace VebProdavnica.Models
                 string statusStr = porudzbinaNode.SelectSingleNode("STATUS")?.InnerText;
                 string idProizvoda = porudzbinaNode.SelectSingleNode("ID_PROIZVOD")?.InnerText;
                 string userKorisnik = porudzbinaNode.SelectSingleNode("USER_KORISNIK")?.InnerText;
+                string recenzijaOstavljenaStr = porudzbinaNode.SelectSingleNode("RECENZIJA_OSTAVLJENA")?.InnerText;
+                string idRecenzije = porudzbinaNode.SelectSingleNode("ID_RECENZIJA")?.InnerText;
 
+                bool recenzijaOstavljena = false;
+                if (recenzijaOstavljenaStr == "True")
+                    recenzijaOstavljena = true;
 
                 DateTime datum;
                 string format = "dd.MM.yyyy";
@@ -275,7 +289,7 @@ namespace VebProdavnica.Models
                     status = Status.OTKAZANA;
 
                 Porudzbina nova = new Porudzbina(int.Parse(id), int.Parse(idProizvoda), int.Parse(kolicina),
-                    userKorisnik, datum, status);
+                    userKorisnik, datum, status, recenzijaOstavljena, int.Parse(idRecenzije));
                 ret.Add(int.Parse(id), nova);
 
             }
@@ -318,6 +332,14 @@ namespace VebProdavnica.Models
             userKorisnikElement.InnerText = update.userKupac.ToString();
             porudzbinaXmlElement.AppendChild(userKorisnikElement);
 
+            XmlElement recenzijaOstavljenaElement = xmlDoc.CreateElement("RECENZIJA_OSTAVLJENA");
+            recenzijaOstavljenaElement.InnerText = update.recenzijaOstavljena.ToString();
+            porudzbinaXmlElement.AppendChild(recenzijaOstavljenaElement);
+
+            XmlElement idRecenzijaElement = xmlDoc.CreateElement("ID_RECENZIJA");
+            idRecenzijaElement.InnerText = update.idRecenzije.ToString();
+            porudzbinaXmlElement.AppendChild(idRecenzijaElement);
+
             xmlDoc.DocumentElement.AppendChild(porudzbinaXmlElement);
             xmlDoc.Save(porudzbinePath);
         }
@@ -340,10 +362,14 @@ namespace VebProdavnica.Models
                 string slika = recenzijaNode.SelectSingleNode("SLIKA")?.InnerText;
                 string idProizvoda = recenzijaNode.SelectSingleNode("ID_PROIZVOD")?.InnerText;
                 string userKorisnik = recenzijaNode.SelectSingleNode("USER_KORISNIK")?.InnerText;
+                string obrisanaStr = recenzijaNode.SelectSingleNode("OBRISANA")?.InnerText;
 
+                bool obrisana = false;
+                if (obrisanaStr == "True")
+                    obrisana = true;
 
                 Recenzija nova = new Recenzija(int.Parse(id), int.Parse(idProizvoda), userKorisnik, naslov,
-                        sadrzaj, slika);
+                        sadrzaj, slika, obrisana);
                 ret.Add(int.Parse(id), nova);
 
             }
@@ -351,6 +377,48 @@ namespace VebProdavnica.Models
             return ret;
         }
 
+        public static void UpdateRecenzijaXml(Recenzija update)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(recenzijePath);
+
+            XmlNode recenzijaNode = xmlDoc.SelectSingleNode($"//recenzija[ID='{update.id}']");
+            if (recenzijaNode != null)
+                recenzijaNode.ParentNode.RemoveChild(recenzijaNode);
+
+            XmlElement recenzijaXmlElement = xmlDoc.CreateElement("recenzija");
+
+            XmlElement idElement = xmlDoc.CreateElement("ID");
+            idElement.InnerText = update.id.ToString();
+            recenzijaXmlElement.AppendChild(idElement);
+
+            XmlElement naslovElement = xmlDoc.CreateElement("NASLOV");
+            naslovElement.InnerText = update.naslov;
+            recenzijaXmlElement.AppendChild(naslovElement);
+
+            XmlElement sadrzajElement = xmlDoc.CreateElement("SADRZAJ");
+            sadrzajElement.InnerText = update.sadrzajRecenzije;
+            recenzijaXmlElement.AppendChild(sadrzajElement);
+
+            XmlElement slikaElement = xmlDoc.CreateElement("SLIKA");
+            slikaElement.InnerText = update.slika;
+            recenzijaXmlElement.AppendChild(slikaElement);
+
+            XmlElement idProizvodaElement = xmlDoc.CreateElement("ID_PROIZVOD");
+            idProizvodaElement.InnerText = update.idProizvod.ToString();
+            recenzijaXmlElement.AppendChild(idProizvodaElement);
+
+            XmlElement userKorisnikElement = xmlDoc.CreateElement("USER_KORISNIK");
+            userKorisnikElement.InnerText = update.userRecezent;
+            recenzijaXmlElement.AppendChild(userKorisnikElement);
+
+            XmlElement obrisanaElement = xmlDoc.CreateElement("OBRISANA");
+            obrisanaElement.InnerText = update.obrisana.ToString();
+            recenzijaXmlElement.AppendChild(obrisanaElement);
+
+            xmlDoc.DocumentElement.AppendChild(recenzijaXmlElement);
+            xmlDoc.Save(recenzijePath);
+        }
 
         private static List<Recenzija> vratiRecenzije(int idTrazenogProizvoda)
         {
@@ -370,11 +438,16 @@ namespace VebProdavnica.Models
                 string slika = recenzijaNode.SelectSingleNode("SLIKA")?.InnerText;
                 string idProizvoda = recenzijaNode.SelectSingleNode("ID_PROIZVOD")?.InnerText;
                 string userKorisnik = recenzijaNode.SelectSingleNode("USER_KORISNIK")?.InnerText;
+                string obrisanaStr = recenzijaNode.SelectSingleNode("OBRISANA")?.InnerText;
 
-                if(int.Parse(idProizvoda) == idTrazenogProizvoda)
+                bool obrisana = false;
+                if (obrisanaStr == "True")
+                    obrisana = true;
+
+                if (int.Parse(idProizvoda) == idTrazenogProizvoda)
                 {
                     Recenzija trazena = new Recenzija(int.Parse(id), int.Parse(idProizvoda), userKorisnik, naslov,
-                        sadrzaj, slika);
+                        sadrzaj, slika, obrisana);
                     ret.Add(trazena);
                 }
 
@@ -408,7 +481,7 @@ namespace VebProdavnica.Models
                 string userProdavca = proizvodNode.SelectSingleNode("ID_PRODAVCA")?.InnerText;
 
                 bool dostupan = false;
-                if (dostupanStr == "true")
+                if (dostupanStr == "True")
                     dostupan = true;
 
                 DateTime datum;
@@ -449,7 +522,12 @@ namespace VebProdavnica.Models
                 string statusStr = porudzbinaNode.SelectSingleNode("STATUS")?.InnerText;
                 string idProizvoda = porudzbinaNode.SelectSingleNode("ID_PROIZVOD")?.InnerText;
                 string userKorisnik = porudzbinaNode.SelectSingleNode("USER_KORISNIK")?.InnerText;
+                string recenzijaOstavljenaStr = porudzbinaNode.SelectSingleNode("RECENZIJA_OSTAVLJENA")?.InnerText;
+                string idRecenzije = porudzbinaNode.SelectSingleNode("ID_RECENZIJA")?.InnerText;
 
+                bool recenzijaOstavljena = false;
+                if (recenzijaOstavljenaStr == "True")
+                    recenzijaOstavljena = true;
 
                 DateTime datum;
                 string format = "dd.MM.yyyy";
@@ -464,7 +542,7 @@ namespace VebProdavnica.Models
                 if(userKorisnik == korisnickoImeTrazenog)
                 {
                     Porudzbina trazena = new Porudzbina(int.Parse(id), int.Parse(idProizvoda), int.Parse(kolicina), userKorisnik,
-                        datum, status);
+                        datum, status, recenzijaOstavljena, int.Parse(idRecenzije));
                     porudzbine.Add(trazena);
                 }
 
@@ -495,7 +573,7 @@ namespace VebProdavnica.Models
                 string userProdavca = proizvodNode.SelectSingleNode("ID_PRODAVCA")?.InnerText;
 
                 bool dostupan = false;
-                if (dostupanStr == "true")
+                if (dostupanStr == "True")
                     dostupan = true;
 
                 DateTime datum;

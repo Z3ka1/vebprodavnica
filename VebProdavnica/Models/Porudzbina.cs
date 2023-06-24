@@ -16,9 +16,10 @@ namespace VebProdavnica.Models
         public string userKupac { get; set; }
         public DateTime datumPorudzbine { get; set; }
         public Status status { get; set; }
-        
+        public bool recenzijaOstavljena { get; set; }
+        public int idRecenzije { get; set; }
 
-        public Porudzbina(int id, int idProizvod, int kolicina, string userKupac, DateTime datumPorudzbine, Status status)
+        public Porudzbina(int id, int idProizvod, int kolicina, string userKupac, DateTime datumPorudzbine, Status status, bool recenzijaOstavljena, int idRecenzije)
         {
             this.id = id;
             this.idProizvod = idProizvod;
@@ -26,6 +27,8 @@ namespace VebProdavnica.Models
             this.userKupac = userKupac;
             this.datumPorudzbine = datumPorudzbine;
             this.status = status;
+            this.recenzijaOstavljena = recenzijaOstavljena;
+            this.idRecenzije = idRecenzije;
         }
 
 

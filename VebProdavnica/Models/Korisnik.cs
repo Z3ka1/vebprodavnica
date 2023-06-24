@@ -21,13 +21,16 @@ namespace VebProdavnica.Models
         public DateTime datumRodjenja { get; set; }
         public Uloga uloga { get; set; }
 
+        public bool obrisan { get; set; }
+
         public List<Porudzbina> listaPorudzbina { get; set; } //Uloga kupac
         public List<Proizvod> listaOmiljenihProizvoda { get; set; } //Uloga kupac
         public List<Proizvod> listaObjavljenihProizvoda { get; set; }   //Uloga prodavac
 
+        //za read iz xml
         public Korisnik(string korisnickoIme, string lozinka, string ime, string prezime, Pol pol, 
             string email, DateTime datumRodjenja, Uloga uloga, List<Porudzbina> porudzbine, 
-            List<Proizvod> omiljeni, List<Proizvod> objavljeni)
+            List<Proizvod> omiljeni, List<Proizvod> objavljeni, bool obrisan)
         {
             this.korisnickoIme = korisnickoIme;
             this.lozinka = lozinka;
@@ -37,12 +40,14 @@ namespace VebProdavnica.Models
             this.email = email;
             this.datumRodjenja = datumRodjenja;
             this.uloga = uloga;
+            this.obrisan = obrisan;
 
             listaPorudzbina = porudzbine;
             listaOmiljenihProizvoda = omiljeni;
             listaObjavljenihProizvoda = objavljeni;
         }
 
+        //Za registraciju
         public Korisnik(string ime, string prezime, Pol pol, string email, DateTime datumRodjenja, Uloga uloga,
             string korisnickoIme, string lozinka)
         {
@@ -54,6 +59,7 @@ namespace VebProdavnica.Models
             this.uloga = uloga;
             this.korisnickoIme = korisnickoIme;
             this.lozinka = lozinka;
+            obrisan = false;
 
             listaPorudzbina = new List<Porudzbina>();
             listaOmiljenihProizvoda = new List<Proizvod>();

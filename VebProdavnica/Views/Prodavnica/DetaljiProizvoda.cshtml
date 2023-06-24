@@ -57,20 +57,23 @@
     @{Dictionary<string, VebProdavnica.Models.Korisnik> korisnici = (Dictionary<string, VebProdavnica.Models.Korisnik>)HttpContext.Current.Application["korisnici"]; }
     @foreach(VebProdavnica.Models.Recenzija r in Model.listaRecenzija)
     {
-    <table>
-        <tr>
-            <td> @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime</td>
-        </tr>
-        <tr>
-            <td> @recenzije[r.id].naslov </td>
-            <td> <img src="@recenzije[r.id].slika" /> </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                 @recenzije[r.id].sadrzajRecenzije
-            </td>
-        </tr>
-    </table>
+        if (!r.obrisana)
+        {
+        <table>
+            <tr>
+                <td> @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime</td>
+            </tr>
+            <tr>
+                <td> @recenzije[r.id].naslov </td>
+                <td> <img src="@recenzije[r.id].slika" /> </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                     @recenzije[r.id].sadrzajRecenzije
+                </td>
+            </tr>
+        </table>
+        }
     }
 
     <a href="~/Prodavnica/Index">Pocetna strana</a>
