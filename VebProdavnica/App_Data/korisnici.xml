@@ -1,5 +1,16 @@
 <?xml version="1.0"?>
 <korisnici>
+	<korisnik>
+		<KORISNICKO_IME>admin</KORISNICKO_IME>
+		<LOZINKA>admin</LOZINKA>
+		<IME>Admin</IME>
+		<PREZIME>Adminovic</PREZIME>
+		<POL>M</POL>
+		<EMAIL>admin@admin.com</EMAIL>
+		<DATUM>18.09.2001</DATUM>
+		<ULOGA>Administrator</ULOGA>
+		<OBRISAN>False</OBRISAN>
+	</korisnik>
   <korisnik>
     <KORISNICKO_IME>petar</KORISNICKO_IME>
     <LOZINKA>petar</LOZINKA>
