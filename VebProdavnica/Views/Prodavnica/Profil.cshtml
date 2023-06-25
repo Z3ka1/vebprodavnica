@@ -132,7 +132,7 @@
     </div>
 
     <div>
-    @if (Model.listaOmiljenihProizvoda.Count > 0)
+    @if (Model.listaOmiljenihProizvoda.Count > 0 && Model.listaOmiljenihProizvoda.Any(obj => obj.obrisan == false))
     {
     <h4>Vasi omiljeni proizvodi</h4>
     <table title="OMILJENI">
@@ -144,6 +144,8 @@
         </tr>
         @foreach (Proizvod p in Model.listaOmiljenihProizvoda)
         {
+            if (!p.obrisan)
+            {
                 <tr>
                     <td>@p.naziv</td>
                     <td>@p.cena</td>
@@ -158,6 +160,7 @@
                     }
                     
                 </tr>
+            }
         }
     </table>
     } else { <h4>Nema OMILJENIH proizvoda</h4>}
@@ -168,7 +171,7 @@ else if(Model.uloga == Uloga.Prodavac)
     <form action="/Prodavnica/DodajProizvod">
         <input type="submit" value="Prodaj novi proizvod" />
     </form>
-    if(Model.listaObjavljenihProizvoda.Count > 0)
+    if(Model.listaObjavljenihProizvoda.Count > 0 && Model.listaObjavljenihProizvoda.Any(obj => obj.obrisan == false))
     {
         <h4>Vasi objavljeni proizvodi</h4>
         <table>
@@ -184,15 +187,17 @@ else if(Model.uloga == Uloga.Prodavac)
             </tr>
             @foreach(Proizvod p in Model.listaObjavljenihProizvoda)
             {
+                if (!p.obrisan)
+                {
                 <tr>
                     <td>@p.naziv</td>
                     <td>@p.cena</td>
                     <td>@p.kolicina</td>
                     <td>@p.opis</td>
-                    <td><img src="@p.slika"/></td>
-                    <td>@p.datumPostavljanja</td>
+                    <td><img src="~/Slike/@p.slika"/></td>
+                    <td>@p.datumPostavljanja.ToString("dd.MM.yyyy")</td>
                     <td>@p.grad</td>
-                    @if(p.dostupan)
+                    @if (p.dostupan)
                     {
                         <td>Dostupan</td>
                     }
@@ -201,7 +206,7 @@ else if(Model.uloga == Uloga.Prodavac)
                         <td>Nedostupan</td>
                     }
                     <td>
-                        @if(p.dostupan)
+                        @if (p.dostupan)
                         {
                             <form action="/Prodavnica/ObrisiProizvod">
                                 <input type="number" name="id" value="@p.id" hidden/>
@@ -214,6 +219,7 @@ else if(Model.uloga == Uloga.Prodavac)
                         }
                     </td>
                 </tr>
+                }
             }
         </table>
     }

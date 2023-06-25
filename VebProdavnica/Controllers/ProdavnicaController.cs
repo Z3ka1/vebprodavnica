@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Antlr.Runtime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -456,9 +457,69 @@ namespace VebProdavnica.Controllers
             return View();
         }
 
+        public ActionResult PublishProizvod(string naziv, string cena, int kolicina, string opis, string slika, 
+            string grad)
+        {
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Korisnik trenutni = (Korisnik)Session["korisnik"];
+
+            bool uspesno;
+            double cenaDouble;
+            uspesno = double.TryParse(cena, out cenaDouble);
+            if(!uspesno)
+            {
+                ViewBag.Greska = "Ne pravilno unesena cena.";
+                return View();
+            }
+            bool dostupan = true;
+            if (kolicina == 0)
+                dostupan = false;
+            string userProdavca = trenutni.korisnickoIme;
+
+            //System.Diagnostics.Debug.WriteLine("Ovo je opis = " + opis);
+            Proizvod novi = new Proizvod(naziv, cenaDouble, kolicina, opis, slika, grad, dostupan, userProdavca);
+
+
+            proizvodi.Add(novi.id, novi);
+            //TODO Ovde se nekako 2 puta doda, proveriti to
+            //trenutni.listaObjavljenihProizvoda.Add(novi);
+            korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda.Add(novi);
+            Data.UpdateProizvodXml(novi);
+
+            ViewBag.Message = "Proizvod uspesno dodat!";
+            ViewData["Proizvodi"] = proizvodi;
+            return View("Profil",trenutni);
+        }
+
         public ActionResult ObrisiProizvod(int id)
         {
-            return View();
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Korisnik trenutni = (Korisnik)Session["korisnik"];
+
+            proizvodi[id].obrisan = true;
+
+            //int idxMenjanja = trenutni.listaObjavljenihProizvoda.FindIndex(p => p.id == id);
+            //trenutni.listaObjavljenihProizvoda[idxMenjanja].obrisan = true;
+
+            int idxMenjanja = korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda.FindIndex(p => p.id == id);
+            korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanja].obrisan = true;
+            
+            //Svakom korisniku brisemo ovaj proizvod iz liste omlijenih
+            foreach(Korisnik k in korisnici.Values)
+            {
+                idxMenjanja = k.listaOmiljenihProizvoda.FindIndex(p => p.id == id);
+                if(idxMenjanja != -1)
+                {
+                    k.listaOmiljenihProizvoda[idxMenjanja].obrisan = true;
+                }
+            }
+            Data.UpdateProizvodXml(proizvodi[id]);
+
+            ViewBag.Message = "Proizvod uspesno obrisan";
+            ViewData["Proizvodi"] = proizvodi;
+            return View("Profil", trenutni);
         }
 
         public ActionResult IzmeniProizvod(int id)
@@ -468,7 +529,7 @@ namespace VebProdavnica.Controllers
             return View(proizvodi[id]);
         }
 
-        public ActionResult IzmeniProizvod(int id, string naziv, string cena,int kolicina, string opis, 
+        public ActionResult PublishIzmenjenProizvod(int id, string naziv, string cena,int kolicina, string opis, 
             string slika, string grad)
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
@@ -490,33 +551,59 @@ namespace VebProdavnica.Controllers
             int idxMenjanjaApp = korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda.FindIndex(p => p.id == id);
 
             proizvodi[id].naziv = naziv;
-            trenutni.listaObjavljenihProizvoda[idxMenjanja].naziv = naziv;
+            //trenutni.listaObjavljenihProizvoda[idxMenjanja].naziv = naziv;
             korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].naziv = naziv;
 
             proizvodi[id].cena = cenaParse;
-            trenutni.listaObjavljenihProizvoda[idxMenjanja].cena = cenaParse;
+            //trenutni.listaObjavljenihProizvoda[idxMenjanja].cena = cenaParse;
             korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].cena = cenaParse;
 
             proizvodi[id].kolicina = kolicina;
-            trenutni.listaObjavljenihProizvoda[idxMenjanja].kolicina = kolicina;
+            //trenutni.listaObjavljenihProizvoda[idxMenjanja].kolicina = kolicina;
             korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].kolicina = kolicina;
 
             proizvodi[id].opis = opis;
-            trenutni.listaObjavljenihProizvoda[idxMenjanja].opis = opis;
+            //trenutni.listaObjavljenihProizvoda[idxMenjanja].opis = opis;
             korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].opis = opis;
 
             if(slika != "")
             {
                 proizvodi[id].slika = slika;
-                trenutni.listaObjavljenihProizvoda[idxMenjanja].slika = slika;
+                //trenutni.listaObjavljenihProizvoda[idxMenjanja].slika = slika;
                 korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].slika = slika;
             }
 
             proizvodi[id].grad = grad;
-            trenutni.listaObjavljenihProizvoda[idxMenjanja].grad = grad;
+            //trenutni.listaObjavljenihProizvoda[idxMenjanja].grad = grad;
             korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].grad = grad;
 
+            if(kolicina > 0)
+            {
+                proizvodi[id].dostupan = true;
+                //trenutni.listaObjavljenihProizvoda[idxMenjanja].dostupan = true;
+                korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].dostupan = true;
+            }   
+
             Data.UpdateProizvodXml(proizvodi[id]);
+
+            //Menjanje svim korisnicima koji imaju taj proizvod u listi omiljenih
+            foreach(Korisnik k in korisnici.Values)
+            {
+                //Trazimo proizvod iz liste omiljenih takav da mu je id jednak sa promenjenim proizvodom
+                idxMenjanja = k.listaOmiljenihProizvoda.FindIndex(p => p.id == id);
+                if(idxMenjanja != -1)
+                {
+                    k.listaOmiljenihProizvoda[idxMenjanja].naziv = naziv;
+                    k.listaOmiljenihProizvoda[idxMenjanja].cena = cenaParse;
+                    k.listaOmiljenihProizvoda[idxMenjanja].kolicina = kolicina;
+                    k.listaOmiljenihProizvoda[idxMenjanja].grad = grad;
+                    k.listaOmiljenihProizvoda[idxMenjanja].opis = opis;
+                    if(slika != "")
+                        k.listaOmiljenihProizvoda[idxMenjanja].slika = slika;
+                    if(kolicina>0)
+                        k.listaOmiljenihProizvoda[idxMenjanja].dostupan = true;
+                }
+            }
 
             ViewBag.Message = "Proizvod uspesno izmenjen";
             ViewData["Proizvodi"] = proizvodi;

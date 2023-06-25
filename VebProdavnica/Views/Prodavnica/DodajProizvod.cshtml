@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "DodajProizvod";
+}
+
+<head>
+    <title>Izmeni proizvod</title>
+</head>
+
+<h2>Dodaj proizvod</h2>
+
+<h3>@ViewBag.Greska</h3>
+
+<form action="/Prodavnica/PublishProizvod">
+    <table>
+        <tr>
+            <td>Naziv:</td>
+            <td><input type="text" name="naziv" required /></td>
+        </tr>
+        <tr>
+            <td>Cena:</td>
+            <td><input type="text" name="cena" required /></td>
+        </tr>
+        <tr>
+            <td>Kolicina:</td>
+            <td><input type="number" min="0" name="kolicina" required /></td>
+        </tr>
+        <tr>
+            <td>Opis:</td>
+            <td><input type="text" name="opis" required /></td>
+        </tr>
+        <tr>
+            <td>Slika:</td>
+            <td><input type="file" accept="image/*" name="slika" required/></td>
+        </tr>
+        <tr>
+            <td>Grad:</td>
+            <td> <input type="text" name="grad" required /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Dodaj" /></td>
+        </tr>
+    </table>
+</form>
+
+<a href="~/Prodavnica/Profil">Odustani</a>

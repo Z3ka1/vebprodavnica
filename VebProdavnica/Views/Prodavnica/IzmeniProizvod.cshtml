@@ -9,7 +9,7 @@
 
 <h3>@ViewBag.Greska</h3>
 
-<form action="/Prodavnica/IzmeniProizvod">
+<form action="/Prodavnica/PublishIzmenjenProizvod">
     <input type="number" value="@Model.id" name="id" hidden/>
 <table>
     <tr>
@@ -26,7 +26,7 @@
     </tr>
     <tr>
         <td>Opis:</td>
-        <td><input type="text" value="@Model.opis" neme="opis" required/></td>
+        <td><input type="text" value="@Model.opis" name="opis" required/></td>
     </tr>
     <tr>
         <td>Slika:</td>

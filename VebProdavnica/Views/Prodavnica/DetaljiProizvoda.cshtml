@@ -119,7 +119,7 @@
     <h3> @ViewBag.Greska </h3>
     
     <h2>@Model.naziv </h2>
-    <img src="@Model.slika" alt="Slika"/> 
+    <img src="~/Slike/@Model.slika" alt="Slika"/> 
     @if (Model.dostupan == true)
     {
         <p>Dostupan, Preostalo: @Model.kolicina</p>
@@ -161,7 +161,7 @@
         }
     }
 
-    @if (Model.listaRecenzija.Count != 0)
+    @if (Model.listaRecenzija.Count != 0 && Model.listaRecenzija.Any(obj => obj.obrisana == false))
     {
         <div class="recenzije-container">
             <h3>Recenzije: </h3>
@@ -179,7 +179,7 @@
                             </tr>
                             <tr>
                                 <td> @recenzije[r.id].naslov </td>
-                                <td> <img src="@recenzije[r.id].slika" alt="Slika"/> </td>
+                                <td> <img src="~/Slike/@recenzije[r.id].slika" alt="Slika"/> </td>
                             </tr>
                             <tr>
                                 <td colspan="2">

@@ -197,11 +197,11 @@
 
         @foreach (Proizvod p in SviProizvodi.Values)
         {
-            if (p.kolicina > 0)
+            if (p.dostupan && !p.obrisan)
             {
                 <tr>
                     <td>@p.naziv</td>
-                    <td><img src="@p.slika" alt="@p.naziv" /></td>
+                    <td><img src="~/Slike/@p.slika" alt="@p.naziv" /></td>
                     <td>@p.cena</td>
                     <td>@p.grad</td>
                     <td>@p.datumPostavljanja.ToString("dd.MM.yyyy")</td>

@@ -15,6 +15,7 @@ namespace VebProdavnica.Models
         static string porudzbinePath = HostingEnvironment.MapPath("~/App_Data/porudzbine.xml");
         static string recenzijePath = HostingEnvironment.MapPath("~/App_Data/recenzije.xml");
 
+        #region Read/Update Korisnici
         public static Dictionary<string, Korisnik> ReadKorisnici()
         {
             Dictionary<string, Korisnik> ret = new Dictionary<string, Korisnik>();
@@ -153,7 +154,9 @@ namespace VebProdavnica.Models
             xmlDoc.DocumentElement.AppendChild(korisnikXmlElement);
             xmlDoc.Save(korisniciPath);
         }
+        #endregion
 
+        #region Read/Update Proizvodi
         public static Dictionary<int, Proizvod> ReadProizvodi()
         {
             Dictionary<int, Proizvod> ret = new Dictionary<int, Proizvod>();
@@ -177,6 +180,11 @@ namespace VebProdavnica.Models
                 string grad = proizvodNode.SelectSingleNode("GRAD")?.InnerText;
                 string dostupanStr = proizvodNode.SelectSingleNode("DOSTUPAN")?.InnerText;
                 string userProdavca = proizvodNode.SelectSingleNode("USER_PRODAVCA")?.InnerText;
+                string obrisanStr = proizvodNode.SelectSingleNode("OBRISAN")?.InnerText;
+
+                bool obrisan = false;
+                if (obrisanStr == "True")
+                    obrisan = true;
 
                 bool dostupan = false;
                 if (dostupanStr == "True")
@@ -190,7 +198,7 @@ namespace VebProdavnica.Models
                 recenzije = vratiRecenzije(int.Parse(id));
 
                 Proizvod novi = new Proizvod(int.Parse(id), naziv, double.Parse(cena), int.Parse(kolicina),
-                    opis, slika, datum, grad, dostupan, userProdavca, recenzije);
+                    opis, slika, datum, grad, dostupan, userProdavca, recenzije,obrisan);
                 ret.Add(int.Parse(id), novi);
             }
 
@@ -249,10 +257,16 @@ namespace VebProdavnica.Models
             userProdavacElement.InnerText = update.userProdavca;
             proizvodXmlElement.AppendChild(userProdavacElement);
 
+            XmlElement obrisanElement = xmlDoc.CreateElement("OBRISAN");
+            obrisanElement.InnerText = update.obrisan.ToString();
+            proizvodXmlElement.AppendChild(obrisanElement);
+
             xmlDoc.DocumentElement.AppendChild(proizvodXmlElement);
             xmlDoc.Save(proizvodiPath);
         }
+        #endregion
 
+        #region Read/Update Porudzbine
         public static Dictionary<int, Porudzbina> ReadPorudzbine()
         {
             Dictionary<int, Porudzbina> ret = new Dictionary<int, Porudzbina>();
@@ -343,7 +357,9 @@ namespace VebProdavnica.Models
             xmlDoc.DocumentElement.AppendChild(porudzbinaXmlElement);
             xmlDoc.Save(porudzbinePath);
         }
+        #endregion
 
+        #region Read/Update Recenzije
         public static Dictionary<int, Recenzija> ReadRecenzije()
         {
             Dictionary<int, Recenzija> ret = new Dictionary<int, Recenzija>();
@@ -419,7 +435,9 @@ namespace VebProdavnica.Models
             xmlDoc.DocumentElement.AppendChild(recenzijaXmlElement);
             xmlDoc.Save(recenzijePath);
         }
+        #endregion
 
+        #region Pomocne metode
         private static List<Recenzija> vratiRecenzije(int idTrazenogProizvoda)
         {
             List<Recenzija> ret = new List<Recenzija>();
@@ -478,7 +496,13 @@ namespace VebProdavnica.Models
                 string datumStr = proizvodNode.SelectSingleNode("DATUM")?.InnerText;
                 string grad = proizvodNode.SelectSingleNode("GRAD")?.InnerText;
                 string dostupanStr = proizvodNode.SelectSingleNode("DOSTUPAN")?.InnerText;
-                string userProdavca = proizvodNode.SelectSingleNode("ID_PRODAVCA")?.InnerText;
+                string userProdavca = proizvodNode.SelectSingleNode("USER_PRODAVCA")?.InnerText;
+                //RAZMISLITI DA LI OVO TREBA
+                string obrisanStr = proizvodNode.SelectSingleNode("OBRISAN")?.InnerText;
+
+                bool obrisan = false;
+                if (obrisanStr == "True")
+                    obrisan = true;
 
                 bool dostupan = false;
                 if (dostupanStr == "True")
@@ -495,7 +519,7 @@ namespace VebProdavnica.Models
                     List<Recenzija> recenzije = new List<Recenzija>();
                     recenzije = vratiRecenzije(int.Parse(id));
                     Proizvod objavljen = new Proizvod(int.Parse(id), naziv, double.Parse(cena), int.Parse(kolicina),
-                        opis, slika, datum, grad, dostupan, userProdavca,recenzije);
+                        opis, slika, datum, grad, dostupan, userProdavca,recenzije,obrisan);
                     ret.Add(objavljen);
                 }
 
@@ -571,6 +595,12 @@ namespace VebProdavnica.Models
                 string grad = proizvodNode.SelectSingleNode("GRAD")?.InnerText;
                 string dostupanStr = proizvodNode.SelectSingleNode("DOSTUPAN")?.InnerText;
                 string userProdavca = proizvodNode.SelectSingleNode("ID_PRODAVCA")?.InnerText;
+                //RAZMISLITI DA LI OVO TREBA
+                string obrisanStr = proizvodNode.SelectSingleNode("OBRISAN")?.InnerText;
+
+                bool obrisan = false;
+                if (obrisanStr == "True")
+                    obrisan = true;
 
                 bool dostupan = false;
                 if (dostupanStr == "True")
@@ -585,7 +615,7 @@ namespace VebProdavnica.Models
                     List<Recenzija> recenzije = new List<Recenzija>();
                     recenzije = vratiRecenzije(int.Parse(id));
                     Proizvod omiljeni = new Proizvod(int.Parse(id), naziv, double.Parse(cena), int.Parse(kolicina),
-                        opis, slika, datum, grad, dostupan, userProdavca, recenzije);
+                        opis, slika, datum, grad, dostupan, userProdavca, recenzije, obrisan);
                     return omiljeni;
                 }
 
@@ -593,6 +623,8 @@ namespace VebProdavnica.Models
 
             return null;
         }
+
+        #endregion
 
         public static int GenerateID()
         {
