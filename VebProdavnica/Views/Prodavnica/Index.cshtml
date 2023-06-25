@@ -107,6 +107,14 @@
             <li style="float:right"><a href="~/Prodavnica/Registracija">Registracija</a></li>
         </ul>
     }
+    else if (((Korisnik)HttpContext.Current.Session["korisnik"]).uloga == Uloga.Administrator)
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Prodavnica/AdminPanel">Admin profil</a></li>
+        </ul>
+    }
     else
     {
         <ul>
@@ -114,106 +122,107 @@
             <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
             <li style="float:right"><a href="~/Prodavnica/Profil">Moj profil</a></li>
         </ul>
+
     }
-    
 
-<div class="elements">
-    <h2>Dobrodošli u prodavnicu</h2>
-    <h2>@ViewBag.Greska</h2>
 
-    <div class="form-container">
-        <table>
-            <tr>
-                <td>
-                    <form action="/Prodavnica/Sort">
-                        <table>
-                            <tr>
-                                <td>
-                                    <h4>Sortiraj:</h4>
-                                    <input list="sort" name="kriterijum" />
-                                    <datalist id="sort">
-                                        <option value="Naziv(rastuce)" />
-                                        <option value="Naziv(opadajuce)" />
-                                        <option value="Cena(rastuce)" />
-                                        <option value="Cena(opadajuce)" />
-                                        <option value="Datum oglasavanja(rastuce)" />
-                                        <option value="Datum oglasavanja(opadajuce)" />
-                                    </datalist>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="submit" value="Sortiraj" />
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                </td>
-                <td>
-                    <form action="/Prodavnica/Pretraga">
-                        <table>
-                            <tr>
-                                <td>
-                                    <h4>Pretrazi:</h4>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Naziv:</td>
-                                <td><input type="text" name="naziv" /></td>
-                            </tr>
-                            <tr>
-                                <td>Cena:</td>
-                                <td>Od: <input type="text" name="cenaOd" /></td>
-                                <td>Do: <input type="text" name="cenaDo" /></td>
-                            </tr>
-                            <tr>
-                                <td>Grad:</td>
-                                <td><input type="text" name="grad" /></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="submit" value="Pretrazi" />
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                </td>
-            </tr>
-        </table>
-        <a href="~/Prodavnica/Index">Ponisti pretragu</a>
-        <h3>@ViewBag.Pretraga</h3>
-    </div>
+    <div class="elements">
+        <h2>Dobrodošli u prodavnicu</h2>
+        <h2>@ViewBag.Greska</h2>
 
-    <table border="1">
-        <tr>
-            <th>Naziv</th>
-            <th>Slika</th>
-            <th>Cena</th>
-            <th>Grad</th>
-            <th>Datum postavljanja</th>
-
-            <th>Detalji</th>
-        </tr>
-
-        @foreach (Proizvod p in SviProizvodi.Values)
-        {
-            if (p.dostupan && !p.obrisan)
-            {
+        <div class="form-container">
+            <table>
                 <tr>
-                    <td>@p.naziv</td>
-                    <td><img src="~/Slike/@p.slika" alt="@p.naziv" /></td>
-                    <td>@p.cena</td>
-                    <td>@p.grad</td>
-                    <td>@p.datumPostavljanja.ToString("dd.MM.yyyy")</td>
                     <td>
-                        <form action="/Prodavnica/DetaljiProizvoda">
-                            <input type="number" value="@p.id" name="id" hidden />
-                            <input type="submit" value="Vise o proizvodu" />
+                        <form action="/Prodavnica/Sort">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <h4>Sortiraj:</h4>
+                                        <input list="sort" name="kriterijum" />
+                                        <datalist id="sort">
+                                            <option value="Naziv(rastuce)" />
+                                            <option value="Naziv(opadajuce)" />
+                                            <option value="Cena(rastuce)" />
+                                            <option value="Cena(opadajuce)" />
+                                            <option value="Datum oglasavanja(rastuce)" />
+                                            <option value="Datum oglasavanja(opadajuce)" />
+                                        </datalist>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="submit" value="Sortiraj" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/Prodavnica/Pretraga">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <h4>Pretrazi:</h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Naziv:</td>
+                                    <td><input type="text" name="naziv" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Cena:</td>
+                                    <td>Od: <input type="text" name="cenaOd" /></td>
+                                    <td>Do: <input type="text" name="cenaDo" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Grad:</td>
+                                    <td><input type="text" name="grad" /></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="submit" value="Pretrazi" />
+                                    </td>
+                                </tr>
+                            </table>
                         </form>
                     </td>
                 </tr>
+            </table>
+            <a href="~/Prodavnica/Index">Ponisti pretragu</a>
+            <h3>@ViewBag.Pretraga</h3>
+        </div>
+
+        <table border="1">
+            <tr>
+                <th>Naziv</th>
+                <th>Slika</th>
+                <th>Cena</th>
+                <th>Grad</th>
+                <th>Datum postavljanja</th>
+
+                <th>Detalji</th>
+            </tr>
+
+            @foreach (Proizvod p in SviProizvodi.Values)
+            {
+                if (p.dostupan && !p.obrisan)
+                {
+                    <tr>
+                        <td>@p.naziv</td>
+                        <td><img src="~/Slike/@p.slika" alt="@p.naziv" /></td>
+                        <td>@p.cena</td>
+                        <td>@p.grad</td>
+                        <td>@p.datumPostavljanja.ToString("dd.MM.yyyy")</td>
+                        <td>
+                            <form action="/Prodavnica/DetaljiProizvoda">
+                                <input type="number" value="@p.id" name="id" hidden />
+                                <input type="submit" value="Vise o proizvodu" />
+                            </form>
+                        </td>
+                    </tr>
+                }
             }
-        }
-    </table>
-</div>
+        </table>
+    </div>
 </body>

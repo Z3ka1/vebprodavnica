@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
@@ -633,5 +634,6 @@ namespace VebProdavnica.Models
             int uniqueId = (int)((timestamp & 0XFFFFFFFF) ^ random);
             return uniqueId;
         }
+
     }
 }

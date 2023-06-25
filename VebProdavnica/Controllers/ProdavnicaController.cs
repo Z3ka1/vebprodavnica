@@ -610,6 +610,36 @@ namespace VebProdavnica.Controllers
             return View("Profil",trenutni);
         }
 
+        public ActionResult FilterDostupan()
+        {
+            ViewBag.Dostupan = true;
+
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            ViewData["Proizvodi"] = proizvodi;
+            return View("Profil",(Korisnik)Session["korisnik"]);
+        }
+
+        public ActionResult ProfilSort(string kriterijum)
+        {
+            Korisnik trenutni = (Korisnik)Session["korisnik"];
+
+            if (kriterijum == "Naziv(rastuce)")
+                trenutni.listaObjavljenihProizvoda.Sort((x, y) => x.naziv.CompareTo(y.naziv));
+            else if (kriterijum == "Naziv(opadajuce)")
+                trenutni.listaObjavljenihProizvoda.Sort((x, y) => y.naziv.CompareTo(x.naziv));
+            else if (kriterijum == "Cena(rastuce)")
+                trenutni.listaObjavljenihProizvoda.Sort((x, y) => x.cena.CompareTo(y.cena));
+            else if (kriterijum == "Cena(opadajuce)")
+                trenutni.listaObjavljenihProizvoda.Sort((x, y) => y.cena.CompareTo(x.cena));
+            else if (kriterijum == "Datum oglasavanja(rastuce)")
+                trenutni.listaObjavljenihProizvoda.Sort((x, y) => x.datumPostavljanja.CompareTo(y.datumPostavljanja));
+            else if (kriterijum == "Datum oglasavanja(opadajuce)")
+                trenutni.listaObjavljenihProizvoda.Sort((x, y) => y.datumPostavljanja.CompareTo(x.datumPostavljanja));
+ 
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            ViewData["Proizvodi"] = proizvodi;
+            return View("Profil", trenutni);
+        }
 
     }
 }

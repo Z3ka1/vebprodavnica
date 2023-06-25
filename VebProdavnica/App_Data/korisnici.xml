@@ -10,9 +10,6 @@
     <DATUM>01.11.2001</DATUM>
     <ULOGA>Prodavac</ULOGA>
     <OBRISAN>False</OBRISAN>
-    <omiljeni>
-      <ID_PROIZVOD>1</ID_PROIZVOD>
-    </omiljeni>
   </korisnik>
   <korisnik>
     <KORISNICKO_IME>test</KORISNICKO_IME>

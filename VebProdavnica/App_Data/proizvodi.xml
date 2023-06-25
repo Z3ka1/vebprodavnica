@@ -28,48 +28,6 @@
     <OBRISAN>False</OBRISAN>
   </proizvod>
   <proizvod>
-    <ID>-1110451739</ID>
-    <NAZIV>povodac</NAZIV>
-    <CENA>100</CENA>
-    <KOLICINA>4</KOLICINA>
-    <OPIS>
-    </OPIS>
-    <SLIKA>povodac.jpg</SLIKA>
-    <DATUM>25.06.2023</DATUM>
-    <GRAD>Subotica</GRAD>
-    <DOSTUPAN>True</DOSTUPAN>
-    <USER_PRODAVCA>petar</USER_PRODAVCA>
-    <OBRISAN>True</OBRISAN>
-  </proizvod>
-  <proizvod>
-    <ID>-1678343563</ID>
-    <NAZIV>mis</NAZIV>
-    <CENA>2000</CENA>
-    <KOLICINA>4</KOLICINA>
-    <OPIS>
-    </OPIS>
-    <SLIKA>mis.jpg</SLIKA>
-    <DATUM>25.06.2023</DATUM>
-    <GRAD>NS</GRAD>
-    <DOSTUPAN>True</DOSTUPAN>
-    <USER_PRODAVCA>petar</USER_PRODAVCA>
-    <OBRISAN>True</OBRISAN>
-  </proizvod>
-  <proizvod>
-    <ID>-1036029670</ID>
-    <NAZIV>povodac</NAZIV>
-    <CENA>120</CENA>
-    <KOLICINA>10</KOLICINA>
-    <OPIS>
-    </OPIS>
-    <SLIKA>povodac.jpg</SLIKA>
-    <DATUM>25.06.2023</DATUM>
-    <GRAD>Cacak</GRAD>
-    <DOSTUPAN>True</DOSTUPAN>
-    <USER_PRODAVCA>petar</USER_PRODAVCA>
-    <OBRISAN>True</OBRISAN>
-  </proizvod>
-  <proizvod>
     <ID>888073819</ID>
     <NAZIV>povodac</NAZIV>
     <CENA>120</CENA>
