@@ -2,112 +2,17 @@
 @model VebProdavnica.Models.Korisnik
 @{
     ViewBag.Title = "AdminPanel";
-    var SviKorisnici = ViewData["Korisnici"] as Dictionary<string, Korisnik>;
-    var SviProizvodi = ViewData["Proizvodi"] as Dictionary<int, Proizvod>;
-    var SvePorudzbine = ViewData["Porudzbine"] as Dictionary<int, Porudzbina>;
-    var SveRecenzije = ViewData["Recenzije"] as Dictionary<int, Recenzija>;
 }
-
-<head>
-    <title>Admin panel</title>
-</head>
 
 <h2>Admin Panel</h2>
 <h2>@ViewBag.Greska</h2>
 
-<div>
-    <h3>Lista korisnika</h3>
-
-    <form action="/Admin/PretragaKorisnika">
-        <table>
-            <tr>
-                <td>
-                    <h4>Pretrazi i sortiraj:</h4>
-                </td>
-            </tr>
-            <tr>
-                <td>Ime:</td>
-                <td><input type="text" name="ime" /></td>
-            </tr>
-            <tr>
-                <td>Prezime:</td>
-                <td><input type="text" name="prezime" /></td>
-            </tr>
-            <tr>
-                <td>Datum:</td>
-                <td>Od: <input type="date" value="@DateTime.MinValue.ToString("yyyy-MM-dd")" name="datumOd" /></td>
-                <td>Do: <input type="date" value="@DateTime.MinValue.ToString("yyyy-MM-dd")" name="datumDo" /></td>
-            </tr>
-            <tr>
-                <td>Uloga:</td>
-                <td>
-                    <input list="pretraga" name="uloga" />
-                    <datalist id="pretraga">
-                        <option value="SVI" />
-                        <option value="KUPCI" />
-                        <option value="PRODAVCI" />
-                    </datalist>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h4>Sortiraj:</h4>
-                </td>
-                <td>
-                    <input list="sort" name="kriterijum" />
-                    <datalist id="sort">
-                        <option value="Podrazumevano" />
-                        <option value="Ime(rastuce)" />
-                        <option value="Ime(opadajuce)" />
-                        <option value="Uloga(rastuce)" />
-                        <option value="Uloga(opadajuce)" />
-                        <option value="Datum rodjenja(rastuce)" />
-                        <option value="Datum rodjenja(opadajuce)" />
-                    </datalist>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="submit" value="Primeni filtere" />
-                </td>
-            </tr>
-        </table>
-    </form>
-    <a href="~/Admin/AdminPanel">Ponisti filtere</a>
-
-    <table>
-        <tr>
-            <th>Ime</th>
-            <th>Prezime</th>
-            <th>Korisnicko ime</th>
-            <th>Uloga</th>
-            <th>Datum rodjenja</th>
-        </tr>
-        @foreach (Korisnik k in SviKorisnici.Values)
-        {
-            if (k.uloga != Uloga.Administrator)
-            {
-                <tr>
-                    <td>@k.ime</td>
-                    <td>@k.prezime</td>
-                    <td>@k.korisnickoIme</td>
-                    @if (k.uloga == Uloga.Kupac)
-                    {
-                        <td>KUPAC</td>
-                    }
-                    else
-                    {
-                        <td>PRODAVAC</td>
-                    }
-                    <td>@k.datumRodjenja.ToString("dd.MM.yyyy")</td>
-                </tr>
-            }
-        }
-
-    </table>
-
-</div>
-
+<ul>
+    <li><a href="~/Admin/AdminPanelKorisnici">Administriranje korisnika</a></li>
+    <li><a href="~/Admin/AdminPanelProizvodi">Administriranje proizvoda</a></li>
+    <li><a href="~/Admin/AdminPanelPorudzbine">Administriranje porudzbina</a></li>
+    <li><a href="~/Admin/AdminPanelRecenzije">Odobravanje recenzija</a></li>
+</ul>
 
 <div>
     <h4>Podaci o korisniku</h4>

@@ -1,0 +1,88 @@
+﻿@using VebProdavnica.Models;
+@model VebProdavnica.Models.Korisnik
+@{
+    ViewBag.Title = "AdminPanelProizvodi";
+    var SviProizvodi = ViewData["Proizvodi"] as Dictionary<int, Proizvod>;
+}
+
+<h2>Admin - Proizvodi</h2>
+<h2>@ViewBag.Greska</h2>
+
+<div>
+    <h3>Lista proizvoda</h3>
+
+    <form action="/Admin/PretragaProizvoda">
+        <table>
+            <tr>
+                <td>
+                    <h4>Pretrazi i sortiraj:</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>Status:</td>
+                <td>
+                    <select name="status">
+                        <option value="dostupan">Dostupan</option>
+                        <option value="nedostupan">Nedostupan</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Sortiraj:
+                </td>
+                <td>
+                    <select name="kriterijum">
+                        <option value="podrazumevano">Podrazumevano</option>
+                        <option value="nazRastuce">Naziv(rastuce)</option>
+                        <option value="nazOpadajuce">Naziv(opadajuce)</option>
+                        <option value="cenaRastuce">Cena(rastuce)</option>
+                        <option value="cenaOpadajuce">Cena(opadajuce)</option>
+                        <option value="datumRastuce">Datum oglasavanja(rastuce)</option>
+                        <option value="datumOpadajuce">Datum oglasavanja(opadajuce)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Primeni filtere" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    <a href="~/Admin/AdminPanelProizvodi">Ponisti filtere</a>
+
+    <table>
+        <tr>
+            <th>Prodavac</th>
+            <th>Naziv</th>
+            <th>Cena</th>
+            <th>Datum postavljanja</th>
+            <th>Kolicina</th>
+            <th>Dostupnost</th>
+        </tr>
+        @foreach (Proizvod p in SviProizvodi.Values)
+        {
+            if (!p.obrisan)
+            {
+                <tr>
+                    <td>@p.userProdavca</td>
+                    <td>@p.naziv</td>
+                    <td>@p.cena</td>
+                    <td>@p.datumPostavljanja.ToString("dd.MM.yyyy")</td>
+                    <td>@p.kolicina</td>
+                    @if (p.dostupan == true)
+                    {
+                        <td>DOSTUPAN</td>
+                    }
+                    else
+                    {
+                        <td>NEDOSTUPAN</td>
+                    }
+                </tr>
+            }
+        }
+
+    </table>
+</div>
+

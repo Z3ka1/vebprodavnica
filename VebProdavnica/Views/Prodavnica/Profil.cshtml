@@ -187,16 +187,15 @@ else if (Model.uloga == Uloga.Prodavac)
 
         <h4>Sortiraj:</h4>
         <form action="/Prodavnica/ProfilSort">
-            <input list="sort" name="kriterijum" />
-            <datalist id="sort">
-                <option value="Naziv(rastuce)" />
-                <option value="Naziv(opadajuce)" />
-                <option value="Cena(rastuce)" />
-                <option value="Cena(opadajuce)" />
-                <option value="Datum oglasavanja(rastuce)" />
-                <option value="Datum oglasavanja(opadajuce)" />
-            </datalist>
-            <input type="submit" value="Sortiraj"/>
+            <select name="kriterijum">
+                <option value="Naziv(rastuce)">Naziv(rastuce)</option>
+                <option value="Naziv(opadajuce)">Naziv(opadajuce)</option>
+                <option value="Cena(rastuce)">Cena(rastuce)</option>
+                <option value="Cena(opadajuce)">Cena(opadajuce)</option>
+                <option value="Datum oglasavanja(rastuce)">Datum oglasavanja(rastuce)</option>
+                <option value="Datum oglasavanja(opadajuce)">Datum oglasavanja(opadajuce)</option>
+            </select>
+            <input type="submit" value="Sortiraj" />
         </form>
 
         <table>
@@ -231,7 +230,7 @@ else if (Model.uloga == Uloga.Prodavac)
                                 <td>Nedostupan</td>
                             }
                             <td>
-                                @if (p.dostupan)
+                                @if (true) //p.dostupan ???
                                 {
                                     <form action="/Prodavnica/ObrisiProizvod">
                                         <input type="number" name="id" value="@p.id" hidden />

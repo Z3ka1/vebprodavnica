@@ -124,7 +124,7 @@ namespace VebProdavnica.Controllers
                 Porudzbina nova = new Porudzbina(Data.GenerateID(), id, kolicina,
                     ((Korisnik)Session["korisnik"]).korisnickoIme, DateTime.Now, Status.AKTIVNA, false, 0);
                 //Session.porudzbine
-                ((Korisnik)Session["korisnik"]).listaPorudzbina.Add(nova);
+                //((Korisnik)Session["korisnik"]).listaPorudzbina.Add(nova);
                 //korisnici.porudzbine
                 korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].listaPorudzbina.Add(nova);
                 //porudzbine + XMLPorudzbine
@@ -132,8 +132,14 @@ namespace VebProdavnica.Controllers
                 Data.UpdatePorudzbinaXml(nova);
                 //proizvodi.kolicina + XMLProizvodi
                 proizvodi[id].kolicina -= kolicina;
+                //Idx proizvoda u listi korisnika koji prodaje
+                int idxMenjanja = korisnici[proizvodi[id].userProdavca].listaObjavljenihProizvoda.FindIndex(p => p.id == id);
+                korisnici[proizvodi[id].userProdavca].listaObjavljenihProizvoda[idxMenjanja].kolicina -= kolicina;
                 if (proizvodi[id].kolicina <= 0)
+                {
                     proizvodi[id].dostupan = false;
+                    korisnici[proizvodi[id].userProdavca].listaObjavljenihProizvoda[idxMenjanja].dostupan = false;
+                }
                 Data.UpdateProizvodXml(proizvodi[id]);
 
                 ViewBag.Message = $"Porudzbina {nova.id} uspesno kreirana, detalje o porudzbini mozete videti na svom profilu.";

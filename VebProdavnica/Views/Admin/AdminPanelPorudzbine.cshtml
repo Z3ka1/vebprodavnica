@@ -1,0 +1,51 @@
+﻿@using VebProdavnica.Models;
+@model VebProdavnica.Models.Korisnik
+@{
+    ViewBag.Title = "AdminPanelPorudzbine";
+    var SvePorudzbine = ViewData["Porudzbine"] as Dictionary<int, Porudzbina>;
+    var SviProizvodi = ViewData["Proizvodi"] as Dictionary<int, Proizvod>;
+    var SviKorisnici = ViewData["Korisnici"] as Dictionary<string, Korisnik>;
+}
+
+<head>
+    <title>Admin - Porudzbine</title>
+</head>
+
+<h2>Admin Panel</h2>
+<h2>@ViewBag.Greska</h2>
+
+<div>
+    <h3>Lista porudzbina</h3>
+    <table>
+        <tr>
+            <th>Kupac</th>
+            <th>Proizvod</th>
+            <th>Kolicina</th>
+            <th>Datum porudzbine</th>
+            <th>Status</th>
+        </tr>
+        @foreach (Porudzbina p in SvePorudzbine.Values)
+        {
+            <tr>
+                <td>@SviKorisnici[p.userKupac].korisnickoIme</td>
+                <td>@SviProizvodi[p.idProizvod].naziv</td>
+                <td>@p.kolicina</td>
+                <td>@p.datumPorudzbine.ToString("dd.MM.yyyy")</td>
+                @if (p.status == Status.AKTIVNA)
+                {
+                    <td>AKTIVNA</td>
+                }
+                else if(p.status == Status.IZVRSENA)
+                {
+                    <td>IZVRSENA</td>
+                }
+                else
+                {
+                    <td>OTKAZANA</td>
+                }
+            </tr>
+        }
+
+    </table>
+
+</div>

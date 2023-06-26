@@ -1,19 +1,6 @@
 <?xml version="1.0"?>
 <proizvodi>
   <proizvod>
-    <ID>1</ID>
-    <NAZIV>Laptop</NAZIV>
-    <CENA>100000</CENA>
-    <KOLICINA>3</KOLICINA>
-    <OPIS>Macbook Air</OPIS>
-    <SLIKA>laptop.jpg</SLIKA>
-    <DATUM>10.06.2023</DATUM>
-    <GRAD>Novi Sad</GRAD>
-    <DOSTUPAN>True</DOSTUPAN>
-    <USER_PRODAVCA>petar</USER_PRODAVCA>
-    <OBRISAN>False</OBRISAN>
-  </proizvod>
-  <proizvod>
     <ID>2</ID>
     <NAZIV>Tastatura</NAZIV>
     <CENA>8900</CENA>
@@ -31,11 +18,24 @@
     <ID>888073819</ID>
     <NAZIV>povodac</NAZIV>
     <CENA>120</CENA>
-    <KOLICINA>12</KOLICINA>
+    <KOLICINA>10</KOLICINA>
     <OPIS>ze kera</OPIS>
     <SLIKA>povodac.jpg</SLIKA>
     <DATUM>25.06.2023</DATUM>
     <GRAD>Cacak</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>petar</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>1</ID>
+    <NAZIV>Laptop</NAZIV>
+    <CENA>100000</CENA>
+    <KOLICINA>2</KOLICINA>
+    <OPIS>Macbook Air</OPIS>
+    <SLIKA>laptop.jpg</SLIKA>
+    <DATUM>10.06.2023</DATUM>
+    <GRAD>Novi Sad</GRAD>
     <DOSTUPAN>True</DOSTUPAN>
     <USER_PRODAVCA>petar</USER_PRODAVCA>
     <OBRISAN>False</OBRISAN>

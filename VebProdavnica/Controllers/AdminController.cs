@@ -17,15 +17,46 @@ namespace VebProdavnica.Controllers
 
         public ActionResult AdminPanel()
         {
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+            return View(admin);
+        }
+
+        public ActionResult AdminPanelKorisnici()
+        {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
-            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
-            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
-            Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
             Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
 
             ViewData["Korisnici"] = korisnici;
+            return View(admin);
+        }
+
+        public ActionResult AdminPanelProizvodi()
+        {
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
             ViewData["Proizvodi"] = proizvodi;
+            return View(admin);
+        }
+
+        public ActionResult AdminPanelPorudzbine()
+        {
+            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
             ViewData["Porudzbine"] = porudzbine;
+            ViewData["Proizvodi"] = proizvodi;
+            ViewData["Korisnici"] = korisnici;
+            return View(admin);
+        }
+
+        public ActionResult AdminPanelRecenzije()
+        {
+            Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
             ViewData["Recenzije"] = recenzije;
             return View(admin);
         }
@@ -34,9 +65,6 @@ namespace VebProdavnica.Controllers
             string staraLozinka, string novaLozinka)
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
-            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
-            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
-            Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
             Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
 
             if (staraLozinka == admin.lozinka)
@@ -56,10 +84,6 @@ namespace VebProdavnica.Controllers
                 ViewBag.Greska = "Stara lozinka je ne ispravna";
             }
 
-            ViewData["Korisnici"] = korisnici;
-            ViewData["Proizvodi"] = proizvodi;
-            ViewData["Porudzbine"] = porudzbine;
-            ViewData["Recenzije"] = recenzije;
             return View("AdminPanel",admin);
         }
 
@@ -67,9 +91,6 @@ namespace VebProdavnica.Controllers
             string uloga, string kriterijum)
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
-            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
-            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
-            Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
             Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
 
             Dictionary<string, Korisnik> pretraga = new Dictionary<string, Korisnik>();
@@ -338,10 +359,46 @@ namespace VebProdavnica.Controllers
             pretraga = listaKorisnika.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
             ViewData["Korisnici"] = pretraga;
-            ViewData["Proizvodi"] = proizvodi;
-            ViewData["Porudzbine"] = porudzbine;
-            ViewData["Recenzije"] = recenzije;
-            return View("AdminPanel",admin);
+            return View("AdminPanelKorisnici",admin);
+        }
+
+        public ActionResult PretragaProizvoda(string status, string kriterijum)
+        {
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
+            Dictionary<int, Proizvod> pretraga = new Dictionary<int, Proizvod>();
+
+            foreach(Proizvod p in proizvodi.Values)
+            {
+                if (status == "dostupan" && p.dostupan)
+                    pretraga.Add(p.id, p);
+                else if (status == "nedostupan" && !p.dostupan)
+                    pretraga.Add(p.id, p);
+                else
+                    pretraga.Add(p.id, p);
+            }
+
+            var listaKorisnika = pretraga.ToList();
+
+            if (kriterijum == "nazRastuce")
+                listaKorisnika.Sort((x, y) => x.Value.naziv.CompareTo(y.Value.naziv));
+            else if (kriterijum == "nazOpadajuce")
+                listaKorisnika.Sort((x, y) => y.Value.naziv.CompareTo(x.Value.naziv));
+            else if (kriterijum == "cenaRastuce")
+                listaKorisnika.Sort((x, y) => x.Value.cena.CompareTo(y.Value.cena));
+            else if (kriterijum == "cenaOpadajuce")
+                listaKorisnika.Sort((x, y) => y.Value.cena.CompareTo(x.Value.cena));
+            else if (kriterijum == "datumRastuce")
+                listaKorisnika.Sort((x, y) => x.Value.datumPostavljanja.CompareTo(y.Value.datumPostavljanja));
+            else if (kriterijum == "datumOpadajuce")
+                listaKorisnika.Sort((x, y) => y.Value.datumPostavljanja.CompareTo(x.Value.datumPostavljanja));
+
+            pretraga = listaKorisnika.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+
+            ViewData["Proizvodi"] = pretraga;
+            return View("AdminPanelProizvodi", admin);
         }
     }
 }

@@ -1,0 +1,104 @@
+﻿@using VebProdavnica.Models;
+@model VebProdavnica.Models.Korisnik
+@{
+    ViewBag.Title = "AdminPanelKorisnici";
+    var SviKorisnici = ViewData["Korisnici"] as Dictionary<string, Korisnik>;
+}
+
+<head>
+    <title>Admin - Korisnici</title>
+</head>
+
+<h2>Admin Panel</h2>
+<h2>@ViewBag.Greska</h2>
+
+<div>
+    <h3>Lista korisnika</h3>
+
+    <form action="/Admin/PretragaKorisnika">
+        <table>
+            <tr>
+                <td>
+                    <h4>Pretrazi i sortiraj:</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>Ime:</td>
+                <td><input type="text" name="ime" /></td>
+            </tr>
+            <tr>
+                <td>Prezime:</td>
+                <td><input type="text" name="prezime" /></td>
+            </tr>
+            <tr>
+                <td>Datum:</td>
+                <td>Od: <input type="date" value="@DateTime.MinValue.ToString("yyyy-MM-dd")" name="datumOd" /></td>
+                <td>Do: <input type="date" value="@DateTime.MinValue.ToString("yyyy-MM-dd")" name="datumDo" /></td>
+            </tr>
+            <tr>
+                <td>Uloga:</td>
+                <td>
+                    <select name="uloga">
+                        <option value="SVI">SVI</option>
+                        <option value="KUPCI">KUPCI</option>
+                        <option value="PRODAVCI">PRODAVCI</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>Sortiraj:</h4>
+                </td>
+                <td>
+                    <select name="kriterijum">
+                        <option value="Podrazumevano">Podrazumevano</option>
+                        <option value="Ime(rastuce)">Ime(rastuce)</option>
+                        <option value="Ime(opadajuce)">Ime(opadajuce)</option>
+                        <option value="Uloga(rastuce)">Uloga(rastuce)</option>
+                        <option value="Uloga(opadajuce)">Uloga(opadajuce)</option>
+                        <option value="Datum rodjenja(rastuce)">Datum rodjenja(rastuce)</option>
+                        <option value="Datum rodjenja(opadajuce)">Datum rodjenja(opadajuce)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Primeni filtere" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    <a href="~/Admin/AdminPanelKorisnici">Ponisti filtere</a>
+
+    <table>
+        <tr>
+            <th>Ime</th>
+            <th>Prezime</th>
+            <th>Korisnicko ime</th>
+            <th>Uloga</th>
+            <th>Datum rodjenja</th>
+        </tr>
+        @foreach (Korisnik k in SviKorisnici.Values)
+        {
+            if (k.uloga != Uloga.Administrator && !k.obrisan)
+            {
+                <tr>
+                    <td>@k.ime</td>
+                    <td>@k.prezime</td>
+                    <td>@k.korisnickoIme</td>
+                    @if (k.uloga == Uloga.Kupac)
+                    {
+                        <td>KUPAC</td>
+                    }
+                    else
+                    {
+                        <td>PRODAVAC</td>
+                    }
+                    <td>@k.datumRodjenja.ToString("dd.MM.yyyy")</td>
+                </tr>
+            }
+        }
+
+    </table>
+
+</div>

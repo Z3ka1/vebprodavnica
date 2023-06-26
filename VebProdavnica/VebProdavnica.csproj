@@ -198,6 +198,9 @@
     <Content Include="Views\Prodavnica\IzmeniProizvod.cshtml" />
     <Content Include="Views\Prodavnica\DodajProizvod.cshtml" />
     <Content Include="Views\Admin\AdminPanel.cshtml" />
+    <Content Include="Views\Admin\AdminPanelKorisnici.cshtml" />
+    <Content Include="Views\Admin\AdminPanelProizvodi.cshtml" />
+    <Content Include="Views\Admin\AdminPanelPorudzbine.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
