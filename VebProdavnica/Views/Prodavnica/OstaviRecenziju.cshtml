@@ -1,4 +1,4 @@
-﻿
+﻿@using VebProdavnica.Models;
 @{
     ViewBag.Title = "OstaviRecenziju";
 }
@@ -10,6 +10,10 @@
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
             margin: 0;
+        }
+
+        .elements
+        {
             padding: 20px;
         }
 
@@ -39,7 +43,7 @@
 
         input[type="submit"] {
             padding: 5px 10px;
-            background-color: #cc0000;
+            background-color: #4CAF50;
             color: #fff;
             border: none;
             cursor: pointer;
@@ -47,7 +51,31 @@
         }
 
         input[type="submit"]:hover {
-            background-color: #990000;
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0px;
+            margin: 0;
+            background-color: #333;
+            overflow: hidden;
+            position: sticky;
+            top: 0;
+        }
+
+        li {
+            display: inline;
+            margin-right: 10px;
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
         }
 
         a {
@@ -63,6 +91,33 @@
 
 <body>
 
+    @if (HttpContext.Current.Session["korisnik"] == null)
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Prijava">Prijavi se</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Registracija">Registracija</a></li>
+        </ul>
+    }
+    else if (((Korisnik)HttpContext.Current.Session["korisnik"]).uloga == Uloga.Administrator)
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Admin/AdminPanel">Admin profil</a></li>
+        </ul>
+    }
+    else
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Profil">Moj profil</a></li>
+        </ul>
+
+    }
+
+<div class="elements">
     <h2>Recenzija porudzbine '@ViewBag.id'</h2>
 
     <form method="post" action="/Prodavnica/PublishRecenziju">
@@ -86,4 +141,5 @@
         </table>
     </form>
     <a href="~/Prodavnica/Profil"> Odustani </a>
+</div>
 </body>

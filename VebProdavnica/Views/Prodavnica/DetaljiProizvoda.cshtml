@@ -5,7 +5,6 @@
     ViewBag.Title = "DetaljiProizvoda";
 }
 
-<h2>Detalji proizvoda</h2>
 
 <head>
     <title>Proizvod @Model.naziv</title>
@@ -14,6 +13,10 @@
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
             margin: 0;
+        }
+
+        .elements
+        {
             padding: 20px;
         }
 
@@ -103,6 +106,29 @@
         .recenzija:last-child {
             margin-bottom: 0;
         }
+        ul {
+            list-style-type: none;
+            padding: 0px;
+            margin: 0;
+            background-color: #333;
+            overflow: hidden;
+            position: sticky;
+            top: 0;
+        }
+
+        li {
+            display: inline;
+            margin-right: 10px;
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
 
         a {
             color: #333;
@@ -115,11 +141,39 @@
     </style>
 </head>
 <body>
+    @if (HttpContext.Current.Session["korisnik"] == null)
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Prijava">Prijavi se</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Registracija">Registracija</a></li>
+        </ul>
+    }
+    else if (((Korisnik)HttpContext.Current.Session["korisnik"]).uloga == Uloga.Administrator)
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Admin/AdminPanel">Admin profil</a></li>
+        </ul>
+    }
+    else
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Profil">Moj profil</a></li>
+        </ul>
+
+    }
+
+<div class="elements">
+    <h2>Detalji proizvoda</h2>
     <h3> @ViewBag.Message </h3>
     <h3> @ViewBag.Greska </h3>
-    
+
     <h2>@Model.naziv </h2>
-    <img src="~/Slike/@Model.slika" alt="Slika"/> 
+    <img src="~/Slike/@Model.slika" alt="Slika" />
     @if (Model.dostupan == true)
     {
         <p>Dostupan, Preostalo: @Model.kolicina</p>
@@ -130,23 +184,23 @@
     }
     <p>Cena: @Model.cena </p>
     <p>Grad: @Model.grad</p>
-    <p>Datum postavljanja: @Model.datumPostavljanja.ToString("dd.MM.yyyy")</p> 
+    <p>Datum postavljanja: @Model.datumPostavljanja.ToString("dd.MM.yyyy")</p>
     <p>@Model.opis</p>
 
     @if (HttpContext.Current.Session["korisnik"] != null &&
         ((Korisnik)HttpContext.Current.Session["korisnik"]).uloga == Uloga.Kupac)
     {
-        if(Model.kolicina > 0)
-                {
-                    <div class="form-container">
-                        <form method="post" action="/Prodavnica/PoruciProizvod">
-                            <input type="number" value="@Model.id" name="id" hidden />
-                            <label for="kolicina">Kolicina:</label>
-                            <input type="number" name="kolicina" min="1" required />
-                            <input type="submit" value="Naruci" />
-                        </form>
-                    </div>
-                }
+        if (Model.kolicina > 0)
+        {
+            <div class="form-container">
+                <form method="post" action="/Prodavnica/PoruciProizvod">
+                    <input type="number" value="@Model.id" name="id" hidden />
+                    <label for="kolicina">Kolicina:</label>
+                    <input type="number" name="kolicina" min="1" required />
+                    <input type="submit" value="Naruci" />
+                </form>
+            </div>
+        }
 
         if (!((Korisnik)HttpContext.Current.Session["korisnik"]).listaOmiljenihProizvoda.Any(p => p.id == Model.id))
         {
@@ -179,7 +233,7 @@
                             </tr>
                             <tr>
                                 <td> @recenzije[r.id].naslov </td>
-                                <td> <img src="~/Slike/@recenzije[r.id].slika" alt="Slika"/> </td>
+                                <td> <img src="~/Slike/@recenzije[r.id].slika" alt="Slika" /> </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
@@ -193,4 +247,5 @@
         </div>
     }
     <a href="~/Prodavnica/Index">Pocetna strana</a>
+</div>
 </body>

@@ -11,6 +11,10 @@
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
             margin: 0;
+        }
+
+        .elements
+        {
             padding: 20px;
         }
 
@@ -51,6 +55,30 @@
             background-color: #990000;
         }
 
+        ul {
+            list-style-type: none;
+            padding: 0px;
+            margin: 0;
+            background-color: #333;
+            overflow: hidden;
+            position: sticky;
+            top: 0;
+        }
+
+        li {
+            display: inline;
+            margin-right: 10px;
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
         a {
             color: #333;
             text-decoration: none;
@@ -62,26 +90,56 @@
     </style>
 </head>
 
-<h2>Izmena recenzije '@Recenzija.id'</h2>
+<body>
+    @if (HttpContext.Current.Session["korisnik"] == null)
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Prijava">Prijavi se</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Registracija">Registracija</a></li>
+        </ul>
+    }
+    else if (((Korisnik)HttpContext.Current.Session["korisnik"]).uloga == Uloga.Administrator)
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Admin/AdminPanel">Admin profil</a></li>
+        </ul>
+    }
+    else
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Profil">Moj profil</a></li>
+        </ul>
 
-<form method="post" action="/Prodavnica/PublishIzmenjenuRecenziju">
-    <input type="number" value="@Recenzija.id" name="idRecenzije" hidden />
-    <table>
-        <tr>
-            <td>Naslov:</td>
-            <td> <input type="text" value="@Recenzija.naslov" name="naslov" /> </td>
-        </tr>
-        <tr>
-            <td>Napisite nesto o ovom proizvodu: </td>
-            <td> <input type="text" value="@Recenzija.sadrzajRecenzije" name="sadrzaj" /> </td>
-        </tr>
-        <tr>
-            <td>Mozete dodati i sliku uz vasu recenziju</td>
-            <td><input type="file" accept="image/*" value="@Recenzija.slika" name="slika" /></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="submit" value="Izmeni recenziju" /></td>
-        </tr>
-    </table>
-</form>
-<a href="~/Prodavnica/Profil"> Odustani </a>
+    }
+
+<div class="elements">
+    <h2>Izmena recenzije '@Recenzija.id'</h2>
+
+    <form method="post" action="/Prodavnica/PublishIzmenjenuRecenziju">
+        <input type="number" value="@Recenzija.id" name="idRecenzije" hidden />
+        <table>
+            <tr>
+                <td>Naslov:</td>
+                <td> <input type="text" value="@Recenzija.naslov" name="naslov" /> </td>
+            </tr>
+            <tr>
+                <td>Napisite nesto o ovom proizvodu: </td>
+                <td> <input type="text" value="@Recenzija.sadrzajRecenzije" name="sadrzaj" /> </td>
+            </tr>
+            <tr>
+                <td>Mozete dodati i sliku uz vasu recenziju</td>
+                <td><input type="file" accept="image/*" value="@Recenzija.slika" name="slika" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" value="Izmeni recenziju" /></td>
+            </tr>
+        </table>
+    </form>
+    <a href="~/Prodavnica/Profil"> Odustani </a>
+</div>
+</body>

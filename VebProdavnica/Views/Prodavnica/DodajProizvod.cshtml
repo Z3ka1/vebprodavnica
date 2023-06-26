@@ -1,46 +1,168 @@
-﻿
+﻿@using VebProdavnica.Models;
 @{
     ViewBag.Title = "DodajProizvod";
 }
 
 <head>
     <title>Izmeni proizvod</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            position: sticky;
+            top: 0;
+        }
+
+        li {
+            display: inline;
+            margin-right: 10px;
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            color: #cc0000;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 500px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        h3 {
+            color: #ff0000;
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+
+    </style>
 </head>
 
-<h2>Dodaj proizvod</h2>
+<body>
+    @if (HttpContext.Current.Session["korisnik"] == null)
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Prijava">Prijavi se</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Registracija">Registracija</a></li>
+        </ul>
+    }
+    else if (((Korisnik)HttpContext.Current.Session["korisnik"]).uloga == Uloga.Administrator)
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Admin/AdminPanel">Admin profil</a></li>
+        </ul>
+    }
+    else
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Profil">Moj profil</a></li>
+        </ul>
 
-<h3>@ViewBag.Greska</h3>
+    }
 
-<form action="/Prodavnica/PublishProizvod">
-    <table>
-        <tr>
-            <td>Naziv:</td>
-            <td><input type="text" name="naziv" required /></td>
-        </tr>
-        <tr>
-            <td>Cena:</td>
-            <td><input type="text" name="cena" required /></td>
-        </tr>
-        <tr>
-            <td>Kolicina:</td>
-            <td><input type="number" min="0" name="kolicina" required /></td>
-        </tr>
-        <tr>
-            <td>Opis:</td>
-            <td><input type="text" name="opis" required /></td>
-        </tr>
-        <tr>
-            <td>Slika:</td>
-            <td><input type="file" accept="image/*" name="slika" required/></td>
-        </tr>
-        <tr>
-            <td>Grad:</td>
-            <td> <input type="text" name="grad" required /></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="submit" value="Dodaj" /></td>
-        </tr>
-    </table>
-</form>
+<div class="container">
+    <h2>Dodaj proizvod</h2>
 
-<a href="~/Prodavnica/Profil">Odustani</a>
+    <h3>@ViewBag.Greska</h3>
+
+    <form action="/Prodavnica/PublishProizvod">
+        <table>
+            <tr>
+                <td>Naziv:</td>
+                <td><input type="text" name="naziv" required /></td>
+            </tr>
+            <tr>
+                <td>Cena:</td>
+                <td><input type="text" name="cena" required /></td>
+            </tr>
+            <tr>
+                <td>Kolicina:</td>
+                <td><input type="number" min="0" name="kolicina" required /></td>
+            </tr>
+            <tr>
+                <td>Opis:</td>
+                <td><input type="text" name="opis" required /></td>
+            </tr>
+            <tr>
+                <td>Slika:</td>
+                <td><input type="file" accept="image/*" name="slika" required /></td>
+            </tr>
+            <tr>
+                <td>Grad:</td>
+                <td> <input type="text" name="grad" required /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" value="Dodaj" /></td>
+            </tr>
+        </table>
+    </form>
+
+    <a href="~/Prodavnica/Profil">Odustani</a>
+</div>
+</body>

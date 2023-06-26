@@ -8,398 +8,534 @@
 
 <head>
     <title>Profil @Model.korisnickoIme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        h3 {
+            color: #666;
+        }
+
+        h4 {
+            color: #999;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            position: sticky;
+            top: 0;
+        }
+
+        li {
+            display: inline;
+            margin-right: 10px;
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            color: #cc0000;
+        }
+
+        .container {
+            margin: 20px auto;
+            max-width: 850px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        form {
+            display: inline;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"].obrisi {
+            background-color: #cc0000;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        input[type="submit"].obrisi:hover {
+            background-color: #990000;
+        }
+
+        input[type="text"], input[type="password"], select {
+            padding: 8px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        img {
+            width: 150px;
+            height: 100px;
+        }
+    </style>
 </head>
 
-
-<h2>Profil korisnika '@Model.korisnickoIme'</h2>
-<h3>Vasa uloga: '@Model.uloga.ToString()'</h3>
-<h2>@ViewBag.Greska</h2>
-<h2>@ViewBag.Message</h2>
-
-
-@if (Model.uloga == Uloga.Kupac)
-{
-    <div>
-        <h4>Vase porudzbine:</h4>
-        @if (Model.listaPorudzbina.Any(obj => obj.status == Status.AKTIVNA))
-        {
-            <h4>AKTIVNE:</h4>
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Proizvod</th>
-                    <th>Kolicina</th>
-                    <th>Datum porudzbine</th>
-                    <th>Oznaci pristiglo</th>
-                </tr>
-                @foreach (Porudzbina p in Model.listaPorudzbina)
-                {
-                    if (p.status == Status.AKTIVNA)
-                    {
-                        <tr>
-                            <td>@p.id</td>
-                            <td>@SviProizvodi[p.idProizvod].naziv</td>
-                            <td>@p.kolicina</td>
-                            <td>@p.datumPorudzbine.ToString("dd.MM.yyyy")</td>
-                            <td>
-                                <form method="post" action="/Prodavnica/OznaciPorudzbinuIzvrsenom">
-                                    <input type="text" value="@p.id" name="id" hidden />
-                                    <input type="submit" value="Primljeno" />
-                                </form>
-                            </td>
-                        </tr>
-                    }
-                }
-            </table>
-        }
-        else
-        { <h4>Nema AKTIVNIH porudzbina!</h4>}
-
-        @if (Model.listaPorudzbina.Any(obj => obj.status == Status.IZVRSENA))
-        {
-            <h4>IZVRSENE</h4>
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Proizvod</th>
-                    <th>Kolicina</th>
-                    <th>Datum porudzbine</th>
-                    <th>Ostavi recenziju</th>
-                </tr>
-                @foreach (Porudzbina p in Model.listaPorudzbina)
-                {
-                    if (p.status == Status.IZVRSENA)
-                    {
-                        <tr>
-                            <td>@p.id</td>
-                            <td>@SviProizvodi[p.idProizvod].naziv</td>
-                            <td>@p.kolicina</td>
-                            <td>@p.datumPorudzbine.ToString("dd.MM.yyyy")</td>
-                            <td>
-                                @if (p.recenzijaOstavljena == false)
-                                {
-                                    <form method="post" action="/Prodavnica/OstaviRecenziju">
-                                        <input type="text" value="@p.id" name="id" hidden />
-                                        <input type="submit" value="Ostavi recenziju" />
-                                    </form>
-                                }
-                                else
-                                {
-                                    <form method="post" action="/Prodavnica/IzmeniRecenziju">
-                                        <input type="text" value="@p.id" name="id" hidden />
-                                        <input type="submit" value="Izmeni recenziju" />
-                                    </form>
-                                    <form method="post" action="/Prodavnica/ObrisiRecenziju">
-                                        <input type="text" value="@p.id" name="id" hidden />
-                                        <input type="submit" value="Obrisi recenziju" />
-                                    </form>
-                                }
-                            </td>
-                        </tr>
-                    }
-                }
-            </table>
-        }
-        else
-        { <h4>Nema IZVRSENIH porudzbina!</h4>}
-
-        @if (Model.listaPorudzbina.Any(obj => obj.status == Status.OTKAZANA))
-        {
-            <h4>OTKAZANE</h4>
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Proizvod</th>
-                    <th>Kolicina</th>
-                    <th>Datum porudzbine</th>
-                </tr>
-                @foreach (Porudzbina p in Model.listaPorudzbina)
-                {
-                    if (p.status == Status.OTKAZANA)
-                    {
-                        <tr>
-                            <td>@p.id</td>
-                            <td>@SviProizvodi[p.idProizvod].naziv</td>
-                            <td>@p.kolicina</td>
-                            <td>@p.datumPorudzbine.ToString("dd.MM.yyyy")</td>
-                            <td>
-                                Porudzbina OTKAZANA
-                            </td>
-                        </tr>
-                    }
-                }
-            </table>
-        }
-        else
-        { <h4>Nema OTKAZANIH porudzbina!</h4>}
-    </div>
-
-    <div>
-        @if (Model.listaOmiljenihProizvoda.Count > 0 && Model.listaOmiljenihProizvoda.Any(obj => obj.obrisan == false))
-        {
-            <h4>Vasi omiljeni proizvodi</h4>
-            <table title="OMILJENI">
-                <tr>
-                    <th>Naziv</th>
-                    <th>Cena</th>
-                    <th>Grad</th>
-                    <th>Dostupnost</th>
-                </tr>
-                @foreach (Proizvod p in Model.listaOmiljenihProizvoda)
-                {
-                    if (!p.obrisan)
-                    {
-                        <tr>
-                            <td>@p.naziv</td>
-                            <td>@p.cena</td>
-                            <td>@p.grad</td>
-                            @if (p.dostupan)
-                            {
-                                <td>DOSTUPAN</td>
-                            }
-                            else
-                            {
-                                <td>NEDOSTUPAN</td>
-                            }
-
-                        </tr>
-                    }
-                }
-            </table>
-        }
-        else
-        { <h4>Nema OMILJENIH proizvoda</h4>}
-    </div>
-}
-else if (Model.uloga == Uloga.Prodavac)
-{
-    <form action="/Prodavnica/DodajProizvod">
-        <input type="submit" value="Prodaj novi proizvod" />
-    </form>
-    if (Model.listaObjavljenihProizvoda.Count > 0 && Model.listaObjavljenihProizvoda.Any(obj => obj.obrisan == false))
+<body>
+    @if (HttpContext.Current.Session["korisnik"] == null)
     {
-        <h4>Vasi objavljeni proizvodi</h4>
-
-
-        <form action="/Prodavnica/ProfilSort">
-            <table>
-                <tr>
-                    <td>
-                        <h4>Pretrazi i sortiraj:</h4>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Status:</td>
-                    <td>
-                        <select name="status">
-                            <option value="svi">Svi</option>
-                            <option value="dostupan">Dostupni</option>
-                            <option value="nedostupan">Nedostupni</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Sortiraj:
-                    </td>
-                    <td>
-                        <select name="kriterijum">
-                            <option value="podrazumevano">Podrazumevano</option>
-                            <option value="nazRastuce">Naziv(rastuce)</option>
-                            <option value="nazOpadajuce">Naziv(opadajuce)</option>
-                            <option value="cenaRastuce">Cena(rastuce)</option>
-                            <option value="cenaOpadajuce">Cena(opadajuce)</option>
-                            <option value="datumRastuce">Datum oglasavanja(rastuce)</option>
-                            <option value="datumOpadajuce">Datum oglasavanja(opadajuce)</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="submit" value="Primeni filtere" />
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <a href="~/Prodavnica/Profil">Ponisti filtere</a>
-
-        <table>
-            <tr>
-                <th>Naziv</th>
-                <th>Cena</th>
-                <th>Kolicina</th>
-                <th>Opis</th>
-                <th>Slika</th>
-                <th>Datum postavljanja</th>
-                <th>Grad</th>
-                <th>Dostupnost</th>
-            </tr>
-            @if (ViewBag.pretraga != null)
-            {
-                foreach (Proizvod p in ViewBag.pretraga.Values)
-                {
-                    if (!p.obrisan)
-                    {
-                        <tr>
-                            <td>@p.naziv</td>
-                            <td>@p.cena</td>
-                            <td>@p.kolicina</td>
-                            <td>@p.opis</td>
-                            <td><img src="~/Slike/@p.slika" /></td>
-                            <td>@p.datumPostavljanja.ToString("dd.MM.yyyy")</td>
-                            <td>@p.grad</td>
-                            @if (p.dostupan)
-                            {
-                                <td>Dostupan</td>
-                            }
-                            else
-                            {
-                                <td>Nedostupan</td>
-                            }
-                            <td>
-                                @if (true) //p.dostupan ???
-                                {
-                                    <form action="/Prodavnica/ObrisiProizvod">
-                                        <input type="number" name="id" value="@p.id" hidden />
-                                        <input type="submit" value="Obrisi" />
-                                    </form>
-                                    <form action="/Prodavnica/IzmeniProizvod">
-                                        <input type="number" name="id" value="@p.id" hidden />
-                                        <input type="submit" value="Izmeni" />
-                                    </form>
-                                }
-                            </td>
-                        </tr>
-
-                    }
-                }
-            }
-            else
-            {
-                foreach (Proizvod p in Model.listaObjavljenihProizvoda)
-                {
-                    if (!p.obrisan)
-                    {
-                        <tr>
-                            <td>@p.naziv</td>
-                            <td>@p.cena</td>
-                            <td>@p.kolicina</td>
-                            <td>@p.opis</td>
-                            <td><img src="~/Slike/@p.slika" /></td>
-                            <td>@p.datumPostavljanja.ToString("dd.MM.yyyy")</td>
-                            <td>@p.grad</td>
-                            @if (p.dostupan)
-                            {
-                                <td>Dostupan</td>
-                            }
-                            else
-                            {
-                                <td>Nedostupan</td>
-                            }
-                            <td>
-                                @if (true) //p.dostupan ???
-                                {
-                                    <form action="/Prodavnica/ObrisiProizvod">
-                                        <input type="number" name="id" value="@p.id" hidden />
-                                        <input type="submit" value="Obrisi" />
-                                    </form>
-                                    <form action="/Prodavnica/IzmeniProizvod">
-                                        <input type="number" name="id" value="@p.id" hidden />
-                                        <input type="submit" value="Izmeni" />
-                                    </form>
-                                }
-                            </td>
-                        </tr>
-
-                    }
-                }
-            }
-        </table>
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Prijava">Prijavi se</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Registracija">Registracija</a></li>
+        </ul>
+    }
+    else if (((Korisnik)HttpContext.Current.Session["korisnik"]).uloga == Uloga.Administrator)
+    {
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Admin/AdminPanel">Admin profil</a></li>
+        </ul>
     }
     else
     {
-        <h4>Trenutno nemate objavljenih proizvoda</h4>
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Profil">Moj profil</a></li>
+        </ul>
+
     }
 
-}
+<div class="container">
+    <h1>Profil korisnika '@Model.korisnickoIme'</h1>
+    <h2>Vasa uloga: '@Model.uloga.ToString()'</h2>
+    <h2>@ViewBag.Greska</h2>
+    <h2>@ViewBag.Message</h2>
 
 
-<div>
-    <h4>Podaci o korisniku</h4>
-    <form method="post" action="/Prodavnica/IzmeniPodatkeKorisnika">
-        <table>
-            <tr>
-                <td>Ime:</td>
-                <td>
-                    <input type="text" value="@Model.ime" name="ime" required />
-                </td>
-            </tr>
-            <tr>
-                <td>Prezime:</td>
-                <td>
-                    <input type="text" value="@Model.prezime" name="prezime" required />
-                </td>
-            </tr>
-            <tr>
-                <td>Pol</td>
-                @switch (Model.pol)
+    @if (Model.uloga == Uloga.Kupac)
+    {
+        <div>
+            <h4>Vase porudzbine:</h4>
+            @if (Model.listaPorudzbina.Any(obj => obj.status == Status.AKTIVNA))
+            {
+                <h4>AKTIVNE:</h4>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Proizvod</th>
+                        <th>Kolicina</th>
+                        <th>Datum porudzbine</th>
+                        <th>Oznaci pristiglo</th>
+                    </tr>
+                    @foreach (Porudzbina p in Model.listaPorudzbina)
+                    {
+                        if (p.status == Status.AKTIVNA)
+                        {
+                            <tr>
+                                <td>@p.id</td>
+                                <td>@SviProizvodi[p.idProizvod].naziv</td>
+                                <td>@p.kolicina</td>
+                                <td>@p.datumPorudzbine.ToString("dd.MM.yyyy")</td>
+                                <td>
+                                    <form method="post" action="/Prodavnica/OznaciPorudzbinuIzvrsenom">
+                                        <input type="text" value="@p.id" name="id" hidden />
+                                        <input type="submit" value="Primljeno" />
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            }
+            else
+            { <h4>Nema AKTIVNIH porudzbina!</h4>}
+
+            @if (Model.listaPorudzbina.Any(obj => obj.status == Status.IZVRSENA))
+            {
+                <h4>IZVRSENE:</h4>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Proizvod</th>
+                        <th>Kolicina</th>
+                        <th>Datum porudzbine</th>
+                        <th>Ostavi recenziju</th>
+                    </tr>
+                    @foreach (Porudzbina p in Model.listaPorudzbina)
+                    {
+                        if (p.status == Status.IZVRSENA)
+                        {
+                            <tr>
+                                <td>@p.id</td>
+                                <td>@SviProizvodi[p.idProizvod].naziv</td>
+                                <td>@p.kolicina</td>
+                                <td>@p.datumPorudzbine.ToString("dd.MM.yyyy")</td>
+                                <td>
+                                    @if (p.recenzijaOstavljena == false)
+                                    {
+                                        <form method="post" action="/Prodavnica/OstaviRecenziju">
+                                            <input type="text" value="@p.id" name="id" hidden />
+                                            <input type="submit" value="Ostavi recenziju" />
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" action="/Prodavnica/IzmeniRecenziju">
+                                            <input type="text" value="@p.id" name="id" hidden />
+                                            <input type="submit" value="Izmeni recenziju" />
+                                        </form>
+                                        <form method="post" action="/Prodavnica/ObrisiRecenziju">
+                                            <input type="text" value="@p.id" name="id" hidden />
+                                            <input type="submit" value="Obrisi recenziju" />
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            }
+            else
+            { <h4>Nema IZVRSENIH porudzbina!</h4>}
+
+            @if (Model.listaPorudzbina.Any(obj => obj.status == Status.OTKAZANA))
+            {
+                <h4>OTKAZANE:</h4>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Proizvod</th>
+                        <th>Kolicina</th>
+                        <th>Datum porudzbine</th>
+                    </tr>
+                    @foreach (Porudzbina p in Model.listaPorudzbina)
+                    {
+                        if (p.status == Status.OTKAZANA)
+                        {
+                            <tr>
+                                <td>@p.id</td>
+                                <td>@SviProizvodi[p.idProizvod].naziv</td>
+                                <td>@p.kolicina</td>
+                                <td>@p.datumPorudzbine.ToString("dd.MM.yyyy")</td>
+                                <td>
+                                    Porudzbina OTKAZANA
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            }
+            else
+            { <h4>Nema OTKAZANIH porudzbina!</h4>}
+        </div>
+
+        <div>
+            @if (Model.listaOmiljenihProizvoda.Count > 0 && Model.listaOmiljenihProizvoda.Any(obj => obj.obrisan == false))
+            {
+                <h4>Vasi omiljeni proizvodi</h4>
+                <table title="OMILJENI">
+                    <tr>
+                        <th>Naziv</th>
+                        <th>Cena</th>
+                        <th>Grad</th>
+                        <th>Dostupnost</th>
+                    </tr>
+                    @foreach (Proizvod p in Model.listaOmiljenihProizvoda)
+                    {
+                        if (!p.obrisan)
+                        {
+                            <tr>
+                                <td>@p.naziv</td>
+                                <td>@p.cena</td>
+                                <td>@p.grad</td>
+                                @if (p.dostupan)
+                                {
+                                    <td>DOSTUPAN</td>
+                                }
+                                else
+                                {
+                                    <td>NEDOSTUPAN</td>
+                                }
+
+                            </tr>
+                        }
+                    }
+                </table>
+            }
+            else
+            { <h4>Nema OMILJENIH proizvoda</h4>}
+        </div>
+    }
+    else if (Model.uloga == Uloga.Prodavac)
+    {
+        <form style="float:right" action="/Prodavnica/DodajProizvod">
+            <input type="submit" value="Prodaj novi proizvod" />
+        </form>
+        if (Model.listaObjavljenihProizvoda.Count > 0 && Model.listaObjavljenihProizvoda.Any(obj => obj.obrisan == false))
+        {
+            <h3>Vasi objavljeni proizvodi</h3>
+
+
+            <form action="/Prodavnica/ProfilSort">
+                <table>
+                    <tr>
+                        <td>Status:
+                            <select name="status">
+                                <option value="svi">Svi</option>
+                                <option value="dostupan">Dostupni</option>
+                                <option value="nedostupan">Nedostupni</option>
+                            </select>
+                        </td>
+                    
+                        <td>
+                            Sortiraj:
+                            <select name="kriterijum">
+                                <option value="podrazumevano">Podrazumevano</option>
+                                <option value="nazRastuce">Naziv(rastuce)</option>
+                                <option value="nazOpadajuce">Naziv(opadajuce)</option>
+                                <option value="cenaRastuce">Cena(rastuce)</option>
+                                <option value="cenaOpadajuce">Cena(opadajuce)</option>
+                                <option value="datumRastuce">Datum oglasavanja(rastuce)</option>
+                                <option value="datumOpadajuce">Datum oglasavanja(opadajuce)</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" value="Primeni filtere" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <a style="float:right" href="~/Prodavnica/Profil">Ponisti filtere</a>
+
+            <table>
+                <tr>
+                    <th>Naziv</th>
+                    <th>Cena</th>
+                    <th>Kolicina</th>
+                    <th>Opis</th>
+                    <th>Slika</th>
+                    <th>Datum postavljanja</th>
+                    <th>Grad</th>
+                    <th>Dostupnost</th>
+                    <th>Akcije</th>
+                </tr>
+                @if (ViewBag.pretraga != null)
                 {
-                    case Pol.M:
-                        <td>Muski</td>
-                        break;
-                    case Pol.Z:
-                        <td>Zenski</td>
-                        break;
+                    foreach (Proizvod p in ViewBag.pretraga.Values)
+                    {
+                        if (!p.obrisan)
+                        {
+                            <tr>
+                                <td>@p.naziv</td>
+                                <td>@p.cena</td>
+                                <td>@p.kolicina</td>
+                                <td>@p.opis</td>
+                                <td><img src="~/Slike/@p.slika" /></td>
+                                <td>@p.datumPostavljanja.ToString("dd.MM.yyyy")</td>
+                                <td>@p.grad</td>
+                                @if (p.dostupan)
+                                {
+                                    <td>Dostupan</td>
+                                }
+                                else
+                                {
+                                    <td>Nedostupan</td>
+                                }
+                                <td>
+                                    @if (true) //p.dostupan ???
+                                    {
+                                        <form action="/Prodavnica/ObrisiProizvod">
+                                            <input type="number" name="id" value="@p.id" hidden />
+                                            <input class="obrisi" type="submit" value="Obrisi" />
+                                        </form>
+                                        <form action="/Prodavnica/IzmeniProizvod">
+                                            <input type="number" name="id" value="@p.id" hidden />
+                                            <input type="submit" value="Izmeni" />
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+
+                        }
+                    }
                 }
-            </tr>
-            <tr>
-                <td>Email:</td>
-                <td>
-                    <input type="text" value="@Model.email" name="email" required />
-                </td>
-            </tr>
-            <tr>
-                <td>Datum rodjenja:</td>
-                <td>
-                    <input type="date" value="@Model.datumRodjenja.ToString("yyyy-MM-dd")" name="datumRodjenja" required />
-                </td>
-            </tr>
-            <tr>
-                <td>Uloga:</td>
-                @switch (Model.uloga)
+                else
                 {
-                    case Uloga.Kupac:
-                        <td>Kupac</td>
-                        break;
-                    case Uloga.Prodavac:
-                        <td>Prodavac</td>
-                        break;
-                    case Uloga.Administrator:
-                        <td>Administrator</td>
-                        break;
+                    foreach (Proizvod p in Model.listaObjavljenihProizvoda)
+                    {
+                        if (!p.obrisan)
+                        {
+                            <tr>
+                                <td>@p.naziv</td>
+                                <td>@p.cena</td>
+                                <td>@p.kolicina</td>
+                                <td>@p.opis</td>
+                                <td><img src="~/Slike/@p.slika" /></td>
+                                <td>@p.datumPostavljanja.ToString("dd.MM.yyyy")</td>
+                                <td>@p.grad</td>
+                                @if (p.dostupan)
+                                {
+                                    <td>Dostupan</td>
+                                }
+                                else
+                                {
+                                    <td>Nedostupan</td>
+                                }
+                                <td>
+                                    @if (true) //p.dostupan ???
+                                    {
+                                        <form action="/Prodavnica/ObrisiProizvod">
+                                            <input type="number" name="id" value="@p.id" hidden />
+                                            <input class="obrisi" type="submit" value="Obrisi" />
+                                        </form>
+                                        <form action="/Prodavnica/IzmeniProizvod">
+                                            <input type="number" name="id" value="@p.id" hidden />
+                                            <input type="submit" value="Izmeni" />
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+
+                        }
+                    }
                 }
-            </tr>
-            <tr>
-                <td>Korisnicko ime:</td>
-                <td>
-                    @Model.korisnickoIme
-                </td>
-            </tr>
-            <tr>
-                <td>Nova lozinka:</td>
-                <td>
-                    <input type="password" name="novaLozinka" />
-                </td>
-            </tr>
-            <tr>
-                <td>Stara lozinka (radi potvrde identiteta):</td>
-                <td>
-                    <input type="password" name="staraLozinka" required />
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2"><input type="submit" value="Potvrdi izmenu podataka" /> </td>
-            </tr>
-        </table>
-    </form>
+            </table>
+        }
+        else
+        {
+            <h4>Trenutno nemate objavljenih proizvoda</h4>
+        }
+
+    }
+
+
+    <div>
+        <h3>Podaci o korisniku</h3>
+        <form method="post" action="/Prodavnica/IzmeniPodatkeKorisnika">
+            <table>
+                <tr>
+                    <td>Ime:</td>
+                    <td>
+                        <input type="text" value="@Model.ime" name="ime" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Prezime:</td>
+                    <td>
+                        <input type="text" value="@Model.prezime" name="prezime" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pol</td>
+                    @switch (Model.pol)
+                    {
+                        case Pol.M:
+                            <td>Muski</td>
+                            break;
+                        case Pol.Z:
+                            <td>Zenski</td>
+                            break;
+                    }
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td>
+                        <input type="text" value="@Model.email" name="email" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Datum rodjenja:</td>
+                    <td>
+                        <input type="date" value="@Model.datumRodjenja.ToString("yyyy-MM-dd")" name="datumRodjenja" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Uloga:</td>
+                    @switch (Model.uloga)
+                    {
+                        case Uloga.Kupac:
+                            <td>Kupac</td>
+                            break;
+                        case Uloga.Prodavac:
+                            <td>Prodavac</td>
+                            break;
+                        case Uloga.Administrator:
+                            <td>Administrator</td>
+                            break;
+                    }
+                </tr>
+                <tr>
+                    <td>Korisnicko ime:</td>
+                    <td>
+                        @Model.korisnickoIme
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nova lozinka:</td>
+                    <td>
+                        <input type="password" name="novaLozinka" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Stara lozinka (radi potvrde identiteta):</td>
+                    <td>
+                        <input type="password" name="staraLozinka" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit" value="Potvrdi izmenu podataka" /> </td>
+                </tr>
+            </table>
+        </form>
+    </div>
 </div>
+</body>

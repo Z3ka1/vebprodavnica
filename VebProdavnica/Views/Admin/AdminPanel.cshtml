@@ -4,92 +4,106 @@
     ViewBag.Title = "AdminPanel";
 }
 
-<h2>Admin Panel</h2>
-<h2>@ViewBag.Greska</h2>
+<head>
+    <title>Admin panel</title>
+</head>
 
-<ul>
-    <li><a href="~/Admin/AdminPanelKorisnici">Administriranje korisnika</a></li>
-    <li><a href="~/Admin/AdminPanelProizvodi">Administriranje proizvoda</a></li>
-    <li><a href="~/Admin/AdminPanelPorudzbine">Administriranje porudzbina</a></li>
-    <li><a href="~/Admin/AdminPanelRecenzije">Odobravanje recenzija</a></li>
-</ul>
+<body>
+    <div class="nav">
+        <ul>
+            <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+            <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+            <li style="float:right"><a href="~/Admin/AdminPanel">Admin profil</a></li>
+        </ul>
+    </div>
 
-<div>
-    <h4>Podaci o korisniku</h4>
-    <form method="post" action="/Admin/IzmeniPodatkeAdmina">
-        <table>
-            <tr>
-                <td>Ime:</td>
-                <td>
-                    <input type="text" value="@Model.ime" name="ime" required />
-                </td>
-            </tr>
-            <tr>
-                <td>Prezime:</td>
-                <td>
-                    <input type="text" value="@Model.prezime" name="prezime" required />
-                </td>
-            </tr>
-            <tr>
-                <td>Pol</td>
-                @switch (Model.pol)
-                {
-                    case Pol.M:
-                        <td>Muski</td>
-                        break;
-                    case Pol.Z:
-                        <td>Zenski</td>
-                        break;
-                }
-            </tr>
-            <tr>
-                <td>Email:</td>
-                <td>
-                    <input type="text" value="@Model.email" name="email" required />
-                </td>
-            </tr>
-            <tr>
-                <td>Datum rodjenja:</td>
-                <td>
-                    <input type="date" value="@Model.datumRodjenja.ToString("yyyy-MM-dd")" name="datumRodjenja" required />
-                </td>
-            </tr>
-            <tr>
-                <td>Uloga:</td>
-                @switch (Model.uloga)
-                {
-                    case Uloga.Kupac:
-                        <td>Kupac</td>
-                        break;
-                    case Uloga.Prodavac:
-                        <td>Prodavac</td>
-                        break;
-                    case Uloga.Administrator:
-                        <td>Administrator</td>
-                        break;
-                }
-            </tr>
-            <tr>
-                <td>Korisnicko ime:</td>
-                <td>
-                    @Model.korisnickoIme
-                </td>
-            </tr>
-            <tr>
-                <td>Nova lozinka:</td>
-                <td>
-                    <input type="password" name="novaLozinka" />
-                </td>
-            </tr>
-            <tr>
-                <td>Stara lozinka (radi potvrde identiteta):</td>
-                <td>
-                    <input type="password" name="staraLozinka" required />
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2"><input type="submit" value="Potvrdi izmenu podataka" /> </td>
-            </tr>
-        </table>
-    </form>
-</div>
+    <h2>Admin: @Model.korisnickoIme</h2>
+    <h2>@ViewBag.Greska</h2>
+
+    <ul>
+        <li><a href="~/Admin/AdminPanelKorisnici">Administriranje korisnika</a></li>
+        <li><a href="~/Admin/AdminPanelProizvodi">Administriranje proizvoda</a></li>
+        <li><a href="~/Admin/AdminPanelPorudzbine">Administriranje porudzbina</a></li>
+        <li><a href="~/Admin/AdminPanelRecenzije">Odobravanje recenzija</a></li>
+    </ul>
+
+    <div>
+        <h4>Podaci o korisniku</h4>
+        <form method="post" action="/Admin/IzmeniPodatkeAdmina">
+            <table>
+                <tr>
+                    <td>Ime:</td>
+                    <td>
+                        <input type="text" value="@Model.ime" name="ime" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Prezime:</td>
+                    <td>
+                        <input type="text" value="@Model.prezime" name="prezime" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pol</td>
+                    @switch (Model.pol)
+                    {
+                        case Pol.M:
+                            <td>Muski</td>
+                            break;
+                        case Pol.Z:
+                            <td>Zenski</td>
+                            break;
+                    }
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td>
+                        <input type="text" value="@Model.email" name="email" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Datum rodjenja:</td>
+                    <td>
+                        <input type="date" value="@Model.datumRodjenja.ToString("yyyy-MM-dd")" name="datumRodjenja" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Uloga:</td>
+                    @switch (Model.uloga)
+                    {
+                        case Uloga.Kupac:
+                            <td>Kupac</td>
+                            break;
+                        case Uloga.Prodavac:
+                            <td>Prodavac</td>
+                            break;
+                        case Uloga.Administrator:
+                            <td>Administrator</td>
+                            break;
+                    }
+                </tr>
+                <tr>
+                    <td>Korisnicko ime:</td>
+                    <td>
+                        @Model.korisnickoIme
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nova lozinka:</td>
+                    <td>
+                        <input type="password" name="novaLozinka" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Stara lozinka (radi potvrde identiteta):</td>
+                    <td>
+                        <input type="password" name="staraLozinka" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit" value="Potvrdi izmenu podataka" /> </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</body>
