@@ -375,7 +375,7 @@ namespace VebProdavnica.Controllers
                     pretraga.Add(p.id, p);
                 else if (status == "nedostupan" && !p.dostupan)
                     pretraga.Add(p.id, p);
-                else
+                else if (status == "svi")
                     pretraga.Add(p.id, p);
             }
 

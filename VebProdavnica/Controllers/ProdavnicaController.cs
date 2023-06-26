@@ -616,34 +616,41 @@ namespace VebProdavnica.Controllers
             return View("Profil",trenutni);
         }
 
-        public ActionResult FilterDostupan()
-        {
-            ViewBag.Dostupan = true;
-
-            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
-            ViewData["Proizvodi"] = proizvodi;
-            return View("Profil",(Korisnik)Session["korisnik"]);
-        }
-
-        public ActionResult ProfilSort(string kriterijum)
+        public ActionResult ProfilSort(string status, string kriterijum)
         {
             Korisnik trenutni = (Korisnik)Session["korisnik"];
-
-            if (kriterijum == "Naziv(rastuce)")
-                trenutni.listaObjavljenihProizvoda.Sort((x, y) => x.naziv.CompareTo(y.naziv));
-            else if (kriterijum == "Naziv(opadajuce)")
-                trenutni.listaObjavljenihProizvoda.Sort((x, y) => y.naziv.CompareTo(x.naziv));
-            else if (kriterijum == "Cena(rastuce)")
-                trenutni.listaObjavljenihProizvoda.Sort((x, y) => x.cena.CompareTo(y.cena));
-            else if (kriterijum == "Cena(opadajuce)")
-                trenutni.listaObjavljenihProizvoda.Sort((x, y) => y.cena.CompareTo(x.cena));
-            else if (kriterijum == "Datum oglasavanja(rastuce)")
-                trenutni.listaObjavljenihProizvoda.Sort((x, y) => x.datumPostavljanja.CompareTo(y.datumPostavljanja));
-            else if (kriterijum == "Datum oglasavanja(opadajuce)")
-                trenutni.listaObjavljenihProizvoda.Sort((x, y) => y.datumPostavljanja.CompareTo(x.datumPostavljanja));
- 
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
-            ViewData["Proizvodi"] = proizvodi;
+            Dictionary<int, Proizvod> pretraga = new Dictionary<int, Proizvod>();
+
+            foreach (Proizvod p in proizvodi.Values)
+            {
+                if (status == "dostupan" && p.dostupan)
+                    pretraga.Add(p.id, p);
+                else if (status == "nedostupan" && !p.dostupan)
+                    pretraga.Add(p.id, p);
+                else if (status == "svi")
+                    pretraga.Add(p.id, p);
+            }
+
+            var listaKorisnika = pretraga.ToList();
+            
+            if (kriterijum == "nazRastuce")
+                listaKorisnika.Sort((x, y) => x.Value.naziv.CompareTo(y.Value.naziv));
+            else if (kriterijum == "nazOpadajuce")
+                listaKorisnika.Sort((x, y) => y.Value.naziv.CompareTo(x.Value.naziv));
+            else if (kriterijum == "cenaRastuce")
+                listaKorisnika.Sort((x, y) => x.Value.cena.CompareTo(y.Value.cena));
+            else if (kriterijum == "cenaOpadajuce")
+                listaKorisnika.Sort((x, y) => y.Value.cena.CompareTo(x.Value.cena));
+            else if (kriterijum == "datumRastuce")
+                listaKorisnika.Sort((x, y) => x.Value.datumPostavljanja.CompareTo(y.Value.datumPostavljanja));
+            else if (kriterijum == "datumOpadajuce")
+                listaKorisnika.Sort((x, y) => y.Value.datumPostavljanja.CompareTo(x.Value.datumPostavljanja));
+
+            pretraga = listaKorisnika.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+            ViewData["Proizvodi"] = pretraga;
+            ViewBag.pretraga = pretraga;
             return View("Profil", trenutni);
         }
 

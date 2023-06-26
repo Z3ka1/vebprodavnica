@@ -180,23 +180,48 @@ else if (Model.uloga == Uloga.Prodavac)
     {
         <h4>Vasi objavljeni proizvodi</h4>
 
-        //TODO OVO NE RADI
-        @*<h4>Filtriraj po statusu</h4>
-        <a href="~/Prodavnica/FilterDostupan">Pikazi samo dostupne</a>
-        <a href="~/Prodavnica/Profil">Prikazi sve</a>*@
 
-        <h4>Sortiraj:</h4>
         <form action="/Prodavnica/ProfilSort">
-            <select name="kriterijum">
-                <option value="Naziv(rastuce)">Naziv(rastuce)</option>
-                <option value="Naziv(opadajuce)">Naziv(opadajuce)</option>
-                <option value="Cena(rastuce)">Cena(rastuce)</option>
-                <option value="Cena(opadajuce)">Cena(opadajuce)</option>
-                <option value="Datum oglasavanja(rastuce)">Datum oglasavanja(rastuce)</option>
-                <option value="Datum oglasavanja(opadajuce)">Datum oglasavanja(opadajuce)</option>
-            </select>
-            <input type="submit" value="Sortiraj" />
+            <table>
+                <tr>
+                    <td>
+                        <h4>Pretrazi i sortiraj:</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td>
+                        <select name="status">
+                            <option value="svi">Svi</option>
+                            <option value="dostupan">Dostupni</option>
+                            <option value="nedostupan">Nedostupni</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Sortiraj:
+                    </td>
+                    <td>
+                        <select name="kriterijum">
+                            <option value="podrazumevano">Podrazumevano</option>
+                            <option value="nazRastuce">Naziv(rastuce)</option>
+                            <option value="nazOpadajuce">Naziv(opadajuce)</option>
+                            <option value="cenaRastuce">Cena(rastuce)</option>
+                            <option value="cenaOpadajuce">Cena(opadajuce)</option>
+                            <option value="datumRastuce">Datum oglasavanja(rastuce)</option>
+                            <option value="datumOpadajuce">Datum oglasavanja(opadajuce)</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="Primeni filtere" />
+                    </td>
+                </tr>
+            </table>
         </form>
+        <a href="~/Prodavnica/Profil">Ponisti filtere</a>
 
         <table>
             <tr>
@@ -209,10 +234,12 @@ else if (Model.uloga == Uloga.Prodavac)
                 <th>Grad</th>
                 <th>Dostupnost</th>
             </tr>
-            @foreach (Proizvod p in Model.listaObjavljenihProizvoda)
+            @if (ViewBag.pretraga != null)
             {
-                if (!p.obrisan)
+                foreach (Proizvod p in ViewBag.pretraga.Values)
                 {
+                    if (!p.obrisan)
+                    {
                         <tr>
                             <td>@p.naziv</td>
                             <td>@p.cena</td>
@@ -243,7 +270,48 @@ else if (Model.uloga == Uloga.Prodavac)
                                 }
                             </td>
                         </tr>
-                    
+
+                    }
+                }
+            }
+            else
+            {
+                foreach (Proizvod p in Model.listaObjavljenihProizvoda)
+                {
+                    if (!p.obrisan)
+                    {
+                        <tr>
+                            <td>@p.naziv</td>
+                            <td>@p.cena</td>
+                            <td>@p.kolicina</td>
+                            <td>@p.opis</td>
+                            <td><img src="~/Slike/@p.slika" /></td>
+                            <td>@p.datumPostavljanja.ToString("dd.MM.yyyy")</td>
+                            <td>@p.grad</td>
+                            @if (p.dostupan)
+                            {
+                                <td>Dostupan</td>
+                            }
+                            else
+                            {
+                                <td>Nedostupan</td>
+                            }
+                            <td>
+                                @if (true) //p.dostupan ???
+                                {
+                                    <form action="/Prodavnica/ObrisiProizvod">
+                                        <input type="number" name="id" value="@p.id" hidden />
+                                        <input type="submit" value="Obrisi" />
+                                    </form>
+                                    <form action="/Prodavnica/IzmeniProizvod">
+                                        <input type="number" name="id" value="@p.id" hidden />
+                                        <input type="submit" value="Izmeni" />
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+
+                    }
                 }
             }
         </table>
