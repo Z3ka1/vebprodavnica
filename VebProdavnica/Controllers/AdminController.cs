@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web;
 using System.Web.Mvc;
 using VebProdavnica.Models;
@@ -399,6 +400,128 @@ namespace VebProdavnica.Controllers
 
             ViewData["Proizvodi"] = pretraga;
             return View("AdminPanelProizvodi", admin);
+        }
+
+        public ActionResult DodajProdavca()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RegistrujProdavca(string ime, string prezime, string pol,string email, DateTime datumRodjenja, 
+            string korisnickoIme, string lozinka)
+        {
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
+            foreach (string user in korisnici.Keys)
+            {
+                if (korisnickoIme == user)
+                {
+                    ViewBag.Greska = $"Korisnicko ime '{user}' je vec u upotrebi!";
+                    ViewData["Korisnici"] = korisnici;
+                    return View("AdminPanelKorisnici", admin);
+                }
+            }
+
+            Pol polp = Pol.M;
+            if (pol == "Z")
+                polp = Pol.Z;
+
+            Korisnik novi = new Korisnik(ime, prezime, polp, email, datumRodjenja, Uloga.Prodavac, korisnickoIme, lozinka);
+            korisnici.Add(novi.korisnickoIme, novi);
+            Data.UpdateKorisnikXml(novi);
+
+            ViewData["Korisnici"] = korisnici;
+            return View("AdminPanelKorisnici",admin);
+        }
+
+        [HttpPost]
+        public ActionResult IzmeniKorisnika(string user)
+        {
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            return View(korisnici[user]);
+        }
+
+
+        [HttpPost]
+        public ActionResult PublishIzmenjenogKorisnika(string user,string ime, string prezime, string pol, string email, 
+            DateTime datumRodjenja, string lozinka)
+        {
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
+            Pol p = Pol.M;
+            if (pol == "Z")
+                p = Pol.Z;
+
+            korisnici[user].ime = ime;
+            korisnici[user].prezime = prezime;
+            korisnici[user].pol = p;
+            korisnici[user].email = email;
+            korisnici[user].datumRodjenja = datumRodjenja;
+            if (lozinka != "")
+                korisnici[user].lozinka = lozinka;
+            Data.UpdateKorisnikXml(korisnici[user]);
+
+
+            ViewData["Korisnici"] = korisnici;
+            return View("AdminPanelKorisnici", admin);
+        }
+
+        [HttpPost]
+        public ActionResult ObrisiProdavca(string user)
+        {
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<int, Porudzbina> recenzije = (Dictionary<int, Porudzbina>)HttpContext.Application["recenzije"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
+            korisnici[user].obrisan = true;
+            Data.UpdateKorisnikXml(korisnici[user]);
+
+            foreach(Proizvod p in korisnici[user].listaObjavljenihProizvoda)
+            {
+                p.obrisan = true;
+                proizvodi[p.id].obrisan = true;
+                Data.UpdateProizvodXml(p);
+                //RAZMISLITI DA LI TREBA RECENZIJE BRISATI
+            }
+            //Ponovo iscitavamo korisnike zbog proizvoda koji su se promenili a nalazili su se u liti omiljenih
+            korisnici = Data.ReadKorisnici();
+
+            ViewData["Korisnici"] = korisnici;
+            return View("AdminPanelKorisnici", admin);
+        }
+
+        [HttpPost]
+        public ActionResult ObrisiKupca(string user)
+        {
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
+            korisnici[user].obrisan = true;
+            Data.UpdateKorisnikXml(korisnici[user]);
+            foreach(Porudzbina p in korisnici[user].listaPorudzbina)
+            {
+                if(p.status == Status.AKTIVNA)
+                {
+                    p.status = Status.OTKAZANA;
+                    porudzbine[p.id].status = Status.OTKAZANA;
+
+                    proizvodi[p.idProizvod].kolicina += p.kolicina;
+                    proizvodi[p.idProizvod].dostupan = true;
+
+                    Data.UpdateProizvodXml(proizvodi[p.idProizvod]);
+                    Data.UpdatePorudzbinaXml(p);
+                }
+            }
+
+
+            ViewData["Korisnici"] = korisnici;
+            return View("AdminPanelKorisnici", admin);
         }
     }
 }

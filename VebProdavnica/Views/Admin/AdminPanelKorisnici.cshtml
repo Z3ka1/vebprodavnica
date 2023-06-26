@@ -69,7 +69,10 @@
         </table>
     </form>
     <a href="~/Admin/AdminPanelKorisnici">Ponisti filtere</a>
-
+    
+    <form  action="/Admin/DodajProdavca">
+        <input type="submit" value="Dodaj prodavca" />
+    </form>
     <table>
         <tr>
             <th>Ime</th>
@@ -77,6 +80,7 @@
             <th>Korisnicko ime</th>
             <th>Uloga</th>
             <th>Datum rodjenja</th>
+            <th>Komande</th>
         </tr>
         @foreach (Korisnik k in SviKorisnici.Values)
         {
@@ -95,6 +99,27 @@
                         <td>PRODAVAC</td>
                     }
                     <td>@k.datumRodjenja.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        <form method="post" action="/Admin/IzmeniKorisnika">
+                            <input type="text" value="@k.korisnickoIme" name="user" hidden />
+                            <input type="submit" value="Izmeni" />
+                        </form>
+                        @if (k.uloga == Uloga.Prodavac)
+                        {
+                            <form method="post" action="/Admin/ObrisiProdavca">
+                                <input type="text" value="@k.korisnickoIme" name="user" hidden />
+                                <input type="submit" value="Obrisi" />
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" action="/Admin/ObrisiKupca">
+                                <input type="text" value="@k.korisnickoIme" name="user" hidden />
+                                <input type="submit" value="Obrisi" />
+                            </form>
+                        }
+
+                    </td>
                 </tr>
             }
         }
