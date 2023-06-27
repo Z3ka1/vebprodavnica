@@ -23,6 +23,7 @@
             <th>Kolicina</th>
             <th>Datum porudzbine</th>
             <th>Status</th>
+            <th>Komande</th>
         </tr>
         @foreach (Porudzbina p in SvePorudzbine.Values)
         {
@@ -43,6 +44,19 @@
                 {
                     <td>OTKAZANA</td>
                 }
+                <td>
+                    @if(p.status == Status.AKTIVNA)
+                    {
+                        <form method="post" action="/Admin/PorudzbinaIzvrsena">
+                            <input type="number" value="@p.id" name="id" hidden />
+                            <input type="submit" value="Izvrsena" />
+                        </form>
+                        <form method="post" action="/Admin/PorudzbinaOtkazana">
+                            <input type="number" value="@p.id" name="id" hidden/>
+                            <input type="submit" value="Otkazi" />
+                        </form>
+                    }
+                </td>
             </tr>
         }
 

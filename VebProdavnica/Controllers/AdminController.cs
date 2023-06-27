@@ -476,7 +476,7 @@ namespace VebProdavnica.Controllers
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
-            Dictionary<int, Porudzbina> recenzije = (Dictionary<int, Porudzbina>)HttpContext.Application["recenzije"];
+            Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
             Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
 
             korisnici[user].obrisan = true;
@@ -625,5 +625,66 @@ namespace VebProdavnica.Controllers
             return View("AdminPanelProizvodi", admin);
         }
 
+        [HttpPost]
+        public ActionResult PorudzbinaIzvrsena(int id)
+        {
+            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
+            porudzbine[id].status = Status.IZVRSENA;
+            Data.UpdatePorudzbinaXml(porudzbine[id]);
+            int idxMenjanja = korisnici[porudzbine[id].userKupac].listaPorudzbina.FindIndex(p => p.id == id);
+            korisnici[porudzbine[id].userKupac].listaPorudzbina[idxMenjanja].status = Status.IZVRSENA;
+
+            ViewBag.Message = "Porudzbina oznacena kao izvrsena";
+            ViewData["Porudzbine"] = porudzbine;
+            return View("AdminPanelPorudzbine", admin);
+        }
+
+        [HttpPost]
+        public ActionResult PorudzbinaOtkazana(int id)  //AKCIJA SAMO ZA AKTIVNE PORUDZBINE
+        {
+            Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
+            porudzbine[id].status = Status.OTKAZANA;
+            Data.UpdatePorudzbinaXml(porudzbine[id]);
+            int idxMenjanja = korisnici[porudzbine[id].userKupac].listaPorudzbina.FindIndex(p => p.id == id);
+            korisnici[porudzbine[id].userKupac].listaPorudzbina[idxMenjanja].status = Status.OTKAZANA;
+
+            //proizvod ponovo postaje aktivan
+            proizvodi[porudzbine[id].idProizvod].kolicina += porudzbine[id].kolicina;
+            proizvodi[porudzbine[id].idProizvod].dostupan = true;
+            Data.UpdateProizvodXml(proizvodi[porudzbine[id].idProizvod]);
+
+            foreach (Korisnik k in korisnici.Values)
+            {
+                if (k.uloga == Uloga.Kupac)
+                {
+                    idxMenjanja = k.listaOmiljenihProizvoda.FindIndex(p => p.id == porudzbine[id].idProizvod);
+                    if (idxMenjanja != -1)
+                    {
+                        k.listaOmiljenihProizvoda[idxMenjanja].kolicina += porudzbine[id].kolicina;
+                        k.listaOmiljenihProizvoda[idxMenjanja].dostupan = true;
+                    }
+                }
+                if(k.uloga == Uloga.Prodavac)
+                {
+                    idxMenjanja = k.listaObjavljenihProizvoda.FindIndex(p => p.id == porudzbine[id].idProizvod);
+                    if(idxMenjanja != -1)
+                    {
+                        k.listaObjavljenihProizvoda[idxMenjanja].kolicina += porudzbine[id].kolicina;
+                        k.listaObjavljenihProizvoda[idxMenjanja].dostupan = true;
+                    }
+                }
+            }
+
+            ViewBag.Message = "Porudzbina otkazana";
+            ViewData["Porudzbine"] = porudzbine;
+            return View("AdminPanelPorudzbine", admin);
+        }
     }
 }
