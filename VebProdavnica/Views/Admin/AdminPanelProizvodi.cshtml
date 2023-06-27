@@ -7,6 +7,7 @@
 
 <h2>Admin - Proizvodi</h2>
 <h2>@ViewBag.Greska</h2>
+<h2>@ViewBag.Message</h2>
 
 <div>
     <h3>Lista proizvoda</h3>
@@ -61,6 +62,7 @@
             <th>Datum postavljanja</th>
             <th>Kolicina</th>
             <th>Dostupnost</th>
+            <th>Komande</th>
         </tr>
         @foreach (Proizvod p in SviProizvodi.Values)
         {
@@ -80,6 +82,16 @@
                     {
                         <td>NEDOSTUPAN</td>
                     }
+                    <td>
+                        <form method="post" action="/Admin/IzmeniProizvod">
+                            <input type="number" value="@p.id" name="id" hidden/>
+                            <input type="submit" value="Izmeni" />
+                        </form>
+                        <form method="post" action="/Admin/ObrisiProizvod">
+                            <input type="number" value="@p.id" name="id" hidden />
+                            <input type="submit" value="Obrisi" />
+                        </form>
+                    </td>
                 </tr>
             }
         }

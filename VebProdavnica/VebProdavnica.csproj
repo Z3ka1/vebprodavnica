@@ -203,6 +203,7 @@
     <Content Include="Views\Admin\AdminPanelPorudzbine.cshtml" />
     <Content Include="Views\Admin\DodajProdavca.cshtml" />
     <Content Include="Views\Admin\IzmeniKorisnika.cshtml" />
+    <Content Include="Views\Admin\IzmeniProizvod.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

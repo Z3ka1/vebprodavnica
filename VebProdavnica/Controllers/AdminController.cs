@@ -85,7 +85,7 @@ namespace VebProdavnica.Controllers
                 ViewBag.Greska = "Stara lozinka je ne ispravna";
             }
 
-            return View("AdminPanel",admin);
+            return View("AdminPanel", admin);
         }
 
         public ActionResult PretragaKorisnika(string ime, string prezime, DateTime datumOd, DateTime datumDo,
@@ -96,11 +96,11 @@ namespace VebProdavnica.Controllers
 
             Dictionary<string, Korisnik> pretraga = new Dictionary<string, Korisnik>();
 
-            foreach(Korisnik k in korisnici.Values)
+            foreach (Korisnik k in korisnici.Values)
             {
                 if (uloga == "" || uloga == "SVI")
                 {
-                    if(ime != "" && prezime != "" && (datumOd != DateTime.MinValue || datumDo != DateTime.MinValue))
+                    if (ime != "" && prezime != "" && (datumOd != DateTime.MinValue || datumDo != DateTime.MinValue))
                     {
                         if (datumDo == DateTime.MinValue)
                             datumDo = DateTime.MaxValue;
@@ -178,7 +178,7 @@ namespace VebProdavnica.Controllers
 
                 }
 
-                if(uloga == "KUPCI")
+                if (uloga == "KUPCI")
                 {
                     if (ime != "" && prezime != "" && (datumOd != DateTime.MinValue || datumDo != DateTime.MinValue))
                     {
@@ -258,7 +258,7 @@ namespace VebProdavnica.Controllers
                     }
                 }
 
-                if(uloga == "PRODAVCI")
+                if (uloga == "PRODAVCI")
                 {
                     if (ime != "" && prezime != "" && (datumOd != DateTime.MinValue || datumDo != DateTime.MinValue))
                     {
@@ -360,7 +360,7 @@ namespace VebProdavnica.Controllers
             pretraga = listaKorisnika.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
             ViewData["Korisnici"] = pretraga;
-            return View("AdminPanelKorisnici",admin);
+            return View("AdminPanelKorisnici", admin);
         }
 
         public ActionResult PretragaProizvoda(string status, string kriterijum)
@@ -370,7 +370,7 @@ namespace VebProdavnica.Controllers
 
             Dictionary<int, Proizvod> pretraga = new Dictionary<int, Proizvod>();
 
-            foreach(Proizvod p in proizvodi.Values)
+            foreach (Proizvod p in proizvodi.Values)
             {
                 if (status == "dostupan" && p.dostupan)
                     pretraga.Add(p.id, p);
@@ -408,7 +408,7 @@ namespace VebProdavnica.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegistrujProdavca(string ime, string prezime, string pol,string email, DateTime datumRodjenja, 
+        public ActionResult RegistrujProdavca(string ime, string prezime, string pol, string email, DateTime datumRodjenja,
             string korisnickoIme, string lozinka)
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
@@ -432,8 +432,9 @@ namespace VebProdavnica.Controllers
             korisnici.Add(novi.korisnickoIme, novi);
             Data.UpdateKorisnikXml(novi);
 
+            ViewBag.Message = "Novi prodavac registrovan!";
             ViewData["Korisnici"] = korisnici;
-            return View("AdminPanelKorisnici",admin);
+            return View("AdminPanelKorisnici", admin);
         }
 
         [HttpPost]
@@ -445,7 +446,7 @@ namespace VebProdavnica.Controllers
 
 
         [HttpPost]
-        public ActionResult PublishIzmenjenogKorisnika(string user,string ime, string prezime, string pol, string email, 
+        public ActionResult PublishIzmenjenogKorisnika(string user, string ime, string prezime, string pol, string email,
             DateTime datumRodjenja, string lozinka)
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
@@ -465,6 +466,7 @@ namespace VebProdavnica.Controllers
             Data.UpdateKorisnikXml(korisnici[user]);
 
 
+            ViewBag.Message = "Korisnik izmenjen!";
             ViewData["Korisnici"] = korisnici;
             return View("AdminPanelKorisnici", admin);
         }
@@ -480,7 +482,7 @@ namespace VebProdavnica.Controllers
             korisnici[user].obrisan = true;
             Data.UpdateKorisnikXml(korisnici[user]);
 
-            foreach(Proizvod p in korisnici[user].listaObjavljenihProizvoda)
+            foreach (Proizvod p in korisnici[user].listaObjavljenihProizvoda)
             {
                 p.obrisan = true;
                 proizvodi[p.id].obrisan = true;
@@ -488,8 +490,10 @@ namespace VebProdavnica.Controllers
                 //RAZMISLITI DA LI TREBA RECENZIJE BRISATI
             }
             //Ponovo iscitavamo korisnike zbog proizvoda koji su se promenili a nalazili su se u liti omiljenih
+            korisnici.Clear();
             korisnici = Data.ReadKorisnici();
 
+            ViewBag.Message = "Prodavac obrisan!";
             ViewData["Korisnici"] = korisnici;
             return View("AdminPanelKorisnici", admin);
         }
@@ -504,9 +508,9 @@ namespace VebProdavnica.Controllers
 
             korisnici[user].obrisan = true;
             Data.UpdateKorisnikXml(korisnici[user]);
-            foreach(Porudzbina p in korisnici[user].listaPorudzbina)
+            foreach (Porudzbina p in korisnici[user].listaPorudzbina)
             {
-                if(p.status == Status.AKTIVNA)
+                if (p.status == Status.AKTIVNA)
                 {
                     p.status = Status.OTKAZANA;
                     porudzbine[p.id].status = Status.OTKAZANA;
@@ -519,9 +523,107 @@ namespace VebProdavnica.Controllers
                 }
             }
 
-
+            ViewBag.Message = "Kupac obrisan!";
             ViewData["Korisnici"] = korisnici;
             return View("AdminPanelKorisnici", admin);
         }
+
+        [HttpPost]
+        public ActionResult IzmeniProizvod(int id)
+        {
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            return View(proizvodi[id]);
+        }
+
+        [HttpPost]
+        public ActionResult PublishIzmenjenProizvod(int id, string naziv, string cena, int kolicina, string opis, string slika,
+            string grad)
+        {
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
+            double cenaParse;
+            bool valid = double.TryParse(cena, out cenaParse);
+
+            if (!valid)
+            {
+                ViewBag.Greska = "Proizvod nije izmenjen, pogresna vrednost za cenu!";
+                return View("IzmeniProizvod", proizvodi[id]);
+            }
+
+            proizvodi[id].naziv = naziv;
+            proizvodi[id].cena = cenaParse;
+            proizvodi[id].kolicina = kolicina;
+            proizvodi[id].opis = opis;
+            proizvodi[id].grad = grad;
+            if(slika != "")
+                proizvodi[id].slika = slika;
+            Data.UpdateProizvodXml(proizvodi[id]);
+
+            foreach(Korisnik k in korisnici.Values)
+            {
+                if(k.uloga == Uloga.Kupac)
+                    foreach(Proizvod p in k.listaOmiljenihProizvoda)
+                    {
+                        if(p.id == id)
+                        {
+                            p.naziv = naziv;
+                            p.cena = cenaParse;
+                            p.kolicina = kolicina;
+                            p.opis = opis;
+                            p.grad = grad;
+                            if (slika != "")
+                                p.slika = slika;
+                        }
+                    }
+                if(k.uloga == Uloga.Prodavac)
+                    foreach(Proizvod p in k.listaObjavljenihProizvoda)
+                    {
+                        if (p.id == id)
+                        {
+                            p.naziv = naziv;
+                            p.cena = cenaParse;
+                            p.kolicina = kolicina;
+                            p.opis = opis;
+                            p.grad = grad;
+                            if (slika != "")
+                                p.slika = slika;
+                        }
+                    }
+            }
+
+            ViewBag.Message = "Proizvod izmenjen!";
+            ViewData["Proizvodi"] = proizvodi;
+            return View("AdminPanelProizvodi", admin);
+        }
+
+        [HttpPost]
+        public ActionResult ObrisiProizvod(int id)
+        {
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
+            proizvodi[id].obrisan = true;
+            Data.UpdateProizvodXml(proizvodi[id]);
+
+            foreach(Korisnik k in korisnici.Values)
+            {
+                if (k.uloga == Uloga.Kupac)
+                    foreach (Proizvod p in k.listaOmiljenihProizvoda)
+                        if (p.id == id)
+                            p.obrisan = true;
+                if(k.uloga == Uloga.Prodavac)
+                    foreach(Proizvod p in k.listaObjavljenihProizvoda)
+                        if (p.id == id)
+                            p.obrisan = true;
+            }
+
+            ViewBag.Message = "Proizvod obrisan!";
+            ViewData["Proizvodi"] = proizvodi;
+            return View("AdminPanelProizvodi", admin);
+        }
+
     }
 }

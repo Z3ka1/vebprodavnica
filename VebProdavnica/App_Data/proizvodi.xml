@@ -1,20 +1,6 @@
 <?xml version="1.0"?>
 <proizvodi>
   <proizvod>
-    <ID>2</ID>
-    <NAZIV>Tastatura</NAZIV>
-    <CENA>8900</CENA>
-    <KOLICINA>9</KOLICINA>
-    <OPIS>
-    </OPIS>
-    <SLIKA>tastatura.jpeg</SLIKA>
-    <DATUM>15.06.2023</DATUM>
-    <GRAD>Novi Sad</GRAD>
-    <DOSTUPAN>True</DOSTUPAN>
-    <USER_PRODAVCA>petar</USER_PRODAVCA>
-    <OBRISAN>False</OBRISAN>
-  </proizvod>
-  <proizvod>
     <ID>888073819</ID>
     <NAZIV>povodac</NAZIV>
     <CENA>120</CENA>
@@ -39,5 +25,31 @@
     <DOSTUPAN>True</DOSTUPAN>
     <USER_PRODAVCA>petar</USER_PRODAVCA>
     <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>2</ID>
+    <NAZIV>Tastatura</NAZIV>
+    <CENA>8900</CENA>
+    <KOLICINA>9</KOLICINA>
+    <OPIS>Gaming tastatura</OPIS>
+    <SLIKA>tastatura.jpeg</SLIKA>
+    <DATUM>15.06.2023</DATUM>
+    <GRAD>Novi Sad</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>petar</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>-1701652194</ID>
+    <NAZIV>test</NAZIV>
+    <CENA>1312</CENA>
+    <KOLICINA>2</KOLICINA>
+    <OPIS>testiranje</OPIS>
+    <SLIKA>flasica.jpg</SLIKA>
+    <DATUM>27.06.2023</DATUM>
+    <GRAD>Cacak</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>petar</USER_PRODAVCA>
+    <OBRISAN>True</OBRISAN>
   </proizvod>
 </proizvodi>

@@ -548,7 +548,7 @@ namespace VebProdavnica.Controllers
             if(!valid)
             {
                 ViewBag.Greska = "Proizvod nije izmenjen, pogresna vrednost za cenu!";
-                return View(proizvodi[id]);
+                return View("IzmeniProizvod",proizvodi[id]);
             }
 
             //pozicija u listi objavljenih proizvoda za Session
