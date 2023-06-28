@@ -56,9 +56,13 @@ namespace VebProdavnica.Controllers
         public ActionResult AdminPanelRecenzije()
         {
             Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
             Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
 
             ViewData["Recenzije"] = recenzije;
+            ViewData["Proizvodi"] = proizvodi;
+            ViewData["Korisnici"] = korisnici;
             return View(admin);
         }
 
@@ -685,6 +689,48 @@ namespace VebProdavnica.Controllers
             ViewBag.Message = "Porudzbina otkazana";
             ViewData["Porudzbine"] = porudzbine;
             return View("AdminPanelPorudzbine", admin);
+        }
+
+        [HttpPost]
+        public ActionResult OdobriRecenziju(int id)
+        {
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+            Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+
+            recenzije[id].status = StatusRecenzije.ODOBRENA;
+            Data.UpdateRecenzijaXml(recenzije[id]);
+
+            int idxMenjanja = proizvodi[recenzije[id].idProizvod].listaRecenzija.FindIndex(r => r.id == id);
+            proizvodi[recenzije[id].idProizvod].listaRecenzija[idxMenjanja].status = StatusRecenzije.ODOBRENA;
+
+            ViewBag.Message = "Recenzija odobrena!";
+            ViewData["Recenzije"] = recenzije;
+            ViewData["Proizvodi"] = proizvodi;
+            ViewData["Korisnici"] = korisnici;
+            return View("AdminPanelRecenzije", admin);
+        }
+
+        [HttpPost]
+        public ActionResult OdbiRecenziju(int id)
+        {
+            Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+            Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+
+            recenzije[id].status = StatusRecenzije.ODBIJENA;
+            Data.UpdateRecenzijaXml(recenzije[id]);
+
+            int idxMenjanja = proizvodi[recenzije[id].idProizvod].listaRecenzija.FindIndex(r => r.id == id);
+            proizvodi[recenzije[id].idProizvod].listaRecenzija[idxMenjanja].status = StatusRecenzije.ODBIJENA;
+
+            ViewBag.Message = "Recenzija odbijena!";
+            ViewData["Recenzije"] = recenzije;
+            ViewData["Proizvodi"] = proizvodi;
+            ViewData["Korisnici"] = korisnici;
+            return View("AdminPanelRecenzije", admin);
         }
     }
 }

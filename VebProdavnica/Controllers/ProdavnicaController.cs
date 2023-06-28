@@ -368,7 +368,7 @@ namespace VebProdavnica.Controllers
             Korisnik recezent = (Korisnik)HttpContext.Session["korisnik"];
 
             Recenzija nova = new Recenzija(Data.GenerateID(), porudzbine[idPorudzbine].idProizvod,
-                recezent.korisnickoIme, naslov, sadrzaj, slika, false);
+                recezent.korisnickoIme, naslov, sadrzaj, slika, false, StatusRecenzije.CEKA);
 
             //proizvodi.recenzije
             proizvodi[nova.idProizvod].listaRecenzija.Add(nova);
@@ -385,7 +385,7 @@ namespace VebProdavnica.Controllers
             //korisnici.porudzbine
             korisnici[recezent.korisnickoIme].listaPorudzbina[idxMenjanja] = porudzbine[idPorudzbine];
 
-            ViewBag.Message = "Recenzija postavljena";
+            ViewBag.Message = "Recenzija poslata na uvid. Ukoliko bude odobrena bice objavljena na stranici proizvoda.";
             ViewData["Proizvodi"] = proizvodi;
             return View("Profil", recezent);
         }
@@ -446,6 +446,7 @@ namespace VebProdavnica.Controllers
             //recenzije + XMLRecenzije
             recenzije[idRecenzije].naslov = naslov;
             recenzije[idRecenzije].sadrzajRecenzije = sadrzaj;
+            recenzije[idRecenzije].status = StatusRecenzije.CEKA;
             if(slika != "")
                 recenzije[idRecenzije].slika = slika;
             Data.UpdateRecenzijaXml(recenzije[idRecenzije]);
@@ -454,7 +455,7 @@ namespace VebProdavnica.Controllers
             int idxMenjanja = proizvodi[recenzije[idRecenzije].idProizvod].listaRecenzija.FindIndex(r => r.id == idRecenzije);
             proizvodi[recenzije[idRecenzije].idProizvod].listaRecenzija[idxMenjanja] = recenzije[idRecenzije];
 
-            ViewBag.Message = "Recenzija uspesno izmenjena";
+            ViewBag.Message = "Recenzija uspesno izmenjena i poslata na odobravanje.";
             ViewData["Proizvodi"] = proizvodi;
             return View("Profil", (Korisnik)Session["korisnik"]);
         }

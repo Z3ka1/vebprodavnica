@@ -380,13 +380,20 @@ namespace VebProdavnica.Models
                 string idProizvoda = recenzijaNode.SelectSingleNode("ID_PROIZVOD")?.InnerText;
                 string userKorisnik = recenzijaNode.SelectSingleNode("USER_KORISNIK")?.InnerText;
                 string obrisanaStr = recenzijaNode.SelectSingleNode("OBRISANA")?.InnerText;
+                string statusStr = recenzijaNode.SelectSingleNode("STATUS")?.InnerText;
+
+                StatusRecenzije status = StatusRecenzije.CEKA;
+                if (statusStr == "ODOBRENA")
+                    status = StatusRecenzije.ODOBRENA;
+                if (statusStr == "ODBIJENA")
+                    status = StatusRecenzije.ODBIJENA;
 
                 bool obrisana = false;
                 if (obrisanaStr == "True")
                     obrisana = true;
 
                 Recenzija nova = new Recenzija(int.Parse(id), int.Parse(idProizvoda), userKorisnik, naslov,
-                        sadrzaj, slika, obrisana);
+                        sadrzaj, slika, obrisana, status);
                 ret.Add(int.Parse(id), nova);
 
             }
@@ -433,6 +440,10 @@ namespace VebProdavnica.Models
             obrisanaElement.InnerText = update.obrisana.ToString();
             recenzijaXmlElement.AppendChild(obrisanaElement);
 
+            XmlElement statusElement = xmlDoc.CreateElement("STATUS");
+            statusElement.InnerText = update.status.ToString();
+            recenzijaXmlElement.AppendChild(statusElement);
+
             xmlDoc.DocumentElement.AppendChild(recenzijaXmlElement);
             xmlDoc.Save(recenzijePath);
         }
@@ -458,6 +469,13 @@ namespace VebProdavnica.Models
                 string idProizvoda = recenzijaNode.SelectSingleNode("ID_PROIZVOD")?.InnerText;
                 string userKorisnik = recenzijaNode.SelectSingleNode("USER_KORISNIK")?.InnerText;
                 string obrisanaStr = recenzijaNode.SelectSingleNode("OBRISANA")?.InnerText;
+                string statusStr = recenzijaNode.SelectSingleNode("STATUS")?.InnerText;
+
+                StatusRecenzije status = StatusRecenzije.CEKA;
+                if (statusStr == "ODOBRENA")
+                    status = StatusRecenzije.ODOBRENA;
+                if (statusStr == "ODBIJENA")
+                    status = StatusRecenzije.ODBIJENA;
 
                 bool obrisana = false;
                 if (obrisanaStr == "True")
@@ -466,7 +484,7 @@ namespace VebProdavnica.Models
                 if (int.Parse(idProizvoda) == idTrazenogProizvoda)
                 {
                     Recenzija trazena = new Recenzija(int.Parse(id), int.Parse(idProizvoda), userKorisnik, naslov,
-                        sadrzaj, slika, obrisana);
+                        sadrzaj, slika, obrisana, status);
                     ret.Add(trazena);
                 }
 

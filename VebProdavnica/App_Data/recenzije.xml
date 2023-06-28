@@ -9,5 +9,16 @@
     <ID_PROIZVOD>1</ID_PROIZVOD>
     <USER_KORISNIK>markom</USER_KORISNIK>
     <OBRISANA>False</OBRISANA>
+    <STATUS>ODBIJENA</STATUS>
+  </recenzija>
+  <recenzija>
+    <ID>1643080687</ID>
+    <NASLOV>Vrh</NASLOV>
+    <SADRZAJ>Ovo je vrh laptop</SADRZAJ>
+    <SLIKA>laptop.jpg</SLIKA>
+    <ID_PROIZVOD>1</ID_PROIZVOD>
+    <USER_KORISNIK>test</USER_KORISNIK>
+    <OBRISANA>False</OBRISANA>
+    <STATUS>ODOBRENA</STATUS>
   </recenzija>
 </recenzije>

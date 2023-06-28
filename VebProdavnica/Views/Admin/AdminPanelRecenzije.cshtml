@@ -1,0 +1,55 @@
+﻿@using VebProdavnica.Models;
+@model VebProdavnica.Models.Korisnik
+@{
+    ViewBag.Title = "AdminPanelRecenzije";
+    var SveRecenzije = ViewData["Recenzije"] as Dictionary<int, Recenzija>;
+    var SviProizvodi = ViewData["Proizvodi"] as Dictionary<int, Proizvod>;
+    var SviKorisnici = ViewData["Korisnici"] as Dictionary<string, Korisnik>;
+}
+
+<head>
+    <title>Admin - Recenzije</title>
+</head>
+
+<h2>Admin Panel</h2>
+<h2>@ViewBag.Greska</h2>
+<h2>@ViewBag.Message</h2>
+
+<div>
+    <h3>Recenzije koje cekaju na odobravanje</h3>
+    <table>
+        <tr>
+            <th>Proizvod</th>
+            <th>Kupac</th>
+            <th>Naslov</th>
+            <th>Sadrzaj recenzije</th>
+            <th>Slika</th>
+            <th>Komande</th>
+        </tr>
+        @foreach (Recenzija r in SveRecenzije.Values)
+        {
+            if (!r.obrisana && r.status == StatusRecenzije.CEKA)
+            {
+            <tr>
+                <td>@SviProizvodi[r.idProizvod].naziv</td>
+                <td>@SviKorisnici[r.userRecezent].korisnickoIme</td>
+                <td>@r.naslov</td>
+                <td>@r.sadrzajRecenzije</td>
+                <td><img src="~/Slike/@r.slika" alt=""/></td>
+                <td>
+                    <form method="post" action="/Admin/OdobriRecenziju">
+                        <input type="number" value="@r.id" name="id" hidden />
+                        <input type="submit" value="Odobri" />
+                    </form>
+                    <form method="post" action="/Admin/OdbiRecenziju">
+                        <input type="number" value="@r.id" name="id" hidden />
+                        <input type="submit" value="Odbi" />
+                    </form>
+                </td>
+            </tr>
+            }
+        }
+
+    </table>
+
+</div>

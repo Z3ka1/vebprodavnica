@@ -224,12 +224,31 @@
             @{Dictionary<string, VebProdavnica.Models.Korisnik> korisnici = (Dictionary<string, VebProdavnica.Models.Korisnik>)HttpContext.Current.Application["korisnici"]; }
             @foreach (VebProdavnica.Models.Recenzija r in Model.listaRecenzija)
             {
-                if (!r.obrisana)
+                if (!r.obrisana && r.status == StatusRecenzije.ODOBRENA)
                 {
                     <div class="recenzija">
                         <table>
                             <tr>
                                 <td> @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime</td>
+                            </tr>
+                            <tr>
+                                <td> @recenzije[r.id].naslov </td>
+                                <td> <img src="~/Slike/@recenzije[r.id].slika" alt="Slika" /> </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    @recenzije[r.id].sadrzajRecenzije
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                }
+                else if (!r.obrisana && r.status == StatusRecenzije.ODBIJENA && (Korisnik)Session["korisnik"] != null && ((Korisnik)Session["korisnik"]).uloga == Uloga.Administrator)
+                {
+                    <div class="recenzija">
+                        <table>
+                            <tr>
+                                <td> @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime (ODBIJENA)</td>
                             </tr>
                             <tr>
                                 <td> @recenzije[r.id].naslov </td>
