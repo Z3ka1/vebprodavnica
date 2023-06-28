@@ -5,7 +5,125 @@
     var SviProizvodi = ViewData["Proizvodi"] as Dictionary<int, Proizvod>;
 }
 
-<h2>Admin - Proizvodi</h2>
+<head>
+    <title>Admin - Proizvodi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0px;
+        }
+
+        .elements {
+            padding: 20px;
+        }
+
+        .nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            position: sticky;
+            top: 0;
+        }
+
+        .nav li {
+            display: inline;
+            margin-right: 10px;
+            float: left;
+        }
+
+        .nav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .nav li a:hover {
+            color: #cc0000;
+            text-decoration: none;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        h3 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        input[type="submit"] {
+            padding: 8px 16px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #cc0000;
+        }
+
+        .actions-form {
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .reset-filters {
+            margin-top: 10px;
+            display: inline-block;
+            color: #cc0000;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="nav">
+    <ul>
+        <li><a href="~/Prodavnica/Index">Pocetna stranica</a></li>
+        <li style="float:right"><a href="~/Prodavnica/Odjava">Odjavi se</a></li>
+        <li style="float:right"><a href="~/Admin/AdminPanel">Admin profil</a></li>
+    </ul>
+</div>
+
+<h2>Administriranje proizvoda</h2>
 <h2>@ViewBag.Greska</h2>
 <h2>@ViewBag.Message</h2>
 
@@ -52,7 +170,7 @@
             </tr>
         </table>
     </form>
-    <a href="~/Admin/AdminPanelProizvodi">Ponisti filtere</a>
+    <a class="reset-filters" href="~/Admin/AdminPanelProizvodi">Ponisti filtere</a>
 
     <table>
         <tr>
@@ -83,11 +201,11 @@
                         <td>NEDOSTUPAN</td>
                     }
                     <td>
-                        <form method="post" action="/Admin/IzmeniProizvod">
+                        <form method="post" action="/Admin/IzmeniProizvod" class="actions-form">
                             <input type="number" value="@p.id" name="id" hidden/>
                             <input type="submit" value="Izmeni" />
                         </form>
-                        <form method="post" action="/Admin/ObrisiProizvod">
+                        <form method="post" action="/Admin/ObrisiProizvod" class="actions-form">
                             <input type="number" value="@p.id" name="id" hidden />
                             <input type="submit" value="Obrisi" />
                         </form>
@@ -99,3 +217,4 @@
     </table>
 </div>
 
+</body>

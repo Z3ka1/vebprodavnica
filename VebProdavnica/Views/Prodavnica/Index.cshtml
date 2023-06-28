@@ -67,11 +67,6 @@
             color: #cc0000;
         }
 
-        .form-container {
-            margin-top: 1px;
-            margin-bottom: 1px;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -143,64 +138,70 @@
         <h2>Dobrodošli u prodavnicu</h2>
         <h2>@ViewBag.Greska</h2>
 
-        <div class="form-container">
-            <table>
-                <tr>
-                    <td>
-                        <form action="/Prodavnica/Sort">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <h4>Sortiraj:</h4>
-                                        <select name="kriterijum">
-                                            <option value="Naziv(rastuce)">Naziv(rastuce)</option>
-                                            <option value="Naziv(opadajuce)">Naziv(opadajuce)</option>
-                                            <option value="Cena(rastuce)">Cena(rastuce)</option>
-                                            <option value="Cena(opadajuce)">Cena(opadajuce)</option>
-                                            <option value="Datum oglasavanja(rastuce)">Datum oglasavanja(rastuce)</option>
-                                            <option value="Datum oglasavanja(opadajuce)">Datum oglasavanja(opadajuce)</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="submit" value="Sortiraj" />
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                    </td>
-                    <td>
-                        <form action="/Prodavnica/Pretraga">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <h4>Pretrazi:</h4>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Naziv:</td>
-                                    <td><input type="text" name="naziv" /></td>
-                                </tr>
-                                <tr>
-                                    <td>Cena:</td>
-                                    <td>Od: <input type="text" name="cenaOd" /></td>
-                                    <td>Do: <input type="text" name="cenaDo" /></td>
-                                </tr>
-                                <tr>
-                                    <td>Grad:</td>
-                                    <td><input type="text" name="grad" /></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="submit" value="Pretrazi" />
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                    </td>
-                </tr>
-            </table>
+        <div>
+            @*<form action="/Prodavnica/Sort">
+                <table>
+                    <tr>
+                        <td>
+                            Sortiraj:
+                            <select name="kriterijum">
+                                <option value="Naziv(rastuce)">Naziv(rastuce)</option>
+                                <option value="Naziv(opadajuce)">Naziv(opadajuce)</option>
+                                <option value="Cena(rastuce)">Cena(rastuce)</option>
+                                <option value="Cena(opadajuce)">Cena(opadajuce)</option>
+                                <option value="Datum oglasavanja(rastuce)">Datum oglasavanja(rastuce)</option>
+                                <option value="Datum oglasavanja(opadajuce)">Datum oglasavanja(opadajuce)</option>
+                            </select>
+                            <input type="submit" value="Sortiraj" />
+                        </td>
+                    </tr>
+                </table>
+            </form>*@
+        
+            <div style="max-width: 700px; margin: auto">
+            <form action="/Prodavnica/Pretraga"
+                  style="padding: 10px">
+                <table style="border-collapse: collapse; margin-bottom: 10px">
+                    <tr>
+                        <td style="padding: 5px; margin: 0;">
+                            <label style="font-weight:bold">Pretrazi:</label>
+                            <br />
+
+                            <label style="font-weight:bold">Naziv:</label>
+                            <input type="text" name="naziv" 
+                                   style="padding: 5px; border: 1px solid #ccc; border-radius: 3px"/>
+                            <br />
+
+                            <label style="font-weight:bold">Grad:</label>
+                            <input type="text" name="grad" 
+                                   style="padding: 5px; border: 1px solid #ccc; border-radius: 3px"/>
+                            <br />
+                        </td>
+                        <td style="padding: 5px; margin: 0">
+                            <label style="font-weight:bold">Cena:</label>
+                            <br />
+                            Od: <input type="text" name="cenaOd"
+                                       style="padding: 5px; border: 1px solid #ccc; border-radius: 3px" />
+                            Do: <input type="text" name="cenaDo"
+                                       style="padding: 5px; border: 1px solid #ccc; border-radius: 3px" />
+                           <br />
+                            <label style="font-weight:bold">Sortiraj:</label>
+                            <select name="kriterijum">
+                                <option value="Naziv(rastuce)">Naziv(rastuce)</option>
+                                <option value="Naziv(opadajuce)">Naziv(opadajuce)</option>
+                                <option value="Cena(rastuce)">Cena(rastuce)</option>
+                                <option value="Cena(opadajuce)">Cena(opadajuce)</option>
+                                <option value="Datum oglasavanja(rastuce)">Datum oglasavanja(rastuce)</option>
+                                <option value="Datum oglasavanja(opadajuce)">Datum oglasavanja(opadajuce)</option>
+                            </select>
+                            <input type="submit" value="Primeni"
+                                   style="padding: 8px 16px; border:none; border-radius:3px;" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            </div>
+            
             <a href="~/Prodavnica/Index">Ponisti pretragu</a>
             <h3>@ViewBag.Pretraga</h3>
         </div>

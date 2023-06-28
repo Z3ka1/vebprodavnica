@@ -353,12 +353,14 @@
                     </tr>
                     <tr>
                         <td>
-                            <input type="submit" value="Primeni filtere" />
+                            <a href="~/Prodavnica/Profil">Ponisti filtere </a>
+                        </td>
+                        <td>
+                            <input style="float: right" type="submit" value="Primeni filtere" />
                         </td>
                     </tr>
                 </table>
             </form>
-            <a style="float:right" href="~/Prodavnica/Profil">Ponisti filtere</a>
 
             <table>
                 <tr>
@@ -397,13 +399,13 @@
                                 <td>
                                     @if (true) //p.dostupan ???
                                     {
-                                        <form action="/Prodavnica/ObrisiProizvod">
-                                            <input type="number" name="id" value="@p.id" hidden />
-                                            <input class="obrisi" type="submit" value="Obrisi" />
-                                        </form>
                                         <form action="/Prodavnica/IzmeniProizvod">
                                             <input type="number" name="id" value="@p.id" hidden />
                                             <input type="submit" value="Izmeni" />
+                                        </form>
+                                        <form action="/Prodavnica/ObrisiProizvod">
+                                            <input type="number" name="id" value="@p.id" hidden />
+                                            <input class="obrisi" type="submit" value="Obrisi" />
                                         </form>
                                     }
                                 </td>
@@ -437,13 +439,13 @@
                                 <td>
                                     @if (true) //p.dostupan ???
                                     {
-                                        <form action="/Prodavnica/ObrisiProizvod">
-                                            <input type="number" name="id" value="@p.id" hidden />
-                                            <input class="obrisi" type="submit" value="Obrisi" />
-                                        </form>
                                         <form action="/Prodavnica/IzmeniProizvod">
                                             <input type="number" name="id" value="@p.id" hidden />
                                             <input type="submit" value="Izmeni" />
+                                        </form>
+                                        <form action="/Prodavnica/ObrisiProizvod">
+                                            <input type="number" name="id" value="@p.id" hidden />
+                                            <input class="obrisi" type="submit" value="Obrisi" />
                                         </form>
                                     }
                                 </td>

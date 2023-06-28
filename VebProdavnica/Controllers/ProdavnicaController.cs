@@ -33,7 +33,7 @@ namespace VebProdavnica.Controllers
 
         [HttpPost]
         public ActionResult RegistrujSe(string ime, string prezime, string polStr, string email, DateTime datumRodjenja,
-            string ulogaStr, string korisnickoIme, string lozinka)
+            string korisnickoIme, string lozinka)
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
 
@@ -50,11 +50,7 @@ namespace VebProdavnica.Controllers
             if (polStr == "Zensko")
                 pol = Pol.Z;
 
-            Uloga uloga = Uloga.Kupac;
-            if (ulogaStr == "Prodavac")
-                uloga = Uloga.Prodavac;
-
-            Korisnik novi = new Korisnik(ime, prezime, pol, email, datumRodjenja, uloga, korisnickoIme, lozinka);
+            Korisnik novi = new Korisnik(ime, prezime, pol, email, datumRodjenja, Uloga.Kupac, korisnickoIme, lozinka);
             korisnici.Add(novi.korisnickoIme, novi);
             Data.UpdateKorisnikXml(novi);
             Session["korisnik"] = novi;
@@ -175,7 +171,7 @@ namespace VebProdavnica.Controllers
             return View("Index");
         }
 
-        public ActionResult Pretraga(string naziv, string cenaOd, string cenaDo, string grad)
+        public ActionResult Pretraga(string naziv, string cenaOd, string cenaDo, string grad, string kriterijum)
         {
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
             Dictionary<int, Proizvod> pretraga = new Dictionary<int, Proizvod>();
@@ -276,14 +272,27 @@ namespace VebProdavnica.Controllers
                         if (!pretraga.ContainsKey(p.id))
                             pretraga.Add(p.id, p);
                 }
+
+                if (naziv == "" && cenaOd == "" && cenaDo == "" && grad == "")
+                    pretraga.Add(p.id, p);
             }
 
-            if(pretraga.Count == 0)
-            {
-                ViewBag.Pretraga = "Nije pronadjen ni jedan proizvod za datu pretragu. Prikazani su svi proizvodi.";
-                ViewData["Proizvodi"] = proizvodi;
-                return View("Index");
-            }
+            var listaProizvoda = pretraga.ToList();
+
+            if (kriterijum == "Naziv(rastuce)")
+                listaProizvoda.Sort((x, y) => x.Value.naziv.CompareTo(y.Value.naziv));
+            else if (kriterijum == "Naziv(opadajuce)")
+                listaProizvoda.Sort((x, y) => y.Value.naziv.CompareTo(x.Value.naziv));
+            else if (kriterijum == "Cena(rastuce)")
+                listaProizvoda.Sort((x, y) => x.Value.cena.CompareTo(y.Value.cena));
+            else if (kriterijum == "Cena(opadajuce)")
+                listaProizvoda.Sort((x, y) => y.Value.cena.CompareTo(x.Value.cena));
+            else if (kriterijum == "Datum oglasavanja(rastuce)")
+                listaProizvoda.Sort((x, y) => x.Value.datumPostavljanja.CompareTo(y.Value.datumPostavljanja));
+            else if (kriterijum == "Datum oglasavanja(opadajuce)")
+                listaProizvoda.Sort((x, y) => y.Value.datumPostavljanja.CompareTo(x.Value.datumPostavljanja));
+
+            pretraga = listaProizvoda.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
             ViewBag.Pretraga = "Rezultati pretrage";
             ViewData["Proizvodi"] = pretraga;

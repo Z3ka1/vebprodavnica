@@ -6,6 +6,118 @@
 
 <head>
     <title>Admin panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0px;
+        }
+        
+        .elements {
+            padding: 20px;
+        }
+
+        .nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            position: sticky;
+            top: 0;
+            width: 100%;
+        }
+
+        .nav li {
+            display: inline;
+            margin-right: 10px;
+            float: left;
+        }
+
+        .nav li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .nav li a:hover {
+            color: #cc0000;
+            text-decoration: none;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+
+
+        h2 {
+            color: #007bff;
+        }
+
+        .opt ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .opt ul li {
+            margin-bottom: 10px;
+        }
+
+        .opt ul li a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .opt ul li a:hover {
+            text-decoration: underline;
+        }
+
+        h4 {
+            color: #007bff;
+            margin-top: 20px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 5px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select,
+        input[type="date"] {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="submit"] {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,17 +129,20 @@
         </ul>
     </div>
 
+    <div style="">
+    <div class="elements">
     <h2>Admin: @Model.korisnickoIme</h2>
     <h2>@ViewBag.Greska</h2>
 
-    <ul>
-        <li><a href="~/Admin/AdminPanelKorisnici">Administriranje korisnika</a></li>
-        <li><a href="~/Admin/AdminPanelProizvodi">Administriranje proizvoda</a></li>
-        <li><a href="~/Admin/AdminPanelPorudzbine">Administriranje porudzbina</a></li>
-        <li><a href="~/Admin/AdminPanelRecenzije">Odobravanje recenzija</a></li>
-    </ul>
+    <div class="opt">
+        <ul>
+            <li><a href="~/Admin/AdminPanelKorisnici">Administriranje korisnika</a></li>
+            <li><a href="~/Admin/AdminPanelProizvodi">Administriranje proizvoda</a></li>
+            <li><a href="~/Admin/AdminPanelPorudzbine">Administriranje porudzbina</a></li>
+            <li><a href="~/Admin/AdminPanelRecenzije">Odobravanje recenzija</a></li>
+        </ul>
+    </div>
 
-    <div>
         <h4>Podaci o korisniku</h4>
         <form method="post" action="/Admin/IzmeniPodatkeAdmina">
             <table>
@@ -105,5 +220,6 @@
                 </tr>
             </table>
         </form>
+    </div>
     </div>
 </body>
