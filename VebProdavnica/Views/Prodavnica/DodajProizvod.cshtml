@@ -4,7 +4,7 @@
 }
 
 <head>
-    <title>Izmeni proizvod</title>
+    <title>Dodaj proizvod</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -131,7 +131,7 @@
 
     <h3>@ViewBag.Greska</h3>
 
-    <form action="/Prodavnica/PublishProizvod">
+    <form method="post" action="/Prodavnica/PublishProizvod" enctype="multipart/form-data">
         <table>
             <tr>
                 <td>Naziv:</td>
@@ -151,7 +151,7 @@
             </tr>
             <tr>
                 <td>Slika:</td>
-                <td><input type="file" accept="image/*" name="slika" required /></td>
+                <td><input type="file"  name="slika" accept="image/*" required /></td>
             </tr>
             <tr>
                 <td>Grad:</td>

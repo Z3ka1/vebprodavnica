@@ -39,4 +39,17 @@
     <USER_PRODAVCA>petar</USER_PRODAVCA>
     <OBRISAN>False</OBRISAN>
   </proizvod>
+  <proizvod>
+    <ID>-1676513916</ID>
+    <NAZIV>mis</NAZIV>
+    <CENA>1389</CENA>
+    <KOLICINA>1</KOLICINA>
+    <OPIS>za komp</OPIS>
+    <SLIKA>7579f499c55941a4be7dc00798eaf279.jpg</SLIKA>
+    <DATUM>29.06.2023</DATUM>
+    <GRAD>Prizren</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>petar</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
 </proizvodi>

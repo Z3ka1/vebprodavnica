@@ -120,7 +120,7 @@
 <div class="elements">
     <h2>Izmena recenzije '@Recenzija.id'</h2>
 
-    <form method="post" action="/Prodavnica/PublishIzmenjenuRecenziju">
+    <form method="post" action="/Prodavnica/PublishIzmenjenuRecenziju" enctype="multipart/form-data">
         <input type="number" value="@Recenzija.id" name="idRecenzije" hidden />
         <table>
             <tr>

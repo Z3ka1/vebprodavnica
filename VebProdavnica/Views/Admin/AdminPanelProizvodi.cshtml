@@ -165,13 +165,16 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" value="Primeni filtere" />
+                    <a class="reset-filters" href="~/Admin/AdminPanelProizvodi">Ponisti filtere</a>
+                </td>
+                <td>
+                    <input style="float:right" type="submit" value="Primeni filtere" />
                 </td>
             </tr>
         </table>
     </form>
-    <a class="reset-filters" href="~/Admin/AdminPanelProizvodi">Ponisti filtere</a>
 
+    <h3>@ViewBag.Pretraga</h3>
     <table>
         <tr>
             <th>Prodavac</th>

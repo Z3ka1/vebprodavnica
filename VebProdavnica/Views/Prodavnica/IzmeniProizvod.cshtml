@@ -134,7 +134,7 @@
 
     <h3>@ViewBag.Greska</h3>
 
-    <form action="/Prodavnica/PublishIzmenjenProizvod">
+    <form method="post" action="/Prodavnica/PublishIzmenjenProizvod" enctype="multipart/form-data">
         <input type="number" value="@Model.id" name="id" hidden />
         <table>
             <tr>

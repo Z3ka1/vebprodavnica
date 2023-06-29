@@ -1,6 +1,7 @@
 ﻿using Antlr.Runtime;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -367,7 +368,7 @@ namespace VebProdavnica.Controllers
         }
 
         [HttpPost]
-        public ActionResult PublishRecenziju(int idPorudzbine, string naslov,string sadrzaj,string slika)
+        public ActionResult PublishRecenziju(int idPorudzbine, string naslov,string sadrzaj,HttpPostedFileBase slika)
         {
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
             Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
@@ -376,8 +377,24 @@ namespace VebProdavnica.Controllers
 
             Korisnik recezent = (Korisnik)HttpContext.Session["korisnik"];
 
+            string slikaName = "";
+            if (slika != null && slika.ContentLength > 0)
+            {
+                string fileName = Path.GetFileName(slika.FileName);
+                string fileExtension = Path.GetExtension(slika.FileName);
+
+                string uniqueFileName = Guid.NewGuid().ToString("N") + fileExtension;
+
+                string targetFolderPath = Server.MapPath("~/Slike");
+                Directory.CreateDirectory(targetFolderPath);
+
+                string fullFilePath = Path.Combine(targetFolderPath, uniqueFileName);
+                slika.SaveAs(fullFilePath);
+                slikaName = uniqueFileName;
+            }
+
             Recenzija nova = new Recenzija(Data.GenerateID(), porudzbine[idPorudzbine].idProizvod,
-                recezent.korisnickoIme, naslov, sadrzaj, slika, false, StatusRecenzije.CEKA);
+                recezent.korisnickoIme, naslov, sadrzaj, slikaName, false, StatusRecenzije.CEKA);
 
             //proizvodi.recenzije
             proizvodi[nova.idProizvod].listaRecenzija.Add(nova);
@@ -447,17 +464,33 @@ namespace VebProdavnica.Controllers
         }
 
         [HttpPost]
-        public ActionResult PublishIzmenjenuRecenziju(int idRecenzije, string naslov, string sadrzaj, string slika)
+        public ActionResult PublishIzmenjenuRecenziju(int idRecenzije, string naslov, string sadrzaj, HttpPostedFileBase slika)
         {
             Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+
+            string slikaName = "";
+            if (slika != null && slika.ContentLength > 0)
+            {
+                string fileName = Path.GetFileName(slika.FileName);
+                string fileExtension = Path.GetExtension(slika.FileName);
+
+                string uniqueFileName = Guid.NewGuid().ToString("N") + fileExtension;
+
+                string targetFolderPath = Server.MapPath("~/Slike");
+                Directory.CreateDirectory(targetFolderPath);
+
+                string fullFilePath = Path.Combine(targetFolderPath, uniqueFileName);
+                slika.SaveAs(fullFilePath);
+                slikaName = uniqueFileName;
+            }
 
             //recenzije + XMLRecenzije
             recenzije[idRecenzije].naslov = naslov;
             recenzije[idRecenzije].sadrzajRecenzije = sadrzaj;
             recenzije[idRecenzije].status = StatusRecenzije.CEKA;
-            if(slika != "")
-                recenzije[idRecenzije].slika = slika;
+            if(slikaName != "")
+                recenzije[idRecenzije].slika = slikaName;
             Data.UpdateRecenzijaXml(recenzije[idRecenzije]);
 
             //proizvodi.recenzije
@@ -473,7 +506,8 @@ namespace VebProdavnica.Controllers
             return View();
         }
 
-        public ActionResult PublishProizvod(string naziv, string cena, int kolicina, string opis, string slika, 
+        [HttpPost]
+        public ActionResult PublishProizvod(string naziv, string cena, int kolicina, string opis, HttpPostedFileBase slika, 
             string grad)
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
@@ -493,13 +527,28 @@ namespace VebProdavnica.Controllers
                 dostupan = false;
             string userProdavca = trenutni.korisnickoIme;
 
+            string slikaName = "";
+            if(slika != null && slika.ContentLength > 0)
+            {
+                string fileName = Path.GetFileName(slika.FileName);
+                string fileExtension = Path.GetExtension(slika.FileName);
+
+                string uniqueFileName = Guid.NewGuid().ToString("N") + fileExtension;
+
+                string targetFolderPath = Server.MapPath("~/Slike");
+                Directory.CreateDirectory(targetFolderPath);
+
+                string fullFilePath = Path.Combine(targetFolderPath, uniqueFileName);
+                slika.SaveAs(fullFilePath);
+                slikaName = uniqueFileName;
+            }
+
+
             //System.Diagnostics.Debug.WriteLine("Ovo je opis = " + opis);
-            Proizvod novi = new Proizvod(naziv, cenaDouble, kolicina, opis, slika, grad, dostupan, userProdavca);
+            Proizvod novi = new Proizvod(naziv, cenaDouble, kolicina, opis, slikaName, grad, dostupan, userProdavca);
 
 
             proizvodi.Add(novi.id, novi);
-            //TODO Ovde se nekako 2 puta doda, proveriti to
-            //trenutni.listaObjavljenihProizvoda.Add(novi);
             korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda.Add(novi);
             Data.UpdateProizvodXml(novi);
 
@@ -545,8 +594,9 @@ namespace VebProdavnica.Controllers
             return View(proizvodi[id]);
         }
 
+        [HttpPost]
         public ActionResult PublishIzmenjenProizvod(int id, string naziv, string cena,int kolicina, string opis, 
-            string slika, string grad)
+            HttpPostedFileBase slika, string grad)
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
@@ -559,6 +609,22 @@ namespace VebProdavnica.Controllers
             {
                 ViewBag.Greska = "Proizvod nije izmenjen, pogresna vrednost za cenu!";
                 return View("IzmeniProizvod",proizvodi[id]);
+            }
+
+            string slikaName = "";
+            if (slika != null && slika.ContentLength > 0)
+            {
+                string fileName = Path.GetFileName(slika.FileName);
+                string fileExtension = Path.GetExtension(slika.FileName);
+
+                string uniqueFileName = Guid.NewGuid().ToString("N") + fileExtension;
+
+                string targetFolderPath = Server.MapPath("~/Slike");
+                Directory.CreateDirectory(targetFolderPath);
+
+                string fullFilePath = Path.Combine(targetFolderPath, uniqueFileName);
+                slika.SaveAs(fullFilePath);
+                slikaName = uniqueFileName;
             }
 
             //pozicija u listi objavljenih proizvoda za Session
@@ -582,11 +648,11 @@ namespace VebProdavnica.Controllers
             //trenutni.listaObjavljenihProizvoda[idxMenjanja].opis = opis;
             korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].opis = opis;
 
-            if(slika != "")
+            if(slikaName != "")
             {
-                proizvodi[id].slika = slika;
+                proizvodi[id].slika = slikaName;
                 //trenutni.listaObjavljenihProizvoda[idxMenjanja].slika = slika;
-                korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].slika = slika;
+                korisnici[trenutni.korisnickoIme].listaObjavljenihProizvoda[idxMenjanjaApp].slika = slikaName;
             }
 
             proizvodi[id].grad = grad;
@@ -614,8 +680,8 @@ namespace VebProdavnica.Controllers
                     k.listaOmiljenihProizvoda[idxMenjanja].kolicina = kolicina;
                     k.listaOmiljenihProizvoda[idxMenjanja].grad = grad;
                     k.listaOmiljenihProizvoda[idxMenjanja].opis = opis;
-                    if(slika != "")
-                        k.listaOmiljenihProizvoda[idxMenjanja].slika = slika;
+                    if(slikaName != "")
+                        k.listaOmiljenihProizvoda[idxMenjanja].slika = slikaName;
                     if(kolicina>0)
                         k.listaOmiljenihProizvoda[idxMenjanja].dostupan = true;
                 }

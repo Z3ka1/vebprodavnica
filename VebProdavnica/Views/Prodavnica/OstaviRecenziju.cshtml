@@ -120,7 +120,7 @@
 <div class="elements">
     <h2>Recenzija porudzbine '@ViewBag.id'</h2>
 
-    <form method="post" action="/Prodavnica/PublishRecenziju">
+    <form method="post" action="/Prodavnica/PublishRecenziju" enctype="multipart/form-data">
         <input type="number" value="@ViewBag.id" name="idPorudzbine" hidden />
         <table>
             <tr>

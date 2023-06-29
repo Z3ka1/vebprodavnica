@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web;
@@ -401,7 +402,7 @@ namespace VebProdavnica.Controllers
 
             pretraga = listaKorisnika.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-
+            ViewBag.Pretraga = "Rezultati pretrage";
             ViewData["Proizvodi"] = pretraga;
             return View("AdminPanelProizvodi", admin);
         }
@@ -540,7 +541,7 @@ namespace VebProdavnica.Controllers
         }
 
         [HttpPost]
-        public ActionResult PublishIzmenjenProizvod(int id, string naziv, string cena, int kolicina, string opis, string slika,
+        public ActionResult PublishIzmenjenProizvod(int id, string naziv, string cena, int kolicina, string opis, HttpPostedFileBase slika,
             string grad)
         {
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
@@ -556,13 +557,29 @@ namespace VebProdavnica.Controllers
                 return View("IzmeniProizvod", proizvodi[id]);
             }
 
+            string slikaName = "";
+            if (slika != null && slika.ContentLength > 0)
+            {
+                string fileName = Path.GetFileName(slika.FileName);
+                string fileExtension = Path.GetExtension(slika.FileName);
+
+                string uniqueFileName = Guid.NewGuid().ToString("N") + fileExtension;
+
+                string targetFolderPath = Server.MapPath("~/Slike");
+                Directory.CreateDirectory(targetFolderPath);
+
+                string fullFilePath = Path.Combine(targetFolderPath, uniqueFileName);
+                slika.SaveAs(fullFilePath);
+                slikaName = uniqueFileName;
+            }
+
             proizvodi[id].naziv = naziv;
             proizvodi[id].cena = cenaParse;
             proizvodi[id].kolicina = kolicina;
             proizvodi[id].opis = opis;
             proizvodi[id].grad = grad;
-            if(slika != "")
-                proizvodi[id].slika = slika;
+            if(slikaName != "")
+                proizvodi[id].slika = slikaName;
             Data.UpdateProizvodXml(proizvodi[id]);
 
             foreach(Korisnik k in korisnici.Values)
@@ -577,8 +594,8 @@ namespace VebProdavnica.Controllers
                             p.kolicina = kolicina;
                             p.opis = opis;
                             p.grad = grad;
-                            if (slika != "")
-                                p.slika = slika;
+                            if (slikaName != "")
+                                p.slika = slikaName;
                         }
                     }
                 if(k.uloga == Uloga.Prodavac)
@@ -591,8 +608,8 @@ namespace VebProdavnica.Controllers
                             p.kolicina = kolicina;
                             p.opis = opis;
                             p.grad = grad;
-                            if (slika != "")
-                                p.slika = slika;
+                            if (slikaName != "")
+                                p.slika = slikaName;
                         }
                     }
             }
