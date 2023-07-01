@@ -32,6 +32,8 @@
 
         img {
             max-width: 100%;
+            max-height: 300px;
+            width: auto;
             height: auto;
             margin-bottom: 10px;
         }
@@ -67,13 +69,26 @@
         }
 
         .form-container input[type="submit"] {
-            background-color: #cc0000;
+            background-color: #2979FF;
             color: #fff;
             border: none;
             cursor: pointer;
         }
 
         .form-container input[type="submit"]:hover {
+            background-color: #1565C0;
+        }
+
+        input[type="submit"] {
+            background-color: #cc0000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
             background-color: #990000;
         }
 
@@ -138,6 +153,7 @@
         a:hover {
             color: #cc0000;
         }
+
     </style>
 </head>
 <body>
@@ -169,23 +185,31 @@
 
 <div class="elements">
     <h2>Detalji proizvoda</h2>
-    <h3> @ViewBag.Message </h3>
+    <h3 style="color: #45a049"> @ViewBag.Message </h3>
     <h3> @ViewBag.Greska </h3>
 
-    <h2>@Model.naziv </h2>
-    <img src="~/Slike/@Model.slika" alt="Slika" />
-    @if (Model.dostupan == true)
-    {
-        <p>Dostupan, Preostalo: @Model.kolicina</p>
-    }
-    else
-    {
-        <p>Nedostupan</p>
-    }
-    <p>Cena: @Model.cena </p>
-    <p>Grad: @Model.grad</p>
-    <p>Datum postavljanja: @Model.datumPostavljanja.ToString("dd.MM.yyyy")</p>
-    <p>@Model.opis</p>
+    <table>
+        <tr>
+            <td>
+                <h2>@Model.naziv </h2>
+                @if (Model.dostupan == true)
+                {
+                    <p>Dostupan, Preostalo: @Model.kolicina</p>
+                }
+                else
+                {
+                    <p>Nedostupan</p>
+                }
+                <p>Cena: @Model.cena </p>
+                <p>Grad: @Model.grad</p>
+                <p>Datum postavljanja: @Model.datumPostavljanja.ToString("dd.MM.yyyy")</p>
+                <p>@Model.opis</p>
+            </td>
+            <td>
+                <img src="~/Slike/@Model.slika" alt="Slika" />
+            </td>
+        </tr>
+    </table>
 
     @if (HttpContext.Current.Session["korisnik"] != null &&
         ((Korisnik)HttpContext.Current.Session["korisnik"]).uloga == Uloga.Kupac)
@@ -229,14 +253,15 @@
                     <div class="recenzija">
                         <table>
                             <tr>
-                                <td> @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime</td>
+                                <td><label style="font-weight:bold;">Kupac:</label> @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime</td>
                             </tr>
                             <tr>
                                 <td> @recenzije[r.id].naslov </td>
-                                <td> <img src="~/Slike/@recenzije[r.id].slika" alt="Slika" /> </td>
+                                <td rowspan="2"> <img src="~/Slike/@recenzije[r.id].slika" alt="Slika" /> </td>
                             </tr>
                             <tr>
-                                <td colspan="2">
+                                <td>
+                                    <label style="font-weight: bold;">Komentar:</label>
                                     @recenzije[r.id].sadrzajRecenzije
                                 </td>
                             </tr>
@@ -248,14 +273,16 @@
                     <div class="recenzija">
                         <table>
                             <tr>
-                                <td> @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime (ODBIJENA)</td>
+                                <td> <label style="font-weight:bold;">Kupac:</label> 
+                                @korisnici[r.userRecezent].ime @korisnici[r.userRecezent].prezime (ODBIJENA)</td>
                             </tr>
                             <tr>
                                 <td> @recenzije[r.id].naslov </td>
-                                <td> <img src="~/Slike/@recenzije[r.id].slika" alt="Slika" /> </td>
+                                <td rowspan="2"> <img src="~/Slike/@recenzije[r.id].slika" alt="Slika" /> </td>
                             </tr>
                             <tr>
-                                <td colspan="2">
+                                <td>
+                                    <label style="font-weight:bold;">Komentar:</label>
                                     @recenzije[r.id].sadrzajRecenzije
                                 </td>
                             </tr>

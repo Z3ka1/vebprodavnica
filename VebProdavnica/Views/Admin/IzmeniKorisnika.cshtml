@@ -11,6 +11,10 @@
             background-color: #f2f2f2;
         }
 
+        .elements {
+            padding: 20px;
+        }
+
         ul {
             list-style-type: none;
             margin: 0;
@@ -98,6 +102,10 @@
         a:hover {
             text-decoration: underline;
         }
+
+        .required-input:invalid {
+            background-color: #ffeeee;
+        }
     </style>
 </head>
 
@@ -111,79 +119,81 @@
     </ul>
 </div>
 
-@if (Model.uloga == VebProdavnica.Models.Uloga.Prodavac)
-{
-    <h2>Izmeni prodavca</h2>
-}
-else
-{
-    <h2>Izmeni kupca</h2>
-}
+<div class="elements">
+    @if (Model.uloga == VebProdavnica.Models.Uloga.Prodavac)
+    {
+        <h2>Izmeni prodavca</h2>
+    }
+    else
+    {
+        <h2>Izmeni kupca</h2>
+    }
 
-<form method="post" action="/Admin/PublishIzmenjenogKorisnika">
-    <input type="text" value="@Model.korisnickoIme" name="user" hidden />
-    <table>
-        <tr>
-            <td>Ime:</td>
-            <td>
-                <input type="text" value="@Model.ime" name="ime" required />
-            </td>
-        </tr>
-        <tr>
-            <td>Prezime:</td>
-            <td>
-                <input type="text" value="@Model.prezime" name="prezime" required />
-            </td>
-        </tr>
-        <tr>
-            @if (Model.pol == VebProdavnica.Models.Pol.M)
-            {
-                <td>Pol:</td>
+    <form method="post" action="/Admin/PublishIzmenjenogKorisnika">
+        <input type="text" value="@Model.korisnickoIme" name="user" hidden />
+        <table>
+            <tr>
+                <td>Ime:</td>
                 <td>
-                    <select name="pol">
-                        <option value="M" selected="selected">Musko</option>
-                        <option value="Z">Zensko</option>
-                    </select>
+                    <input class="required-input" type="text" value="@Model.ime" name="ime" required />
                 </td>
-            }
-            else
-            {
-                <td>Pol:</td>
+            </tr>
+            <tr>
+                <td>Prezime:</td>
                 <td>
-                    <select name="pol">
-                        <option value="M">Musko</option>
-                        <option value="Z" selected="selected">Zensko</option>
-                    </select>
+                    <input class="required-input" type="text" value="@Model.prezime" name="prezime" required />
                 </td>
-            }
-        </tr>
-        <tr>
-            <td>Email:</td>
-            <td>
-                <input type="text" value="@Model.email" name="email" required />
-            </td>
-        </tr>
-        <tr>
-            <td>Datum rodjenja:</td>
-            <td>
-                <input type="date" value="@Model.datumRodjenja.ToString("yyyy-MM-dd")" name="datumRodjenja" required />
-            </td>
-        </tr>
-        <tr>
-            <td>Nova lozinka:</td>
-            <td>
-                <input type="text" name="lozinka" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a style="color: crimson" href="/Admin/AdminPanelKorisnici">Odustani</a>
-            </td>
-            <td colspan="2"><input style="float:right;" type="submit" value="Potvrdi izmenu" /> </td>
-        </tr>
+            </tr>
+            <tr>
+                @if (Model.pol == VebProdavnica.Models.Pol.M)
+                {
+                    <td>Pol:</td>
+                    <td>
+                        <select name="pol">
+                            <option value="M" selected="selected">Musko</option>
+                            <option value="Z">Zensko</option>
+                        </select>
+                    </td>
+                }
+                else
+                {
+                    <td>Pol:</td>
+                    <td>
+                        <select name="pol">
+                            <option value="M">Musko</option>
+                            <option value="Z" selected="selected">Zensko</option>
+                        </select>
+                    </td>
+                }
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>
+                    <input class="required-input" type="text" value="@Model.email" name="email" required />
+                </td>
+            </tr>
+            <tr>
+                <td>Datum rodjenja:</td>
+                <td>
+                    <input class="required-input" type="date" value="@Model.datumRodjenja.ToString("yyyy-MM-dd")" name="datumRodjenja" required />
+                </td>
+            </tr>
+            <tr>
+                <td>Nova lozinka:</td>
+                <td>
+                    <input type="text" name="lozinka" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a style="color: crimson" href="/Admin/AdminPanelKorisnici">Odustani</a>
+                </td>
+                <td colspan="2"><input style="float:right;" type="submit" value="Potvrdi izmenu" /> </td>
+            </tr>
 
-    </table>
+        </table>
 
 
-</form>
+    </form>
+</div>
 </body>

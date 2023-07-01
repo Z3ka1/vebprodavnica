@@ -99,6 +99,10 @@
         a:hover {
             text-decoration: underline;
         }
+
+        .required-input:invalid {
+            background-color: #ffeeee;
+        }
     </style>
 </head>
 
@@ -139,19 +143,19 @@
         <table>
             <tr>
                 <td>Naziv:</td>
-                <td><input type="text" value="@Model.naziv" name="naziv" required /></td>
+                <td><input class="required-input" type="text" value="@Model.naziv" name="naziv" required /></td>
             </tr>
             <tr>
                 <td>Cena:</td>
-                <td><input type="text" value="@Model.cena" name="cena" required /></td>
+                <td><input class="required-input" type="text" value="@Model.cena" name="cena" required /></td>
             </tr>
             <tr>
                 <td>Kolicina:</td>
-                <td><input type="number" value="@Model.kolicina" min="0" name="kolicina" required /></td>
+                <td><input class="required-input" type="number" value="@Model.kolicina" min="0" name="kolicina" required /></td>
             </tr>
             <tr>
                 <td>Opis:</td>
-                <td><input type="text" value="@Model.opis" name="opis" required /></td>
+                <td><input class="required-input" type="text" value="@Model.opis" name="opis" required /></td>
             </tr>
             <tr>
                 <td>Slika:</td>
@@ -159,7 +163,7 @@
             </tr>
             <tr>
                 <td>Grad:</td>
-                <td> <input type="text" value="@Model.grad" name="grad" required /></td>
+                <td> <input class="required-input" type="text" value="@Model.grad" name="grad" required /></td>
             </tr>
             <tr>
                 <td>

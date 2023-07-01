@@ -117,6 +117,10 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+
+        .required-input:invalid {
+            background-color: #ffeeee;
+        }
     </style>
 </head>
 
@@ -132,7 +136,9 @@
     <div style="">
     <div class="elements">
     <h2>Admin: @Model.korisnickoIme</h2>
-    <h2>@ViewBag.Greska</h2>
+
+    <h3 style="color: crimson">@ViewBag.Greska</h3>
+    <h3 style="color: #9e00ff">@ViewBag.Message</h3>
 
     <div class="opt">
         <ul>
@@ -149,13 +155,13 @@
                 <tr>
                     <td>Ime:</td>
                     <td>
-                        <input type="text" value="@Model.ime" name="ime" required />
+                        <input class="required-input" type="text" value="@Model.ime" name="ime" required />
                     </td>
                 </tr>
                 <tr>
                     <td>Prezime:</td>
                     <td>
-                        <input type="text" value="@Model.prezime" name="prezime" required />
+                        <input class="required-input" type="text" value="@Model.prezime" name="prezime" required />
                     </td>
                 </tr>
                 <tr>
@@ -173,13 +179,13 @@
                 <tr>
                     <td>Email:</td>
                     <td>
-                        <input type="text" value="@Model.email" name="email" required />
+                        <input class="required-input" type="text" value="@Model.email" name="email" required />
                     </td>
                 </tr>
                 <tr>
                     <td>Datum rodjenja:</td>
                     <td>
-                        <input type="date" value="@Model.datumRodjenja.ToString("yyyy-MM-dd")" name="datumRodjenja" required />
+                        <input class="required-input" type="date" value="@Model.datumRodjenja.ToString("yyyy-MM-dd")" name="datumRodjenja" required />
                     </td>
                 </tr>
                 <tr>
@@ -212,7 +218,7 @@
                 <tr>
                     <td>Stara lozinka (radi potvrde identiteta):</td>
                     <td>
-                        <input type="password" name="staraLozinka" required />
+                        <input class="required-input" type="password" name="staraLozinka" required />
                     </td>
                 </tr>
                 <tr>

@@ -123,11 +123,11 @@
     </ul>
 </div>
 
+<div class="elements">
 <h2>Administriranje proizvoda</h2>
-<h2>@ViewBag.Greska</h2>
-<h2>@ViewBag.Message</h2>
+<h2 style="color: crimson">@ViewBag.Greska</h2>
+<h2 style="color: #9e00ff">@ViewBag.Message</h2>
 
-<div>
     <h3>Lista proizvoda</h3>
 
     <form action="/Admin/PretragaProizvoda">
@@ -195,7 +195,7 @@
                     <td>@p.cena</td>
                     <td>@p.datumPostavljanja.ToString("dd.MM.yyyy")</td>
                     <td>@p.kolicina</td>
-                    @if (p.dostupan == true)
+                    @if (p.dostupan)
                     {
                         <td>DOSTUPAN</td>
                     }

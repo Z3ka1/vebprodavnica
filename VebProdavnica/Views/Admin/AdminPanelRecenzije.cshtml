@@ -106,6 +106,11 @@
             display: inline-block;
             margin-right: 5px;
         }
+        
+        img {
+            width: 150px;
+            height: 100px;
+        }
     </style>
 </head>
 
@@ -118,11 +123,12 @@
         <li style="float:right"><a href="~/Admin/AdminPanel">Admin profil</a></li>
     </ul>
 </div>
-<h2>Admin Panel</h2>
-<h2>@ViewBag.Greska</h2>
-<h2>@ViewBag.Message</h2>
 
-<div>
+<div class="elements">
+<h2>Odobravanje recenzija</h2>
+<h2 style="color: crimson;">@ViewBag.Greska</h2>
+<h2 style="color: #9E00FF">@ViewBag.Message</h2>
+
     <h3>Recenzije koje cekaju na odobravanje</h3>
     <table>
         <tr>

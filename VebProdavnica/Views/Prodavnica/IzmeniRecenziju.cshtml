@@ -44,7 +44,7 @@
 
         input[type="submit"] {
             padding: 5px 10px;
-            background-color: #cc0000;
+            background-color: #4CAF50;
             color: #fff;
             border: none;
             cursor: pointer;
@@ -52,7 +52,7 @@
         }
 
         input[type="submit"]:hover {
-            background-color: #990000;
+            background-color: #45a049;
         }
 
         ul {
@@ -86,6 +86,10 @@
 
         a:hover {
             color: #cc0000;
+        }
+
+        .required-input:invalid {
+            background-color: #ffeeee;
         }
     </style>
 </head>
@@ -125,11 +129,11 @@
         <table>
             <tr>
                 <td>Naslov:</td>
-                <td> <input type="text" value="@Recenzija.naslov" name="naslov" /> </td>
+                <td> <input class="required-input" type="text" value="@Recenzija.naslov" name="naslov" required/> </td>
             </tr>
             <tr>
                 <td>Napisite nesto o ovom proizvodu: </td>
-                <td> <input type="text" value="@Recenzija.sadrzajRecenzije" name="sadrzaj" /> </td>
+                <td> <input class="required-input" type="text" value="@Recenzija.sadrzajRecenzije" name="sadrzaj" required/> </td>
             </tr>
             <tr>
                 <td>Mozete dodati i sliku uz vasu recenziju</td>

@@ -9,10 +9,8 @@ namespace VebProdavnica.Models
     public class Porudzbina
     {
         public int id { get; set; }
-        public Proizvod proizvod { get; set; }
         public int idProizvod { get; set; }
         public int kolicina { get; set; }
-        public Korisnik kupac { get; set; }
         public string userKupac { get; set; }
         public DateTime datumPorudzbine { get; set; }
         public Status status { get; set; }

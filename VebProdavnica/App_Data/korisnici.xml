@@ -10,44 +10,6 @@
     <DATUM>18.09.2001</DATUM>
     <ULOGA>Administrator</ULOGA>
     <OBRISAN>False</OBRISAN>
-  </korisnik>
-  <korisnik>
-    <KORISNICKO_IME>petar</KORISNICKO_IME>
-    <LOZINKA>petar</LOZINKA>
-    <IME>Petar</IME>
-    <PREZIME>Petrovic</PREZIME>
-    <POL>M</POL>
-    <EMAIL>petarp@gmail.com</EMAIL>
-    <DATUM>01.11.2001</DATUM>
-    <ULOGA>Prodavac</ULOGA>
-    <OBRISAN>False</OBRISAN>
-  </korisnik>
-  <korisnik>
-    <KORISNICKO_IME>test</KORISNICKO_IME>
-    <LOZINKA>test</LOZINKA>
-    <IME>Test</IME>
-    <PREZIME>Testovic</PREZIME>
-    <POL>M</POL>
-    <EMAIL>testtestovic@gmail.com</EMAIL>
-    <DATUM>01.06.2023</DATUM>
-    <ULOGA>Kupac</ULOGA>
-    <OBRISAN>False</OBRISAN>
-    <omiljeni>
-      <ID_PROIZVOD>1</ID_PROIZVOD>
-    </omiljeni>
-  </korisnik>
-  <korisnik>
-    <KORISNICKO_IME>markom</KORISNICKO_IME>
-    <LOZINKA>markom</LOZINKA>
-    <IME>Markoo</IME>
-    <PREZIME>Markovicc</PREZIME>
-    <POL>M</POL>
-    <EMAIL>markomm@gmail.com</EMAIL>
-    <DATUM>09.01.2001</DATUM>
-    <ULOGA>Kupac</ULOGA>
-    <OBRISAN>False</OBRISAN>
-    <omiljeni>
-      <ID_PROIZVOD>1</ID_PROIZVOD>
-    </omiljeni>
+    <omiljeni />
   </korisnik>
 </korisnici>

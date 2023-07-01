@@ -84,10 +84,11 @@ namespace VebProdavnica.Controllers
                     korisnici[admin.korisnickoIme].lozinka = novaLozinka;
                 }
                 Data.UpdateKorisnikXml(admin);
+                ViewBag.Message = "Podaci promenjeni.";
             }
             else
             {
-                ViewBag.Greska = "Stara lozinka je ne ispravna";
+                ViewBag.Greska = "Stara lozinka je ne ispravna!";
             }
 
             return View("AdminPanel", admin);
@@ -470,7 +471,6 @@ namespace VebProdavnica.Controllers
                 korisnici[user].lozinka = lozinka;
             Data.UpdateKorisnikXml(korisnici[user]);
 
-
             ViewBag.Message = "Korisnik izmenjen!";
             ViewData["Korisnici"] = korisnici;
             return View("AdminPanelKorisnici", admin);
@@ -479,6 +479,7 @@ namespace VebProdavnica.Controllers
         [HttpPost]
         public ActionResult ObrisiProdavca(string user)
         {
+            //System.Diagnostics.Debug.WriteLine("Brisem prodavca: " + user);
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
             Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
@@ -496,7 +497,8 @@ namespace VebProdavnica.Controllers
             }
             //Ponovo iscitavamo korisnike zbog proizvoda koji su se promenili a nalazili su se u liti omiljenih
             korisnici.Clear();
-            korisnici = Data.ReadKorisnici();
+            HttpContext.Application["korisnici"] = Data.ReadKorisnici();
+            korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
 
             ViewBag.Message = "Prodavac obrisan!";
             ViewData["Korisnici"] = korisnici;
@@ -506,6 +508,7 @@ namespace VebProdavnica.Controllers
         [HttpPost]
         public ActionResult ObrisiKupca(string user)
         {
+            //System.Diagnostics.Debug.WriteLine("Brisem KUPCA: " + user);
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
             Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
@@ -525,6 +528,30 @@ namespace VebProdavnica.Controllers
 
                     Data.UpdateProizvodXml(proizvodi[p.idProizvod]);
                     Data.UpdatePorudzbinaXml(p);
+
+                    //Dodato
+                    int idxMenjanja;
+                    foreach(Korisnik k in korisnici.Values)
+                    {
+                        if (k.uloga == Uloga.Kupac)
+                        {
+                            idxMenjanja = k.listaOmiljenihProizvoda.FindIndex(pr => pr.id == p.idProizvod);
+                            if (idxMenjanja != -1)
+                            {
+                                k.listaOmiljenihProizvoda[idxMenjanja].kolicina = proizvodi[p.idProizvod].kolicina;
+                                k.listaOmiljenihProizvoda[idxMenjanja].dostupan = true;
+                            }
+                        }
+                        if (k.uloga == Uloga.Prodavac)
+                        {
+                            idxMenjanja = k.listaObjavljenihProizvoda.FindIndex(pr => pr.id == p.idProizvod);
+                            if (idxMenjanja != -1)
+                            {
+                                k.listaObjavljenihProizvoda[idxMenjanja].kolicina = proizvodi[p.idProizvod].kolicina;
+                                k.listaObjavljenihProizvoda[idxMenjanja].dostupan = true;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -556,6 +583,11 @@ namespace VebProdavnica.Controllers
                 ViewBag.Greska = "Proizvod nije izmenjen, pogresna vrednost za cenu!";
                 return View("IzmeniProizvod", proizvodi[id]);
             }
+            if(cenaParse < 0)
+            {
+                ViewBag.Greska = "Proizvod nije izmenjen, cena mora biti pozitivan broj!";
+                return View("IzmeniProizvod", proizvodi[id]);
+            }
 
             string slikaName = "";
             if (slika != null && slika.ContentLength > 0)
@@ -580,6 +612,11 @@ namespace VebProdavnica.Controllers
             proizvodi[id].grad = grad;
             if(slikaName != "")
                 proizvodi[id].slika = slikaName;
+            if (proizvodi[id].kolicina > 0)
+                proizvodi[id].dostupan = true;
+            else
+                proizvodi[id].dostupan = false;
+
             Data.UpdateProizvodXml(proizvodi[id]);
 
             foreach(Korisnik k in korisnici.Values)
@@ -596,6 +633,10 @@ namespace VebProdavnica.Controllers
                             p.grad = grad;
                             if (slikaName != "")
                                 p.slika = slikaName;
+                            if (p.kolicina > 0)
+                                p.dostupan = true;
+                            else
+                                p.dostupan = false;
                         }
                     }
                 if(k.uloga == Uloga.Prodavac)
@@ -610,6 +651,10 @@ namespace VebProdavnica.Controllers
                             p.grad = grad;
                             if (slikaName != "")
                                 p.slika = slikaName;
+                            if (p.kolicina > 0)
+                                p.dostupan = true;
+                            else
+                                p.dostupan = false;
                         }
                     }
             }
@@ -651,6 +696,7 @@ namespace VebProdavnica.Controllers
         {
             Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
             Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
 
             porudzbine[id].status = Status.IZVRSENA;
@@ -659,7 +705,9 @@ namespace VebProdavnica.Controllers
             korisnici[porudzbine[id].userKupac].listaPorudzbina[idxMenjanja].status = Status.IZVRSENA;
 
             ViewBag.Message = "Porudzbina oznacena kao izvrsena";
-            ViewData["Porudzbine"] = porudzbine;
+            ViewData["Porudzbine"] = porudzbine; 
+            ViewData["Proizvodi"] = proizvodi;
+            ViewData["Korisnici"] = korisnici;
             return View("AdminPanelPorudzbine", admin);
         }
 
@@ -688,7 +736,7 @@ namespace VebProdavnica.Controllers
                     idxMenjanja = k.listaOmiljenihProizvoda.FindIndex(p => p.id == porudzbine[id].idProizvod);
                     if (idxMenjanja != -1)
                     {
-                        k.listaOmiljenihProizvoda[idxMenjanja].kolicina += porudzbine[id].kolicina;
+                        k.listaOmiljenihProizvoda[idxMenjanja].kolicina = proizvodi[porudzbine[id].idProizvod].kolicina;
                         k.listaOmiljenihProizvoda[idxMenjanja].dostupan = true;
                     }
                 }
@@ -697,13 +745,15 @@ namespace VebProdavnica.Controllers
                     idxMenjanja = k.listaObjavljenihProizvoda.FindIndex(p => p.id == porudzbine[id].idProizvod);
                     if(idxMenjanja != -1)
                     {
-                        k.listaObjavljenihProizvoda[idxMenjanja].kolicina += porudzbine[id].kolicina;
+                        k.listaObjavljenihProizvoda[idxMenjanja].kolicina = proizvodi[porudzbine[id].idProizvod].kolicina;
                         k.listaObjavljenihProizvoda[idxMenjanja].dostupan = true;
                     }
                 }
             }
 
             ViewBag.Message = "Porudzbina otkazana";
+            ViewData["Proizvodi"] = proizvodi;
+            ViewData["Korisnici"] = korisnici;
             ViewData["Porudzbine"] = porudzbine;
             return View("AdminPanelPorudzbine", admin);
         }

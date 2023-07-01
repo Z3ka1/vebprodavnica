@@ -61,32 +61,36 @@
             display: block;
             margin-top: 20px;
         }
+
+        .required-input:invalid {
+            background-color: #ffeeee;
+        }
     </style>
 </head>
 
 <body>
     <h2>Registracija</h2>
 
-    <h2> @ViewBag.Message </h2>
+    <h2 style="color: crimson;"> @ViewBag.Message </h2>
 
     <form method="post" action="/Prodavnica/RegistrujSe">
         <table>
             <tr>
                 <td>Ime:</td>
                 <td>
-                    <input type="text" name="ime" required/>
+                    <input class="required-input" type="text" name="ime" required/>
                 </td>
             </tr>
             <tr>
                 <td>Prezime:</td>
                 <td>
-                    <input type="text" name="prezime" required/>
+                    <input class="required-input" type="text" name="prezime" required/>
                 </td>
             </tr>
             <tr>
                 <td>Pol:</td>
                 <td>
-                    <select name="pol">
+                    <select name="polStr">
                         <option value="M">Musko</option>
                         <option value="Z">Zensko</option>
                     </select>
@@ -95,13 +99,13 @@
             <tr>
                 <td>Email:</td>
                 <td>
-                    <input type="text" name="email" required/>
+                    <input class="required-input" type="text" name="email" required/>
                 </td>
             </tr>
             <tr>
                 <td>Datum rodjenja:</td>
                 <td>
-                    <input type="date" name="datumRodjenja" required/>
+                    <input class="required-input" type="date" name="datumRodjenja" required/>
                 </td>
             </tr>
             <tr>
@@ -113,13 +117,13 @@
             <tr>
                 <td>Korisnicko ime:</td>
                 <td>
-                    <input type="text" name="korisnickoIme" required/>
+                    <input class="required-input" type="text" name="korisnickoIme" required/>
                 </td>
             </tr>
             <tr>
                 <td>Lozinka:</td>
                 <td>
-                    <input type="password" name="lozinka" required/>
+                    <input class="required-input" type="password" name="lozinka" required/>
                 </td>
             </tr>
             <tr>
