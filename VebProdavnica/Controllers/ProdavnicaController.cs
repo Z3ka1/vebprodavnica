@@ -53,6 +53,12 @@ namespace VebProdavnica.Controllers
             if (polStr == "Z")
                 pol = Pol.Z;
 
+            if(datumRodjenja > DateTime.Now)
+            {
+                ViewBag.Message = $"Ne validan datum rodjenja.";
+                return View("Registracija");
+            }
+
             Korisnik novi = new Korisnik(ime, prezime, pol, email, datumRodjenja, Uloga.Kupac, korisnickoIme, lozinka);
             korisnici.Add(novi.korisnickoIme, novi);
             Data.UpdateKorisnikXml(novi);
@@ -77,14 +83,21 @@ namespace VebProdavnica.Controllers
                 }
                 Session["korisnik"] = korisnik;
             }
+            else
+            {
+                ViewBag.Greska = "Pogresno korisnicko ime ili lozinka!";
+                return View("Prijava");
+            }
             return RedirectToAction("Index");
         }
 
         public ActionResult Odjava()
         {
             Session["korisnik"] = null;
-
-            return RedirectToAction("Index");
+            Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            ViewData["Proizvodi"] = proizvodi;
+            ViewBag.Odjava = "Odjavljeni ste.";
+            return View("Index");
         }
 
         public ActionResult DetaljiProizvoda(int id)
@@ -98,6 +111,12 @@ namespace VebProdavnica.Controllers
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+
+            if (korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].obrisan == true)
+            {
+                return RedirectToAction("Odjava");
+            }
+
             if (!((Korisnik)Session["korisnik"]).listaOmiljenihProizvoda.Any(p => p.id == id))
             {
                 //((Korisnik)Session["korisnik"]).listaOmiljenihProizvoda.Add(proizvodi[id]);
@@ -118,6 +137,11 @@ namespace VebProdavnica.Controllers
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
             Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+
+            if (korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].obrisan == true)
+            {
+                return RedirectToAction("Odjava");
+            }
 
             if (proizvodi[id].kolicina >= kolicina)
             {
@@ -180,6 +204,9 @@ namespace VebProdavnica.Controllers
         {
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
             Dictionary<int, Proizvod> pretraga = new Dictionary<int, Proizvod>();
+
+            cenaOd = cenaOd.Replace(" ", "");
+            cenaDo = cenaDo.Replace(" ", "");
 
             bool uspesno = false;
             double cenaOddouble;
@@ -306,6 +333,12 @@ namespace VebProdavnica.Controllers
 
         public ActionResult Profil()
         {
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+
+            if (korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].obrisan == true)
+                return RedirectToAction("Odjava");
+            
+
             Korisnik trenutni = (Korisnik)HttpContext.Session["korisnik"];
 
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
@@ -318,6 +351,9 @@ namespace VebProdavnica.Controllers
             string staraLozinka, string novaLozinka)
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+
+            if (korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].obrisan == true)
+                return RedirectToAction("Odjava");
 
             Korisnik update = (Korisnik)HttpContext.Session["korisnik"];
             if(staraLozinka == update.lozinka)
@@ -354,7 +390,10 @@ namespace VebProdavnica.Controllers
             Korisnik trenutni = (Korisnik)HttpContext.Session["korisnik"];
             Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
-            
+
+            if (korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].obrisan == true)
+                return RedirectToAction("Odjava");
+
             porudzbine[id].status = Status.IZVRSENA;
             trenutni.listaPorudzbina.Find(x => x.id == id).status = Status.IZVRSENA;
             korisnici[trenutni.korisnickoIme].listaPorudzbina.Find(x => x.id == id).status = Status.IZVRSENA;
@@ -379,6 +418,9 @@ namespace VebProdavnica.Controllers
             Dictionary<int, Porudzbina> porudzbine = (Dictionary<int, Porudzbina>)HttpContext.Application["porudzbine"];
             Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+
+            if (korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].obrisan == true)
+                return RedirectToAction("Odjava");
 
             Korisnik recezent = (Korisnik)HttpContext.Session["korisnik"];
 
@@ -430,6 +472,9 @@ namespace VebProdavnica.Controllers
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
             Korisnik recezent = (Korisnik)HttpContext.Session["korisnik"];
 
+            if (korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].obrisan == true)
+                return RedirectToAction("Odjava");
+
             //Ovo ne moze da ne bude tacno al za svaki slucaj
             if (porudzbine[id].recenzijaOstavljena == true)
             {
@@ -473,6 +518,10 @@ namespace VebProdavnica.Controllers
         {
             Dictionary<int, Recenzija> recenzije = (Dictionary<int, Recenzija>)HttpContext.Application["recenzije"];
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
+            Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+
+            if (korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].obrisan == true)
+                return RedirectToAction("Odjava");
 
             string slikaName = "";
             if (slika != null && slika.ContentLength > 0)
@@ -518,6 +567,11 @@ namespace VebProdavnica.Controllers
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
             Korisnik trenutni = (Korisnik)Session["korisnik"];
+
+            if (korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].obrisan == true)
+                return RedirectToAction("Odjava");
+
+            cena = cena.Replace(" ", "");
 
             bool uspesno;
             double cenaDouble;
@@ -574,6 +628,9 @@ namespace VebProdavnica.Controllers
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
             Korisnik trenutni = (Korisnik)Session["korisnik"];
 
+            if (korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].obrisan == true)
+                return RedirectToAction("Odjava");
+
             proizvodi[id].obrisan = true;
 
             //int idxMenjanja = trenutni.listaObjavljenihProizvoda.FindIndex(p => p.id == id);
@@ -613,6 +670,10 @@ namespace VebProdavnica.Controllers
             Dictionary<int, Proizvod> proizvodi = (Dictionary<int, Proizvod>)HttpContext.Application["proizvodi"];
             Korisnik trenutni = (Korisnik)Session["korisnik"];
 
+            if (korisnici[((Korisnik)Session["korisnik"]).korisnickoIme].obrisan == true)
+                return RedirectToAction("Odjava");
+
+            cena = cena.Replace(" ", "");
             double cenaParse;
             bool valid = double.TryParse(cena, out cenaParse);
 

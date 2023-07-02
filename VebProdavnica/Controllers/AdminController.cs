@@ -75,6 +75,12 @@ namespace VebProdavnica.Controllers
 
             if (staraLozinka == admin.lozinka)
             {
+                if(datumRodjenja > DateTime.Now)
+                {
+                    ViewBag.Greska = "Ne ispravan datum rodjenja.";
+                    return View("AdminPanel", admin);
+                }
+
                 korisnici[admin.korisnickoIme].ime = ime;
                 korisnici[admin.korisnickoIme].prezime = prezime;
                 korisnici[admin.korisnickoIme].email = email;
@@ -425,9 +431,14 @@ namespace VebProdavnica.Controllers
                 if (korisnickoIme == user)
                 {
                     ViewBag.Greska = $"Korisnicko ime '{user}' je vec u upotrebi!";
-                    ViewData["Korisnici"] = korisnici;
-                    return View("AdminPanelKorisnici", admin);
+                    return View("DodajProdavca");
                 }
+            }
+
+            if(datumRodjenja > DateTime.Now)
+            {
+                ViewBag.Greska = "Ne ispravan datum rodjenja!";
+                return View("DodajProdavca");
             }
 
             Pol polp = Pol.M;
@@ -457,6 +468,12 @@ namespace VebProdavnica.Controllers
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
             Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
+
+            if(datumRodjenja > DateTime.Now)
+            {
+                ViewBag.Greska = "Ne ispravan datum rodjenja.";
+                return View("IzmeniKorisnika", korisnici[user]);
+            }
 
             Pol p = Pol.M;
             if (pol == "Z")
@@ -575,6 +592,7 @@ namespace VebProdavnica.Controllers
             Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
             Korisnik admin = (Korisnik)HttpContext.Session["korisnik"];
 
+            cena = cena.Replace(" ", "");
             double cenaParse;
             bool valid = double.TryParse(cena, out cenaParse);
 

@@ -230,27 +230,34 @@
                                 <td>@p.kolicina</td>
                                 <td>@p.datumPorudzbine.ToString("dd.MM.yyyy")</td>
                                 <td>
-                                    @if (p.recenzijaOstavljena == false)
+                                    @if (!SviProizvodi[p.idProizvod].obrisan)
                                     {
-                                        <form method="post" action="/Prodavnica/OstaviRecenziju">
-                                            <input type="text" value="@p.id" name="id" hidden />
-                                            <input type="submit" value="Ostavi recenziju" />
-                                        </form>
-                                    }
-                                    else if(p.recenzijaOstavljena == true && SviProizvodi[p.idProizvod].listaRecenzija[SviProizvodi[p.idProizvod].listaRecenzija.FindIndex(r => r.id == p.idRecenzije)].status != StatusRecenzije.CEKA)
-                                    {
-                                        <form method="post" action="/Prodavnica/IzmeniRecenziju">
-                                            <input type="text" value="@p.id" name="id" hidden />
-                                            <input type="submit" value="Izmeni recenziju" />
-                                        </form>
-                                        <form method="post" action="/Prodavnica/ObrisiRecenziju">
-                                            <input type="text" value="@p.id" name="id" hidden />
-                                            <input type="submit" value="Obrisi recenziju" />
-                                        </form>
+                                        if (p.recenzijaOstavljena == false)
+                                        {
+                                            <form method="post" action="/Prodavnica/OstaviRecenziju">
+                                                <input type="text" value="@p.id" name="id" hidden />
+                                                <input type="submit" value="Ostavi recenziju" />
+                                            </form>
+                                        }
+                                        else if (p.recenzijaOstavljena == true && SviProizvodi[p.idProizvod].listaRecenzija[SviProizvodi[p.idProizvod].listaRecenzija.FindIndex(r => r.id == p.idRecenzije)].status != StatusRecenzije.CEKA)
+                                        {
+                                            <form method="post" action="/Prodavnica/IzmeniRecenziju">
+                                                <input type="text" value="@p.id" name="id" hidden />
+                                                <input type="submit" value="Izmeni recenziju" />
+                                            </form>
+                                            <form method="post" action="/Prodavnica/ObrisiRecenziju">
+                                                <input type="text" value="@p.id" name="id" hidden />
+                                                <input type="submit" value="Obrisi recenziju" />
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <p>Ceka odobravanje</p>
+                                        }   
                                     }
                                     else
                                     {
-                                        <p>Ceka odobravanje</p>
+                                        <p>Proizvod obrisan</p>
                                     }
                                 </td>
                             </tr>

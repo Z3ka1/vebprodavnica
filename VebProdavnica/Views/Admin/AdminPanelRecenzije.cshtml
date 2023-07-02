@@ -148,7 +148,7 @@
                 <td>@SviKorisnici[r.userRecezent].korisnickoIme</td>
                 <td>@r.naslov</td>
                 <td>@r.sadrzajRecenzije</td>
-                <td><img src="~/Slike/@r.slika" alt=""/></td>
+                <td><img src="~/Slike/@r.slika" alt="Bez slike"/></td>
                 <td>
                     <form method="post" action="/Admin/OdobriRecenziju" class="actions-form">
                         <input type="number" value="@r.id" name="id" hidden />
