@@ -12,4 +12,78 @@
     <OBRISAN>False</OBRISAN>
     <omiljeni />
   </korisnik>
+  <korisnik>
+    <KORISNICKO_IME>potrosac</KORISNICKO_IME>
+    <LOZINKA>potrosac</LOZINKA>
+    <IME>Potrosac</IME>
+    <PREZIME>Potrosacevic</PREZIME>
+    <POL>M</POL>
+    <EMAIL>ppotrosacevic@yahoo.com</EMAIL>
+    <DATUM>08.08.1995</DATUM>
+    <ULOGA>Kupac</ULOGA>
+    <OBRISAN>False</OBRISAN>
+    <omiljeni />
+  </korisnik>
+  <korisnik>
+    <KORISNICKO_IME>prodavac</KORISNICKO_IME>
+    <LOZINKA>prodavac</LOZINKA>
+    <IME>Prodavac</IME>
+    <PREZIME>Prodavacevic</PREZIME>
+    <POL>M</POL>
+    <EMAIL>pprodavacevic@yahoo.com</EMAIL>
+    <DATUM>17.11.1990</DATUM>
+    <ULOGA>Prodavac</ULOGA>
+    <OBRISAN>False</OBRISAN>
+    <omiljeni />
+  </korisnik>
+  <korisnik>
+    <KORISNICKO_IME>trgovac</KORISNICKO_IME>
+    <LOZINKA>trgovac</LOZINKA>
+    <IME>Trgovac</IME>
+    <PREZIME>Trgovacevic</PREZIME>
+    <POL>M</POL>
+    <EMAIL>trgovacevic@gmail.com</EMAIL>
+    <DATUM>09.09.1999</DATUM>
+    <ULOGA>Prodavac</ULOGA>
+    <OBRISAN>False</OBRISAN>
+    <omiljeni />
+  </korisnik>
+  <korisnik>
+    <KORISNICKO_IME>marina</KORISNICKO_IME>
+    <LOZINKA>marina</LOZINKA>
+    <IME>Marina</IME>
+    <PREZIME>Marinkovic</PREZIME>
+    <POL>Z</POL>
+    <EMAIL>mmarina@hotmail.com</EMAIL>
+    <DATUM>20.08.2002</DATUM>
+    <ULOGA>Kupac</ULOGA>
+    <OBRISAN>False</OBRISAN>
+    <omiljeni />
+  </korisnik>
+  <korisnik>
+    <KORISNICKO_IME>marko</KORISNICKO_IME>
+    <LOZINKA>marko</LOZINKA>
+    <IME>Marko</IME>
+    <PREZIME>Markovic</PREZIME>
+    <POL>M</POL>
+    <EMAIL>markomm@gmail.com</EMAIL>
+    <DATUM>09.12.2001</DATUM>
+    <ULOGA>Kupac</ULOGA>
+    <OBRISAN>False</OBRISAN>
+    <omiljeni />
+  </korisnik>
+  <korisnik>
+    <KORISNICKO_IME>kupac</KORISNICKO_IME>
+    <LOZINKA>kupac</LOZINKA>
+    <IME>Kupac</IME>
+    <PREZIME>Kupacevic</PREZIME>
+    <POL>M</POL>
+    <EMAIL>kkupacevic@gmail.com</EMAIL>
+    <DATUM>20.07.1991</DATUM>
+    <ULOGA>Kupac</ULOGA>
+    <OBRISAN>False</OBRISAN>
+    <omiljeni>
+      <ID_PROIZVOD>-688137141</ID_PROIZVOD>
+    </omiljeni>
+  </korisnik>
 </korisnici>

@@ -1,3 +1,146 @@
 <?xml version="1.0"?>
 <proizvodi>
+  <proizvod>
+    <ID>1349304614</ID>
+    <NAZIV>Intel Core i7 Procesor</NAZIV>
+    <CENA>16000</CENA>
+    <KOLICINA>5</KOLICINA>
+    <OPIS>Naslednik Intel Core 2 serije sa cetiri jezgra i osam thredova. Uspesno ce izvrsiti svaki zadatak koji stavite pred njega. Garancija 3 godine.</OPIS>
+    <SLIKA>d3d0ea1f1a6a467f891e1b991b57114d.jpg</SLIKA>
+    <DATUM>13.06.2023</DATUM>
+    <GRAD>Beograd</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>trgovac</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>-1249879736</ID>
+    <NAZIV>Laptop MacBook Air</NAZIV>
+    <CENA>142000</CENA>
+    <KOLICINA>3</KOLICINA>
+    <OPIS>Macbook Air sa 512GB NVMe SSD. 8GB-RAM. Mala zverka. Njegova zanemarljiva tezina ga cini pogodnim za putovanja i lak prenos.</OPIS>
+    <SLIKA>3ad55edd26f94c4c8589660cce1a5e0b.jpg</SLIKA>
+    <DATUM>15.06.2023</DATUM>
+    <GRAD>Novi Sad</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>prodavac</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>-549255069</ID>
+    <NAZIV>Povodac za pse</NAZIV>
+    <CENA>1800</CENA>
+    <KOLICINA>14</KOLICINA>
+    <OPIS>Povodac za pse sa kanapom duzine preko 3 metra. Ima dzepic sa strane. Sa ovim povodcem setnja vaseg ljubimca nikad nece biti laksa.</OPIS>
+    <SLIKA>0f901d440e9c4d098149e4fcbcef24d2.jpg</SLIKA>
+    <DATUM>02.07.2023</DATUM>
+    <GRAD>Zrenjanin</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>prodavac</USER_PRODAVCA>
+    <OBRISAN>True</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>324703761</ID>
+    <NAZIV>Mehanicka tastatura</NAZIV>
+    <CENA>9900</CENA>
+    <KOLICINA>0</KOLICINA>
+    <OPIS>Mehanicka tastatura sa RGB osvetljenjem. Koriscena i preporucena od strane mnogih profesionalnih esport igraca.</OPIS>
+    <SLIKA>c5caddfd70314033abe03e7bd4a09804.jpeg</SLIKA>
+    <DATUM>13.12.2022</DATUM>
+    <GRAD>Subotica</GRAD>
+    <DOSTUPAN>False</DOSTUPAN>
+    <USER_PRODAVCA>trgovac</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>-1945264246</ID>
+    <NAZIV>Yamaha R3 Replica</NAZIV>
+    <CENA>2800</CENA>
+    <KOLICINA>11</KOLICINA>
+    <OPIS>Replika popularnog Yamahinog R3 modela. R3 je jedan od najboljih masina u svojoj A2 kategoriji. Ubrzanje je daleko najbolje u klasi sa neverovatnih 4s do 100km/h. Prelep supersport model, odlicno ce se ukolipti u vasu sobu! Razmera - 1:12</OPIS>
+    <SLIKA>df80280583e24eccbdfb064b2679dd9d.jpg</SLIKA>
+    <DATUM>12.06.2023</DATUM>
+    <GRAD>Novi Sad</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>trgovac</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>514110694</ID>
+    <NAZIV>Flasica za bebe</NAZIV>
+    <CENA>1000</CENA>
+    <KOLICINA>17</KOLICINA>
+    <OPIS>Flasica za bebe. Namenjena bebama od 3 meseca. Poseduje mehanizam "kap po kap". Zapremina 2dl, sasvim dovoljnja za potrebe jedne bebe i majke.</OPIS>
+    <SLIKA>7071e1629ab34d2c9a669010dc415ea1.jpg</SLIKA>
+    <DATUM>21.04.2023</DATUM>
+    <GRAD>Zrenjanin</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>trgovac</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>-1504245480</ID>
+    <NAZIV>Povodac za pse</NAZIV>
+    <CENA>1800</CENA>
+    <KOLICINA>12</KOLICINA>
+    <OPIS>Povodac za pse sa kanapom duzine preko 3 metra. Ima dzepic sa strane. Sa ovim povodcem setnja vaseg ljubimca nikad nece biti laksa.</OPIS>
+    <SLIKA>3e73aea80ef74e5986e935484d9b6862.jpg</SLIKA>
+    <DATUM>25.03.2023</DATUM>
+    <GRAD>Zrenjanin</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>prodavac</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>628986957</ID>
+    <NAZIV>iPad mini</NAZIV>
+    <CENA>84000</CENA>
+    <KOLICINA>3</KOLICINA>
+    <OPIS>iPad mini sa 512GB memorije, tablet malih dimenzija pogodan za rad i zabavu. Baterija traje ceo dan i brzo se puni.</OPIS>
+    <SLIKA>b216991683e44682a39ef37ac4f8bb94.jpg</SLIKA>
+    <DATUM>15.06.2023</DATUM>
+    <GRAD>Novi Sad</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>prodavac</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>-1256463284</ID>
+    <NAZIV>Mis Razer</NAZIV>
+    <CENA>8900</CENA>
+    <KOLICINA>3</KOLICINA>
+    <OPIS>Mis marke Razer namenjen dugom igranju igrica. Mis ima poseban oblik pogodan za dugo drzanje, kao i 3 nivoa osvetljenja.</OPIS>
+    <SLIKA>82305cca09c549b7a9e29f910b66e72a.jpg</SLIKA>
+    <DATUM>12.05.2023</DATUM>
+    <GRAD>Zemun</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>prodavac</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>-665972246</ID>
+    <NAZIV>Xbox Series X</NAZIV>
+    <CENA>56000</CENA>
+    <KOLICINA>4</KOLICINA>
+    <OPIS>NOVO NOVO NOVO Xbox Series X 1TB memorije. U pakovanju dobijate 2 dzojstika sa baterijama + igricu Diablo.</OPIS>
+    <SLIKA>58f1b402d3394e16ba350c792ec15dc5.jpg</SLIKA>
+    <DATUM>02.05.2023</DATUM>
+    <GRAD>Beograd</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>trgovac</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
+  <proizvod>
+    <ID>-688137141</ID>
+    <NAZIV>Klima</NAZIV>
+    <CENA>28000</CENA>
+    <KOLICINA>4</KOLICINA>
+    <OPIS>Klima pogodna za vrele letnje dane. Veoma efikasna i tiha. Trosi malo struje. Osrednje je velicine pa nece zauzimati mnogo prostora. Pogodna je za rashladjivanje 2 vece prostorije.</OPIS>
+    <SLIKA>e61228ffeefe48e1bd24ca1086cd849a.jpg</SLIKA>
+    <DATUM>02.06.2023</DATUM>
+    <GRAD>Novi Sad</GRAD>
+    <DOSTUPAN>True</DOSTUPAN>
+    <USER_PRODAVCA>prodavac</USER_PRODAVCA>
+    <OBRISAN>False</OBRISAN>
+  </proizvod>
 </proizvodi>

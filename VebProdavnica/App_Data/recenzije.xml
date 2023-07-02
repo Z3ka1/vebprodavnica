@@ -1,3 +1,34 @@
 <?xml version="1.0"?>
 <recenzije>
+  <recenzija>
+    <ID>-793905688</ID>
+    <NASLOV>Odlicna replika</NASLOV>
+    <SADRZAJ>Materijal odlican, isporuka brza. Sve preporuke</SADRZAJ>
+    <SLIKA>a56a6305758a454f917dae90f9576a51.jpg</SLIKA>
+    <ID_PROIZVOD>-1945264246</ID_PROIZVOD>
+    <USER_KORISNIK>marko</USER_KORISNIK>
+    <OBRISANA>False</OBRISANA>
+    <STATUS>CEKA</STATUS>
+  </recenzija>
+  <recenzija>
+    <ID>486813306</ID>
+    <NASLOV>Veoma dobra konzola</NASLOV>
+    <SADRZAJ>Konzola je veoma dobra, tiha u radu i lako se podesava. Prodavac fer i korektan</SADRZAJ>
+    <SLIKA>bee4f962fff04429995cbf8d1f8a9836.jpg</SLIKA>
+    <ID_PROIZVOD>-665972246</ID_PROIZVOD>
+    <USER_KORISNIK>potrosac</USER_KORISNIK>
+    <OBRISANA>False</OBRISANA>
+    <STATUS>CEKA</STATUS>
+  </recenzija>
+  <recenzija>
+    <ID>-1071416626</ID>
+    <NASLOV>LADI KO BESNA</NASLOV>
+    <SADRZAJ>Klima je odlicna</SADRZAJ>
+    <SLIKA>
+    </SLIKA>
+    <ID_PROIZVOD>-688137141</ID_PROIZVOD>
+    <USER_KORISNIK>potrosac</USER_KORISNIK>
+    <OBRISANA>False</OBRISANA>
+    <STATUS>CEKA</STATUS>
+  </recenzija>
 </recenzije>
